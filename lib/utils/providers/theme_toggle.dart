@@ -1,13 +1,12 @@
-import 'package:saasfork_core/saasfork_core.dart';
-
-class ThemeToggle extends StateNotifier<bool> {
+class ThemeToggle {
+  //extends StateNotifier<bool> {
   ThemeToggle() : super() {
-    setState(false);
+    // setState(false);
   }
 
-  bool get isDarkMode => state ?? false;
+  bool get isDarkMode => false; // state ?? false;
 
   void toggleTheme() {
-    setState(!state!);
+    // setState(!state!);
   }
 }
