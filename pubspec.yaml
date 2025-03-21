@@ -16,10 +16,7 @@ dependencies:
   reactive_forms: ^17.0.1
   signals: ^6.0.2
 
-  saasfork_core:
-    git:
-      url: https://github.com/saasfork/saasfork_core.git
-      ref: main
+  saasfork_core: ^0.0.1
 
 dev_dependencies:
   flutter_test:
