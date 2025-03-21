@@ -1,7 +1,9 @@
 name: saasfork_design_system
-description: "A new Flutter package project."
+description: A Flutter UI kit for SaaSFork apps and projects.
 version: 0.0.1
-homepage:
+homepage: https://github.com/saasfork/saasfork_design_system
+repository: https://github.com/saasfork/saasfork_design_system
+issue_tracker: https://github.com/saasfork/saasfork_design_system/issues
 
 environment:
   sdk: ^3.7.0
