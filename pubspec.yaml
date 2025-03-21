@@ -15,7 +15,9 @@ dependencies:
   signals: ^6.0.2
 
   saasfork_core:
-    path: ../saasfork_core
+    git:
+      url: https://github.com/saasfork/saasfork_core.git
+      ref: main
 
 dev_dependencies:
   flutter_test:
