@@ -10,3 +10,4 @@ export './buttons/toggle_simple_button.dart';
 
 // Overlays
 export './overlays/dialog.dart';
+export './overlays/notification.dart';

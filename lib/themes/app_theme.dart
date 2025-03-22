@@ -121,6 +121,16 @@ class AppTheme {
       error: AppColors.red.s500,
     ),
     textTheme: _createTextTheme(AppColors.grey.s800),
+    cardTheme: CardTheme(
+      elevation: AppSpacing.sm,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSpacing.sm),
+        side: BorderSide(color: AppColors.gray.s50, width: 1),
+      ),
+      color: Colors.white,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: AppColors.slate.withValues(alpha: .3),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: _createElevatedButtonStyle(
         backgroundColor: AppColors.indigo,
