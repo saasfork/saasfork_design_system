@@ -18,3 +18,4 @@ export 'views/views.dart';
 
 // Theme
 export 'themes/app_theme.dart';
+export 'themes/layouts/layouts.dart';
