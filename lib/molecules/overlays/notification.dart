@@ -19,6 +19,8 @@ class SFNotification extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assert(message.isNotEmpty, 'Message cannot be empty');
+
     return Card(
       child: Stack(
         children: [
@@ -55,8 +57,9 @@ class SFNotification extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
+                      spacing: AppSpacing.sm,
                       children: [
-                        if (title != null) ...[
+                        if (title != null && title!.isNotEmpty)
                           Text(
                             title!,
                             style: Theme.of(context).textTheme.titleMedium,
@@ -64,8 +67,6 @@ class SFNotification extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                           ),
-                          SizedBox(height: AppSpacing.sm),
-                        ],
                         Text(
                           message,
                           style: Theme.of(context).textTheme.labelLarge,
