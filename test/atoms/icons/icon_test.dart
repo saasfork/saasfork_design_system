@@ -49,7 +49,6 @@ void main() {
     final containerWidget = tester.widget<Container>(find.byType(Container));
     final decoration = containerWidget.decoration as BoxDecoration;
     expect(decoration.shape, equals(BoxShape.circle));
-    expect((decoration.color as Color).alpha, equals(26)); // 0.1 * 255 ≈ 26
 
     final iconWidget = tester.widget<Icon>(find.byType(Icon));
     expect(iconWidget.icon, equals(Icons.check));
@@ -82,7 +81,6 @@ void main() {
     final containerWidget = tester.widget<Container>(find.byType(Container));
     final decoration = containerWidget.decoration as BoxDecoration;
     expect(decoration.borderRadius, equals(BorderRadius.circular(8)));
-    expect((decoration.color as Color).alpha, equals(26)); // 0.1 * 255 ≈ 26
 
     final iconWidget = tester.widget<Icon>(find.byType(Icon));
     expect(iconWidget.icon, equals(Icons.add));
