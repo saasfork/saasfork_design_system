@@ -17,4 +17,9 @@
   * Extensions to simplify displaying notifications (success, error, info, warning)
   * Support for customizing notifications and their display duration
 
+## 0.0.3
 
+* Refactored class naming convention:
+  * Renamed all design system classes with the 'SF' prefix for better consistency
+  * Updated all component names to follow the new naming convention
+  * Improved code organization and namespacing

@@ -3,7 +3,7 @@ import 'breakpoints.dart';
 import 'responsive_context.dart';
 
 /// Grille responsive qui adapte automatiquement le nombre de colonnes
-class ResponsiveGrid extends StatelessWidget {
+class SFResponsiveGrid extends StatelessWidget {
   /// Enfants de la grille
   final List<Widget> children;
 
@@ -28,7 +28,7 @@ class ResponsiveGrid extends StatelessWidget {
   /// Mode "maximisé" pour optimiser l'utilisation de l'espace sur grands écrans
   final bool maximize;
 
-  const ResponsiveGrid({
+  const SFResponsiveGrid({
     required this.children,
     this.mobileColumns,
     this.tabletColumns,
@@ -47,22 +47,22 @@ class ResponsiveGrid extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final screenSize = context.screenSize;
-        final effectiveSpacing = spacing ?? Breakpoints.defaultGap;
+        final effectiveSpacing = spacing ?? SFBreakpoints.defaultGap;
 
         // Conserver les valeurs d'origine
         int columns;
         switch (screenSize) {
-          case ScreenSize.mobile:
-            columns = mobileColumns ?? Breakpoints.mobileColumns;
+          case SFScreenSize.mobile:
+            columns = mobileColumns ?? SFBreakpoints.mobileColumns;
             break;
-          case ScreenSize.tablet:
-            columns = tabletColumns ?? Breakpoints.tabletColumns;
+          case SFScreenSize.tablet:
+            columns = tabletColumns ?? SFBreakpoints.tabletColumns;
             break;
-          case ScreenSize.desktop:
-            columns = desktopColumns ?? Breakpoints.desktopColumns;
+          case SFScreenSize.desktop:
+            columns = desktopColumns ?? SFBreakpoints.desktopColumns;
             break;
-          case ScreenSize.largeDesktop:
-            columns = largeDesktopColumns ?? Breakpoints.largeDesktopColumns;
+          case SFScreenSize.largeDesktop:
+            columns = largeDesktopColumns ?? SFBreakpoints.largeDesktopColumns;
             break;
         }
 
@@ -91,7 +91,7 @@ class ResponsiveGrid extends StatelessWidget {
 }
 
 /// Ligne responsive avec des colonnes de largeurs variables
-class ResponsiveRow extends StatelessWidget {
+class SFResponsiveRow extends StatelessWidget {
   /// Enfants de la ligne (avec leurs spans)
   final List<Widget> children;
 
@@ -107,7 +107,7 @@ class ResponsiveRow extends StatelessWidget {
   /// Padding interne de la ligne
   final EdgeInsetsGeometry? padding;
 
-  const ResponsiveRow({
+  const SFResponsiveRow({
     required this.children,
     this.spacing,
     this.wrap = true,
@@ -150,7 +150,7 @@ class ResponsiveRow extends StatelessWidget {
 }
 
 /// Colonne responsive à largeur variable
-class ResponsiveColumn extends StatelessWidget {
+class SFResponsiveColumn extends StatelessWidget {
   /// Contenu de la colonne
   final Widget child;
 
@@ -175,7 +175,7 @@ class ResponsiveColumn extends StatelessWidget {
   /// Alignement du contenu
   final Alignment? alignment;
 
-  const ResponsiveColumn({
+  const SFResponsiveColumn({
     required this.child,
     this.xs,
     this.sm,
@@ -194,16 +194,16 @@ class ResponsiveColumn extends StatelessWidget {
     // Détermine le span pour le type d'écran actuel
     int? span;
     switch (screenSize) {
-      case ScreenSize.mobile:
+      case SFScreenSize.mobile:
         span = xs;
         break;
-      case ScreenSize.tablet:
+      case SFScreenSize.tablet:
         span = sm ?? xs;
         break;
-      case ScreenSize.desktop:
+      case SFScreenSize.desktop:
         span = md ?? sm ?? xs;
         break;
-      case ScreenSize.largeDesktop:
+      case SFScreenSize.largeDesktop:
         span = lg ?? md ?? sm ?? xs;
         break;
     }
@@ -230,7 +230,7 @@ class ResponsiveColumn extends StatelessWidget {
 }
 
 /// Conteneur responsive avec largeur maximale
-class ResponsiveContainer extends StatelessWidget {
+class SFResponsiveContainer extends StatelessWidget {
   /// Contenu
   final Widget child;
 
@@ -249,7 +249,7 @@ class ResponsiveContainer extends StatelessWidget {
   /// Aligner le contenu au centre
   final bool center;
 
-  const ResponsiveContainer({
+  const SFResponsiveContainer({
     required this.child,
     this.maxWidth,
     this.padding,

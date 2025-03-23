@@ -10,29 +10,29 @@ extension ResponsiveContext on BuildContext {
   double get screenHeight => MediaQuery.of(this).size.height;
 
   /// Type d'écran actuel
-  ScreenSize get screenSize => Breakpoints.getScreenSize(screenWidth);
+  SFScreenSize get screenSize => SFBreakpoints.getScreenSize(screenWidth);
 
   /// Orientation de l'écran
-  ScreenOrientation get orientation => Breakpoints.getOrientation(this);
+  SFScreenOrientation get orientation => SFBreakpoints.getOrientation(this);
 
   /// Nombre de colonnes pour l'écran actuel
-  int get columns => Breakpoints.getColumnsForScreenSize(screenSize);
+  int get columns => SFBreakpoints.getColumnsForScreenSize(screenSize);
 
   /// Marge horizontale adaptée à la taille d'écran
-  double get horizontalMargin => Breakpoints.getHorizontalMargin(screenSize);
+  double get horizontalMargin => SFBreakpoints.getHorizontalMargin(screenSize);
 
   /// Espace entre les éléments adaptée à la taille d'écran
-  double get gap => Breakpoints.defaultGap;
+  double get gap => SFBreakpoints.defaultGap;
 
   /// Vérifications rapides pour le type d'écran
-  bool get isMobile => screenSize == ScreenSize.mobile;
-  bool get isTablet => screenSize == ScreenSize.tablet;
-  bool get isDesktop => screenSize == ScreenSize.desktop;
-  bool get isLargeDesktop => screenSize == ScreenSize.largeDesktop;
+  bool get isMobile => screenSize == SFScreenSize.mobile;
+  bool get isTablet => screenSize == SFScreenSize.tablet;
+  bool get isDesktop => screenSize == SFScreenSize.desktop;
+  bool get isLargeDesktop => screenSize == SFScreenSize.largeDesktop;
 
   /// Vérifications rapides pour l'orientation
-  bool get isPortrait => orientation == ScreenOrientation.portrait;
-  bool get isLandscape => orientation == ScreenOrientation.landscape;
+  bool get isPortrait => orientation == SFScreenOrientation.portrait;
+  bool get isLandscape => orientation == SFScreenOrientation.landscape;
 
   /// Vérifications plus générales
   bool get isMobileOrTablet => isMobile || isTablet;
@@ -42,10 +42,10 @@ extension ResponsiveContext on BuildContext {
   T responsive<T>({required T mobile, T? tablet, T? desktop, T? largeDesktop}) {
     // Version plus concise avec cascade
     return switch (screenSize) {
-      ScreenSize.largeDesktop => largeDesktop ?? desktop ?? tablet ?? mobile,
-      ScreenSize.desktop => desktop ?? tablet ?? mobile,
-      ScreenSize.tablet => tablet ?? mobile,
-      ScreenSize.mobile => mobile,
+      SFScreenSize.largeDesktop => largeDesktop ?? desktop ?? tablet ?? mobile,
+      SFScreenSize.desktop => desktop ?? tablet ?? mobile,
+      SFScreenSize.tablet => tablet ?? mobile,
+      SFScreenSize.mobile => mobile,
     };
   }
 

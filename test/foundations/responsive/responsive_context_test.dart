@@ -5,12 +5,12 @@ import 'package:saasfork_design_system/foundations/responsive/responsive_context
 
 void main() {
   group('ResponsiveContext', () {
-    // Test pour les breakpoints de référence
+    // Changé Breakpoints en SFBreakpoints et ScreenSize en SFScreenSize
     test('Vérifie les points de rupture utilisés dans les tests', () {
-      expect(Breakpoints.getScreenSize(320), ScreenSize.mobile);
-      expect(Breakpoints.getScreenSize(768), ScreenSize.tablet);
-      expect(Breakpoints.getScreenSize(1100), ScreenSize.desktop);
-      expect(Breakpoints.getScreenSize(1440), ScreenSize.largeDesktop);
+      expect(SFBreakpoints.getScreenSize(320), SFScreenSize.mobile);
+      expect(SFBreakpoints.getScreenSize(768), SFScreenSize.tablet);
+      expect(SFBreakpoints.getScreenSize(1100), SFScreenSize.desktop);
+      expect(SFBreakpoints.getScreenSize(1440), SFScreenSize.largeDesktop);
     });
 
     testWidgets('détecte correctement le type d\'écran mobile', (tester) async {
@@ -23,7 +23,7 @@ void main() {
             builder: (context) {
               expect(context.screenWidth, 320);
               expect(context.screenHeight, 600);
-              expect(context.screenSize, ScreenSize.mobile);
+              expect(context.screenSize, SFScreenSize.mobile);
               expect(context.isMobile, true);
               expect(context.isTablet, false);
               expect(context.isDesktop, false);
@@ -32,11 +32,13 @@ void main() {
               expect(context.isDesktopOrLarger, false);
               expect(
                 context.columns,
-                equals(Breakpoints.getColumnsForScreenSize(ScreenSize.mobile)),
+                equals(
+                  SFBreakpoints.getColumnsForScreenSize(SFScreenSize.mobile),
+                ),
               );
               expect(
                 context.horizontalMargin,
-                equals(Breakpoints.getHorizontalMargin(ScreenSize.mobile)),
+                equals(SFBreakpoints.getHorizontalMargin(SFScreenSize.mobile)),
               );
               return const SizedBox.shrink();
             },
@@ -56,13 +58,15 @@ void main() {
           child: Builder(
             builder: (context) {
               expect(context.screenWidth, 768);
-              expect(context.screenSize, ScreenSize.tablet);
+              expect(context.screenSize, SFScreenSize.tablet);
               expect(context.isMobile, false);
               expect(context.isTablet, true);
               expect(context.isMobileOrTablet, true);
               expect(
                 context.columns,
-                equals(Breakpoints.getColumnsForScreenSize(ScreenSize.tablet)),
+                equals(
+                  SFBreakpoints.getColumnsForScreenSize(SFScreenSize.tablet),
+                ),
               );
               return const SizedBox.shrink();
             },
@@ -74,7 +78,7 @@ void main() {
     testWidgets('détecte correctement le type d\'écran desktop', (
       tester,
     ) async {
-      // Ajustement à 1100 au lieu de 1200 pour être sûr d'obtenir ScreenSize.desktop
+      // Ajustement à 1100 au lieu de 1200 pour être sûr d'obtenir SFScreenSize.desktop
       final Size desktopSize = const Size(1100, 800);
 
       await tester.pumpWidget(
@@ -83,12 +87,14 @@ void main() {
           child: Builder(
             builder: (context) {
               expect(context.screenWidth, 1100);
-              expect(context.screenSize, ScreenSize.desktop);
+              expect(context.screenSize, SFScreenSize.desktop);
               expect(context.isDesktop, true);
               expect(context.isDesktopOrLarger, true);
               expect(
                 context.columns,
-                equals(Breakpoints.getColumnsForScreenSize(ScreenSize.desktop)),
+                equals(
+                  SFBreakpoints.getColumnsForScreenSize(SFScreenSize.desktop),
+                ),
               );
               return const SizedBox.shrink();
             },
@@ -108,13 +114,15 @@ void main() {
           child: Builder(
             builder: (context) {
               expect(context.screenWidth, 1440);
-              expect(context.screenSize, ScreenSize.largeDesktop);
+              expect(context.screenSize, SFScreenSize.largeDesktop);
               expect(context.isLargeDesktop, true);
               expect(context.isDesktopOrLarger, true);
               expect(
                 context.columns,
                 equals(
-                  Breakpoints.getColumnsForScreenSize(ScreenSize.largeDesktop),
+                  SFBreakpoints.getColumnsForScreenSize(
+                    SFScreenSize.largeDesktop,
+                  ),
                 ),
               );
               return const SizedBox.shrink();
@@ -132,7 +140,7 @@ void main() {
           data: MediaQueryData(size: portraitSize),
           child: Builder(
             builder: (context) {
-              expect(context.orientation, ScreenOrientation.portrait);
+              expect(context.orientation, SFScreenOrientation.portrait);
               expect(context.isPortrait, true);
               expect(context.isLandscape, false);
               return const SizedBox.shrink();
@@ -150,7 +158,7 @@ void main() {
           data: MediaQueryData(size: landscapeSize),
           child: Builder(
             builder: (context) {
-              expect(context.orientation, ScreenOrientation.landscape);
+              expect(context.orientation, SFScreenOrientation.landscape);
               expect(context.isPortrait, false);
               expect(context.isLandscape, true);
               return const SizedBox.shrink();

@@ -3,13 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:saasfork_design_system/foundations/responsive/responsive_grid.dart';
 
 void main() {
-  group('ResponsiveGrid', () {
+  group('SFResponsiveGrid', () {
     testWidgets('crée une grille avec le nombre correct d\'enfants', (
       tester,
     ) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: ResponsiveGrid(
+          home: SFResponsiveGrid(
             children: List.generate(
               4,
               (index) => Container(
@@ -35,7 +35,7 @@ void main() {
         MediaQuery(
           data: MediaQueryData(size: const Size(320, 600)),
           child: MaterialApp(
-            home: ResponsiveGrid(
+            home: SFResponsiveGrid(
               mobileColumns: 2, // Forcer 2 colonnes sur mobile
               spacing: 10,
               children: List.generate(
@@ -74,7 +74,7 @@ void main() {
         MediaQuery(
           data: MediaQueryData(size: const Size(800, 600)),
           child: MaterialApp(
-            home: ResponsiveGrid(
+            home: SFResponsiveGrid(
               margin: margin,
               padding: padding,
               children: List.generate(
@@ -97,11 +97,11 @@ void main() {
     });
   });
 
-  group('ResponsiveRow', () {
+  group('SFResponsiveRow', () {
     testWidgets('utilise Row quand wrap est false', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: ResponsiveRow(
+          home: SFResponsiveRow(
             wrap: false,
             spacing: 10,
             children: List.generate(
@@ -140,7 +140,7 @@ void main() {
     testWidgets('utilise Wrap quand wrap est true', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: ResponsiveRow(
+          home: SFResponsiveRow(
             wrap: true,
             spacing: 15,
             children: List.generate(
@@ -172,7 +172,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: ResponsiveRow(
+          home: SFResponsiveRow(
             margin: margin,
             padding: padding,
             children: List.generate(
@@ -194,7 +194,7 @@ void main() {
     });
   });
 
-  group('ResponsiveColumn', () {
+  group('SFResponsiveColumn', () {
     Widget buildTestWidget(Widget child) {
       return MaterialApp(home: Scaffold(body: child));
     }
@@ -208,7 +208,7 @@ void main() {
         MediaQuery(
           data: MediaQueryData(size: const Size(320, 600)), // Taille mobile
           child: buildTestWidget(
-            ResponsiveColumn(
+            SFResponsiveColumn(
               xs: 6,
               padding: padding,
               decoration: decoration,
@@ -243,12 +243,12 @@ void main() {
     });
   });
 
-  group('ResponsiveContainer', () {
+  group('SFResponsiveContainer', () {
     testWidgets('ne centre pas le contenu quand center=false', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: ResponsiveContainer(
+            body: SFResponsiveContainer(
               maxWidth: 800,
               center: false,
               child: Container(
@@ -274,7 +274,7 @@ void main() {
         MediaQuery(
           data: MediaQueryData(size: const Size(320, 600)),
           child: MaterialApp(
-            home: ResponsiveContainer(
+            home: SFResponsiveContainer(
               child: Container(
                 height: 50,
                 color: Colors.purple,
@@ -299,7 +299,7 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
-          home: ResponsiveContainer(
+          home: SFResponsiveContainer(
             margin: margin,
             padding: padding,
             decoration: decoration,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Types d'écrans supportés
-enum ScreenSize {
+enum SFScreenSize {
   mobile, // < 600px
   tablet, // 600px - 900px
   desktop, // 900px - 1200px
@@ -9,7 +9,7 @@ enum ScreenSize {
 }
 
 /// Configuration système pour la responsivité
-class Breakpoints {
+class SFBreakpoints {
   /// Seuils de largeur pour chaque type d'écran
   static const double mobileBreakpoint = 0;
   static const double tabletBreakpoint = 600;
@@ -29,48 +29,48 @@ class Breakpoints {
   static const double defaultGap = 16;
 
   /// Marges horizontales par type d'écran
-  static const Map<ScreenSize, double> horizontalMargins = {
-    ScreenSize.mobile: 16,
-    ScreenSize.tablet: 24,
-    ScreenSize.desktop: 32,
-    ScreenSize.largeDesktop: 32,
+  static const Map<SFScreenSize, double> horizontalMargins = {
+    SFScreenSize.mobile: 16,
+    SFScreenSize.tablet: 24,
+    SFScreenSize.desktop: 32,
+    SFScreenSize.largeDesktop: 32,
   };
 
   /// Déterminer le type d'écran selon la largeur
-  static ScreenSize getScreenSize(double width) {
-    if (width >= largeDesktopBreakpoint) return ScreenSize.largeDesktop;
-    if (width >= desktopBreakpoint) return ScreenSize.desktop;
-    if (width >= tabletBreakpoint) return ScreenSize.tablet;
-    return ScreenSize.mobile;
+  static SFScreenSize getScreenSize(double width) {
+    if (width >= largeDesktopBreakpoint) return SFScreenSize.largeDesktop;
+    if (width >= desktopBreakpoint) return SFScreenSize.desktop;
+    if (width >= tabletBreakpoint) return SFScreenSize.tablet;
+    return SFScreenSize.mobile;
   }
 
   /// Détermine l'orientation de l'écran
-  static ScreenOrientation getOrientation(BuildContext context) {
+  static SFScreenOrientation getOrientation(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return size.width > size.height
-        ? ScreenOrientation.landscape
-        : ScreenOrientation.portrait;
+        ? SFScreenOrientation.landscape
+        : SFScreenOrientation.portrait;
   }
 
   /// Obtient le nombre de colonnes pour une taille d'écran
-  static int getColumnsForScreenSize(ScreenSize size) {
+  static int getColumnsForScreenSize(SFScreenSize size) {
     switch (size) {
-      case ScreenSize.mobile:
+      case SFScreenSize.mobile:
         return mobileColumns;
-      case ScreenSize.tablet:
+      case SFScreenSize.tablet:
         return tabletColumns;
-      case ScreenSize.desktop:
+      case SFScreenSize.desktop:
         return desktopColumns;
-      case ScreenSize.largeDesktop:
+      case SFScreenSize.largeDesktop:
         return largeDesktopColumns;
     }
   }
 
   /// Récupère la marge horizontale pour un type d'écran
-  static double getHorizontalMargin(ScreenSize size) {
+  static double getHorizontalMargin(SFScreenSize size) {
     return horizontalMargins[size] ?? defaultGap;
   }
 }
 
 /// Orientation de l'écran
-enum ScreenOrientation { portrait, landscape }
+enum SFScreenOrientation { portrait, landscape }
