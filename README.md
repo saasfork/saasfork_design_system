@@ -427,6 +427,111 @@ Text(
 );
 ```
 
+### Système Responsive
+
+Notre système responsive permet d'adapter facilement vos layouts à différentes tailles d'écran.
+
+#### Grille Responsive
+
+```dart
+// Une grille qui adapte automatiquement le nombre de colonnes selon la taille d'écran
+ResponsiveGrid(
+  // Surcharger le nombre de colonnes par défaut par type d'écran (optionnel)
+  mobileColumns: 1,
+  tabletColumns: 2,
+  desktopColumns: 3,
+  largeDesktopColumns: 4,
+  
+  // Espacements et marges
+  spacing: 16.0,
+  margin: EdgeInsets.all(16.0),
+  padding: EdgeInsets.all(8.0),
+  
+  // Contenu de la grille
+  children: [
+    // Vos widgets ici
+    Card(child: Text("Élément 1")),
+    Card(child: Text("Élément 2")),
+    Card(child: Text("Élément 3")),
+  ],
+);
+```
+
+#### Lignes et Colonnes Responsives
+
+```dart
+// Création d'une ligne responsive avec des colonnes
+ResponsiveRow(
+  spacing: 16.0,
+  wrap: true, // Passe à la ligne si l'espace est insuffisant
+  margin: EdgeInsets.symmetric(vertical: 16.0),
+  children: [
+    // Colonne responsive qui occupe 6/12 sur mobile, 4/12 sur tablet, 3/12 sur desktop
+    ResponsiveColumn(
+      xs: 6, // Mobile (fraction sur 12)
+      sm: 4, // Tablet (fraction sur 12)
+      md: 3, // Desktop (fraction sur 12)
+      child: Container(color: Colors.red, height: 100),
+    ),
+    
+    // Colonne responsive qui occupe 6/12 sur mobile, 8/12 sur tablet, 9/12 sur desktop
+    ResponsiveColumn(
+      xs: 6,
+      sm: 8,
+      md: 9,
+      padding: EdgeInsets.all(8.0),
+      child: Container(color: Colors.blue, height: 100),
+    ),
+  ],
+);
+```
+
+#### Conteneur Responsive
+
+```dart
+// Conteneur responsive qui s'adapte selon la taille d'écran
+ResponsiveContainer(
+  maxWidth: 1200.0, // Largeur max (optionnel)
+  padding: EdgeInsets.all(16.0), // Padding adapté automatiquement sur mobile
+  center: true, // Centre le contenu si maxWidth est défini
+  child: Text("Contenu centré avec largeur maximale"),
+);
+```
+
+#### Extensions Responsives
+
+```dart
+// Détecter la taille d'écran actuelle
+if (context.isMobile) {
+  // Logique spécifique aux mobiles
+} else if (context.isTablet) {
+  // Logique spécifique aux tablettes
+} else if (context.isDesktop) {
+  // Logique spécifique aux desktops
+}
+
+// Valeur adaptative selon la taille d'écran
+final padding = context.responsive(
+  mobile: 8.0,
+  tablet: 16.0,
+  desktop: 24.0,
+  largeDesktop: 32.0,
+);
+
+// Accéder aux marges et espacements adaptés
+final horizontalMargin = context.horizontalMargin;
+final gap = context.gap;
+
+// Padding adapté à la taille d'écran
+Container(
+  padding: context.responsivePadding, // Padding horizontal & vertical
+  child: Text("Contenu avec padding adaptatif"),
+);
+
+// Nombre de colonnes de la grille actuelle
+final columns = context.columns; // 1-12 selon la taille d'écran
+```
+
 ## Contribution
 
 Pour contribuer au design system, veuillez consulter notre guide de contribution et suivre nos conventions de codage.
