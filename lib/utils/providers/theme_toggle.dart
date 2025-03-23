@@ -1,12 +1,20 @@
-class ThemeToggle {
-  //extends StateNotifier<bool> {
-  ThemeToggle() : super() {
-    // setState(false);
-  }
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-  bool get isDarkMode => false; // state ?? false;
+final themeToggleProvider = NotifierProvider<ThemeToggle, bool>(
+  () => ThemeToggle(),
+);
+
+class ThemeToggle extends Notifier<bool> {
+  @override
+  bool build() => false;
+
+  bool get isDarkMode => state;
 
   void toggleTheme() {
-    // setState(!state!);
+    state = !state;
+  }
+
+  void resetTheme() {
+    state = false;
   }
 }

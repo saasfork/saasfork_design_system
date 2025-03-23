@@ -11,27 +11,31 @@ import 'package:signals/signals_flutter.dart';
 /// [initialValue] définit l'état initial (true = sombre, false = clair).
 /// [lightModeColor] et [darkModeColor] permettent de personnaliser les couleurs des deux états.
 /// [size] contrôle la taille du bouton selon les tailles standard du design system.
-class SFToggleSimpleButton extends StatefulWidget {
+class SFToggleButton extends StatefulWidget {
   final Function(bool) onToggle;
   final bool initialValue;
   final Color? lightModeColor;
   final Color? darkModeColor;
+  final Icon? lightIcon;
+  final Icon? darkIcon;
   final ComponentSize size;
 
-  const SFToggleSimpleButton({
+  const SFToggleButton({
     super.key,
     required this.onToggle,
     this.initialValue = false,
     this.lightModeColor,
     this.darkModeColor,
+    this.lightIcon,
+    this.darkIcon,
     this.size = ComponentSize.md,
   });
 
   @override
-  State<SFToggleSimpleButton> createState() => _SFToggleSimpleButtonState();
+  State<SFToggleButton> createState() => _SFToggleButtonState();
 }
 
-class _SFToggleSimpleButtonState extends State<SFToggleSimpleButton>
+class _SFToggleButtonState extends State<SFToggleButton>
     with SingleTickerProviderStateMixin {
   late final Signal<bool> _isDarkMode;
   late AnimationController _animationController;
@@ -79,7 +83,9 @@ class _SFToggleSimpleButtonState extends State<SFToggleSimpleButton>
       final isDark = _isDarkMode.value;
 
       final IconData iconData =
-          isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded;
+          isDark
+              ? widget.darkIcon?.icon ?? Icons.dark_mode_rounded
+              : widget.lightIcon?.icon ?? Icons.light_mode_rounded;
 
       final Color buttonColor =
           isDark
