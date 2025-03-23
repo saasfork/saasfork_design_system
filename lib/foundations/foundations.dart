@@ -18,3 +18,4 @@ export './data/data.dart';
 export './models/models.dart';
 
 export './utils.dart';
+export './responsive/responsive.dart';

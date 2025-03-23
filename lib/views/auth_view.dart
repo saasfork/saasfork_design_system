@@ -28,6 +28,7 @@ class SFAuthView extends StatefulWidget {
 class SFAuthViewState extends State<SFAuthView> {
   final PageController _pageController = PageController();
   late AuthFormData formData;
+  int _currentPageIndex = 0;
 
   @override
   void initState() {
@@ -62,111 +63,138 @@ class SFAuthViewState extends State<SFAuthView> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return PageView(
-      controller: _pageController,
-      physics: NeverScrollableScrollPhysics(),
+  void _setPage(int pageIndex) {
+    setState(() {
+      _currentPageIndex = pageIndex;
+    });
+  }
+
+  Widget _buildLoginPage() => SingleChildScrollView(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      spacing: AppSpacing.md,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          spacing: AppSpacing.md,
-          children: [
-            SFLoginForm(
-              additionalData: formData.toMap(),
-              onSubmit:
-                  widget.onLogin != null
-                      ? (loginData) {
-                        final typedValues = LoginModel.fromMap(loginData);
-                        widget.onLogin!(typedValues);
-                      }
-                      : null,
-            ),
-            Column(
-              spacing: AppSpacing.xs,
-              children: [
-                _richText(
-                  text:
-                      formData.authNotAccount.text ??
-                      'Don\'t have an account yet?',
-                  link: formData.authNotAccount.link,
-                  onTap: () {
-                    _pageController.jumpToPage(1);
-                  },
-                ),
-                _richText(
-                  link: formData.authForgotPassword.link,
-                  onTap: () {
-                    _pageController.jumpToPage(2);
-                  },
-                ),
-              ],
-            ),
-            if ((widget.onGithubConnect != null ||
-                    widget.onGoogleConnect != null) &&
-                formData.dividerText != null)
-              SFDividerWithText(text: formData.dividerText!),
-            if (widget.onGoogleConnect != null)
-              SFSecondaryIconButton(
-                icon: FontAwesomeIcons.google,
-                label: 'Connexion avec Google',
-                onPressed: () => widget.onGoogleConnect!(),
-              ),
-            if (widget.onGithubConnect != null)
-              SFSecondaryIconButton(
-                icon: FontAwesomeIcons.github,
-                label: 'Connexion Github',
-                onPressed: () => widget.onGithubConnect!(),
-              ),
-          ],
+        SFLoginForm(
+          additionalData: formData.toMap(),
+          onSubmit:
+              widget.onLogin != null
+                  ? (loginData) {
+                    final typedValues = LoginModel.fromMap(loginData);
+                    widget.onLogin!(typedValues);
+                  }
+                  : null,
         ),
         Column(
-          spacing: AppSpacing.md,
           children: [
-            SFRegisterForm(
-              additionalData: formData.toMap(),
-              onSubmit:
-                  widget.onRegister != null
-                      ? (registerData) {
-                        final typedValues = RegisterModel.fromMap(registerData);
-                        widget.onRegister!(typedValues);
-                      }
-                      : null,
-            ),
             _richText(
-              text: formData.authAlreadyExists.text,
-              link: formData.authAlreadyExists.link,
+              text:
+                  formData.authNotAccount.text ?? 'Don\'t have an account yet?',
+              link: formData.authNotAccount.link,
               onTap: () {
-                _pageController.jumpToPage(0);
+                _setPage(1);
+              },
+            ),
+            const SizedBox(height: 8),
+            _richText(
+              link: formData.authForgotPassword.link,
+              onTap: () {
+                _setPage(2);
               },
             ),
           ],
         ),
-        Column(
-          spacing: AppSpacing.md,
-          children: [
-            SFForgotPasswordForm(
-              additionalData: formData.toMap(),
-              onSubmit:
-                  widget.onForgotPassword != null
-                      ? (forgotPasswordData) {
-                        final typedValues = ForgotPasswordModel.fromMap(
-                          forgotPasswordData,
-                        );
-                        widget.onForgotPassword!(typedValues);
-                      }
-                      : null,
-            ),
-            _richText(
-              text: formData.authAlreadyExists.text,
-              link: formData.authAlreadyExists.link,
-              onTap: () {
-                _pageController.jumpToPage(0);
-              },
-            ),
-          ],
+        if ((widget.onGithubConnect != null ||
+                widget.onGoogleConnect != null) &&
+            formData.dividerText != null)
+          SFDividerWithText(text: formData.dividerText!),
+        if (widget.onGoogleConnect != null)
+          SFSecondaryIconButton(
+            icon: FontAwesomeIcons.google,
+            label: 'Connexion avec Google',
+            onPressed: () => widget.onGoogleConnect!(),
+          ),
+        if (widget.onGithubConnect != null)
+          SFSecondaryIconButton(
+            icon: FontAwesomeIcons.github,
+            label: 'Connexion Github',
+            onPressed: () => widget.onGithubConnect!(),
+          ),
+      ],
+    ),
+  );
+
+  Widget _buildRegisterPage() => SingleChildScrollView(
+    child: Column(
+      spacing: AppSpacing.md,
+      children: [
+        SFRegisterForm(
+          additionalData: formData.toMap(),
+          onSubmit:
+              widget.onRegister != null
+                  ? (registerData) {
+                    final typedValues = RegisterModel.fromMap(registerData);
+                    widget.onRegister!(typedValues);
+                  }
+                  : null,
+        ),
+        _richText(
+          text: formData.authAlreadyExists.text,
+          link: formData.authAlreadyExists.link,
+          onTap: () {
+            _setPage(0);
+          },
         ),
       ],
+    ),
+  );
+
+  Widget _buildForgotPasswordPage() => SingleChildScrollView(
+    child: Column(
+      spacing: AppSpacing.md,
+      children: [
+        SFForgotPasswordForm(
+          additionalData: formData.toMap(),
+          onSubmit:
+              widget.onForgotPassword != null
+                  ? (forgotPasswordData) {
+                    final typedValues = ForgotPasswordModel.fromMap(
+                      forgotPasswordData,
+                    );
+                    widget.onForgotPassword!(typedValues);
+                  }
+                  : null,
+        ),
+        _richText(
+          text: formData.authAlreadyExists.text,
+          link: formData.authAlreadyExists.link,
+          onTap: () {
+            _setPage(0);
+          },
+        ),
+      ],
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<int>(
+      valueListenable: ValueNotifier<int>(_currentPageIndex),
+      builder: (context, pageIndex, _) {
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            return IntrinsicHeight(
+              child: IndexedStack(
+                index: pageIndex,
+                children: [
+                  _buildLoginPage(),
+                  _buildRegisterPage(),
+                  _buildForgotPasswordPage(),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
