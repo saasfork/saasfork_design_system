@@ -18,6 +18,8 @@ class SFToggleButton extends StatefulWidget {
   final Color? darkModeColor;
   final Icon? lightIcon;
   final Icon? darkIcon;
+  final Color? lightIconColor;
+  final Color? darkIconColor;
   final ComponentSize size;
 
   const SFToggleButton({
@@ -28,6 +30,8 @@ class SFToggleButton extends StatefulWidget {
     this.darkModeColor,
     this.lightIcon,
     this.darkIcon,
+    this.lightIconColor,
+    this.darkIconColor,
     this.size = ComponentSize.md,
   });
 
@@ -92,10 +96,20 @@ class _SFToggleButtonState extends State<SFToggleButton>
               ? (widget.darkModeColor ?? darkColor)
               : (widget.lightModeColor ?? lightColor);
 
+      // Détermine la couleur d'icône appropriée selon le mode et le contexte
+      Color? iconColor;
+
+      // Priorité à la couleur explicitement fournie
+      if (isDark && widget.darkIconColor != null) {
+        iconColor = widget.darkIconColor;
+      } else if (!isDark && widget.lightIconColor != null) {
+        iconColor = widget.lightIconColor;
+      }
+
       return SFCircularButton(
         icon: iconData,
         size: widget.size,
-        iconColor: Colors.white,
+        iconColor: iconColor,
         onPressed: _toggleMode,
         backgroundColor: buttonColor,
       );

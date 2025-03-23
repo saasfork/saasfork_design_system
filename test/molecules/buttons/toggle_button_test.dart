@@ -201,5 +201,89 @@ void main() {
       );
       expect(button.size, equals(ComponentSize.sm));
     });
+
+    testWidgets(
+      'utilise les couleurs d\'icône du thème pour les boutons transparents',
+      (WidgetTester tester) async {
+        // Test avec thème clair
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData.light().copyWith(
+              iconTheme: IconThemeData(color: AppColors.grey.s800),
+            ),
+            home: Scaffold(
+              body: SFToggleButton(
+                onToggle: (value) {},
+                lightModeColor: Colors.transparent,
+                darkModeColor: Colors.transparent,
+              ),
+            ),
+          ),
+        );
+
+        // Vérifie que le bouton est transparent
+        var button = tester.widget<SFCircularButton>(
+          find.byType(SFCircularButton),
+        );
+        expect(button.backgroundColor, equals(Colors.transparent));
+
+        // Test avec thème sombre
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData.dark().copyWith(
+              iconTheme: IconThemeData(color: AppColors.grey.s50),
+            ),
+            home: Scaffold(
+              body: SFToggleButton(
+                onToggle: (value) {},
+                lightModeColor: Colors.transparent,
+                darkModeColor: Colors.transparent,
+              ),
+            ),
+          ),
+        );
+
+        // Vérifie que le bouton est transparent
+        button = tester.widget<SFCircularButton>(find.byType(SFCircularButton));
+        expect(button.backgroundColor, equals(Colors.transparent));
+      },
+    );
+
+    testWidgets('préfère les couleurs d\'icône personnalisées au thème', (
+      WidgetTester tester,
+    ) async {
+      const customLightIconColor = Colors.yellow;
+      const customDarkIconColor = Colors.green;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData.light(),
+          home: Scaffold(
+            body: SFToggleButton(
+              onToggle: (value) {},
+              initialValue: false,
+              lightIconColor: customLightIconColor,
+              darkIconColor: customDarkIconColor,
+              lightModeColor: Colors.transparent,
+              darkModeColor: Colors.transparent,
+            ),
+          ),
+        ),
+      );
+
+      // Vérifie la couleur d'icône personnalisée en mode clair
+      var button = tester.widget<SFCircularButton>(
+        find.byType(SFCircularButton),
+      );
+      expect(button.iconColor, equals(customLightIconColor));
+
+      // Tap pour passer en mode sombre
+      await tester.tap(find.byType(SFCircularButton));
+      await tester.pumpAndSettle();
+
+      // Vérifie la couleur d'icône personnalisée en mode sombre
+      button = tester.widget<SFCircularButton>(find.byType(SFCircularButton));
+      expect(button.iconColor, equals(customDarkIconColor));
+    });
   });
 }

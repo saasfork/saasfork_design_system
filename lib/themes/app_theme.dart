@@ -15,8 +15,18 @@ class AppTheme {
     BorderSide? side,
   }) {
     return ButtonStyle(
-      backgroundColor: WidgetStateProperty.all(backgroundColor),
-      foregroundColor: WidgetStateProperty.all(foregroundColor),
+      backgroundColor: WidgetStateProperty.resolveWith((states) {
+        // Toujours respecter la couleur de fond spécifiée
+        return backgroundColor;
+      }),
+      foregroundColor: WidgetStateProperty.resolveWith((states) {
+        // Pour les boutons transparents, utiliser la couleur du texte du thème
+        if (backgroundColor == Colors.transparent) {
+          // Ici, nous retournons null pour que le système utilise la couleur du texte du thème
+          return null;
+        }
+        return foregroundColor;
+      }),
       padding: WidgetStateProperty.all(AppSizes.getPadding(ComponentSize.md)),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
@@ -25,6 +35,7 @@ class AppTheme {
         ),
       ),
       textStyle: WidgetStateProperty.all(AppTypography.labelLarge),
+      elevation: WidgetStateProperty.all(0),
     );
   }
 
@@ -173,6 +184,9 @@ class AppTheme {
       focusedBorderColor: AppColors.indigo.s400,
       errorBorderColor: AppColors.red.s300,
     ),
+    iconTheme: IconThemeData(
+      color: AppColors.grey.s800, // Couleur d'icône par défaut en mode clair
+    ),
   );
 
   static ThemeData darkTheme = ThemeData(
@@ -227,6 +241,9 @@ class AppTheme {
       enabledBorderColor: AppColors.gray.s600,
       focusedBorderColor: AppColors.indigo.s400,
       errorBorderColor: AppColors.red.s300,
+    ),
+    iconTheme: IconThemeData(
+      color: AppColors.grey.s50, // Couleur d'icône par défaut en mode sombre
     ),
   );
 }

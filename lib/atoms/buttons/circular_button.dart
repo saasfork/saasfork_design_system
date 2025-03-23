@@ -20,18 +20,23 @@ class SFCircularButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Utiliser SizedBox pour garantir une taille exacte
+    // Logique de couleur d'icône:
+    // 1. Si iconColor est fourni, l'utiliser
+    // 2. Sinon, si backgroundColor est transparent, utiliser la couleur d'icône du thème
+    // 3. Sinon (fond coloré), utiliser blanc
+    final Color effectiveIconColor =
+        iconColor ??
+        (backgroundColor == Colors.transparent
+            ? Theme.of(context).iconTheme.color!
+            : Colors.white);
+
     return SizedBox(
       width: _getButtonDimension(),
       height: _getButtonDimension(),
       child: ElevatedButton(
         onPressed: onPressed,
         style: _getButtonStyle(context),
-        child: Icon(
-          icon,
-          color: iconColor ?? Colors.white,
-          size: _getIconSize(),
-        ),
+        child: Icon(icon, color: effectiveIconColor, size: _getIconSize()),
       ),
     );
   }
@@ -42,7 +47,6 @@ class SFCircularButton extends StatelessWidget {
     final baseStyle = theme?.copyWith(
       padding: WidgetStateProperty.all(EdgeInsets.zero),
       shape: WidgetStateProperty.all(const CircleBorder()),
-      // Assurer que la taille est fixe et ne dépend pas du contenu
       minimumSize: WidgetStateProperty.all(Size.square(_getButtonDimension())),
       fixedSize: WidgetStateProperty.all(Size.square(_getButtonDimension())),
       maximumSize: WidgetStateProperty.all(Size.square(_getButtonDimension())),
