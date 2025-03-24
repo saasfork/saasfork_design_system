@@ -13,7 +13,7 @@ class SFNavBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.links = const [],
     this.actions = const [],
-    this.height = 52.0,
+    this.height = kToolbarHeight,
     this.backgroundColor,
     this.horizontalPadding = 16.0,
     super.key,

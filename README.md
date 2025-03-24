@@ -348,20 +348,110 @@ MaterialApp(
 
 ## Layouts
 
-SaasFork Design System fournit des layouts par défaut pour structurer vos applications de manière cohérente.
+SaasFork Design System fournit un système de layouts flexible pour structurer vos applications de manière cohérente.
 
-### Default Layouts
+### SFDefaultLayout
+
+Le layout principal utilise un pattern builder pour permettre une grande flexibilité dans la construction de l'interface:
 
 ```dart
-// Layout de base avec appbar, body et bottomBar
 SFDefaultLayout(
-  appBar: AppBar(title: Text('Mon application')),
-  body: Center(child: Text('Contenu principal')),
-  bottomBar: BottomNavigationBar(
-    items: [
-      BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-      BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Paramètres'),
+  // Définit la structure du layout via un builder
+  builder: SFLayoutBuilder(
+    // Constructeur d'en-tête (optionnel)
+    headerBuilder: (context, ref) => AppBar(
+      title: Text('Mon application'),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.notifications),
+          onPressed: () => print('Notifications'),
+        ),
+      ],
+    ),
+    
+    // Constructeur de drawer latéral (optionnel)
+    drawerBuilder: (context, ref) => ListView(
+      children: [
+        DrawerHeader(child: Text('Menu')),
+        ListTile(
+          leading: Icon(Icons.home),
+          title: Text('Accueil'),
+          onTap: () => print('Accueil'),
+        ),
+        ListTile(
+          leading: Icon(Icons.settings),
+          title: Text('Paramètres'),
+          onTap: () => print('Paramètres'),
+        ),
+      ],
+    ),
+    
+    // Constructeur de contenu (obligatoire)
+    contentBuilder: (context, ref) => SingleChildScrollView(
+      child: Column(
+        children: [
+          Text('Contenu principal'),
+          // Autres widgets...
+        ],
+      ),
+    ),
+    
+    // Constructeur de pied de page (optionnel)
+    footerBuilder: (context, ref) => Container(
+      height: 60,
+      color: Theme.of(context).colorScheme.surface,
+      child: Center(
+        child: Text('© 2023 - SaasFork'),
+      ),
+    ),
+  ),
+  
+  // Padding du contenu principal (optionnel)
+  contentPadding: EdgeInsets.all(16.0),
+);
+```
+
+#### Exemple d'utilisation avec une barre de navigation
+
+```dart
+// Définition d'une navbar pour le header
+Widget _buildNavBar(BuildContext context, WidgetRef ref) {
+  return SFNavBar(
+    leading: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.bolt, color: AppColors.primary),
+        SizedBox(width: 8),
+        Text('SaasFork', style: AppTypography.titleMedium),
+      ],
+    ),
+    links: [
+      SFNavLink(
+        label: 'Tableau de bord',
+        onPress: () => print('Dashboard'),
+      ),
+      SFNavLink(
+        label: 'Utilisateurs',
+        onPress: () => print('Users'),
+      ),
     ],
+    actions: [
+      SFCircularButton(
+        icon: Icons.notifications,
+        onPressed: () => print('Notifications'),
+        size: ComponentSize.sm,
+      ),
+    ],
+  );
+}
+
+// Utilisation dans le layout
+SFDefaultLayout(
+  builder: SFLayoutBuilder(
+    headerBuilder: _buildNavBar,
+    contentBuilder: (context, ref) => Center(
+      child: Text('Contenu de l\'application'),
+    ),
   ),
 );
 ```
