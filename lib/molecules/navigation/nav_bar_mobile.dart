@@ -4,10 +4,15 @@ import 'package:signals/signals_flutter.dart';
 
 class SFNavBarMobile extends StatefulWidget {
   final List<SFNavLink> links;
-  // Ajout de la propriété backgroundColor
   final Color? backgroundColor;
+  final double height;
 
-  const SFNavBarMobile({required this.links, this.backgroundColor, super.key});
+  const SFNavBarMobile({
+    super.key,
+    required this.links,
+    this.backgroundColor,
+    required this.height,
+  });
 
   @override
   State<SFNavBarMobile> createState() => _SFNavBarMobileState();
@@ -40,7 +45,6 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
 
     _fadeAnimation = _animationController;
 
-    // Observer les changements d'état du menu
     effect(() {
       if (_isMenuOpen.value) {
         _animationController.forward();
@@ -50,12 +54,9 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
           }
         });
       } else {
-        // Simplement inverser l'animation sans supprimer les overlays immédiatement
         _animationController.reverse();
 
-        // Correction pour éviter les problèmes d'écouteurs multiples
         if (_overlayEntry != null || _menuEntry != null) {
-          // Stocker la référence à l'écouteur pour pouvoir le supprimer correctement
           void statusListener(AnimationStatus status) {
             if (status == AnimationStatus.dismissed) {
               _removeOverlays();
@@ -80,43 +81,51 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
     _isMenuOpen.value = !_isMenuOpen.value;
   }
 
-  void _showMenuWithOverlay() {
-    _removeOverlays(); // Nettoyer les overlays existants
+  void _executeAfterMenuClosed(VoidCallback action) {
+    _toggleMenu();
 
-    // 1. D'abord créer l'overlay d'arrière-plan avec animation
+    void onAnimationStatusChanged(AnimationStatus status) {
+      if (status == AnimationStatus.dismissed) {
+        action();
+
+        _animationController.removeStatusListener(onAnimationStatusChanged);
+      }
+    }
+
+    _animationController.addStatusListener(onAnimationStatusChanged);
+  }
+
+  void _showMenuWithOverlay() {
+    _removeOverlays();
+
     _overlayEntry = OverlayEntry(
       builder:
           (context) => Positioned(
-            top: 64,
+            top: widget.height,
             left: 0,
             right: 0,
             bottom: 0,
             child: AnimatedBuilder(
               animation: _animationController,
               builder: (context, child) {
-                // Utiliser la même animation que le menu pour l'overlay
                 return FadeTransition(opacity: _fadeAnimation, child: child);
               },
               child: GestureDetector(
-                onTap: () {
-                  print("Overlay clicked!");
-                  _toggleMenu();
-                },
+                onTap: _toggleMenu,
                 behavior: HitTestBehavior.opaque,
-                child: Container(color: Colors.black.withAlpha(30)),
+                child: Container(color: Colors.black.withAlpha(20)),
               ),
             ),
           ),
     );
 
-    // 2. Ensuite créer le menu (sera au-dessus de l'overlay)
     _menuEntry = OverlayEntry(
       builder: (context) {
         final screenWidth = MediaQuery.of(context).size.width;
         final theme = Theme.of(context);
 
         return Positioned(
-          top: 64,
+          top: widget.height,
           left: 0,
           child: ClipRect(
             child: Material(
@@ -149,13 +158,10 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
                           ),
                           child: SFNavLinkItem(
                             link: link.copyWith(
-                              onPress: () {
-                                link.onPress();
-                                _toggleMenu();
-                              },
+                              onPress:
+                                  () => _executeAfterMenuClosed(link.onPress),
                             ),
-                            fullWidth:
-                                true, // Activer le mode pleine largeur pour les liens du menu mobile
+                            fullWidth: true,
                           ),
                         ),
                     ],
@@ -168,8 +174,6 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
       },
     );
 
-    // Important: insérer d'abord l'overlay de fond puis le menu
-    // pour que le menu soit au-dessus et reçoive les clics en priorité
     if (mounted) {
       Overlay.of(context).insert(_overlayEntry!);
       Overlay.of(context).insert(_menuEntry!);
@@ -186,7 +190,6 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
 
   @override
   Widget build(BuildContext context) {
-    // Utiliser Watch pour que le bouton réagisse aux changements de _isMenuOpen
     return Watch((context) {
       return AnimatedSwitchButton(
         initialValue: _isMenuOpen.value,

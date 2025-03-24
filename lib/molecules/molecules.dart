@@ -11,6 +11,7 @@ export 'buttons/toggle_button.dart';
 
 // Navigation
 export './navigation/nav_bar.dart';
+export './navigation/nav_bar_mobile.dart';
 
 // Overlays
 export './overlays/dialog.dart';

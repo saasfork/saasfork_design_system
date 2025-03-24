@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:saasfork_design_system/molecules/navigation/nav_bar_mobile.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
-class SFNavBar extends StatelessWidget {
+class SFNavBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final List<SFNavLink> links;
   final List<Widget> actions;
@@ -14,16 +13,19 @@ class SFNavBar extends StatelessWidget {
     this.leading,
     this.links = const [],
     this.actions = const [],
-    this.height = 64.0,
+    this.height = 52.0,
     this.backgroundColor,
     this.horizontalPadding = 16.0,
     super.key,
   });
 
   @override
+  Size get preferredSize => Size.fromHeight(height);
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: height,
+      height: preferredSize.height,
       color: backgroundColor ?? Theme.of(context).colorScheme.surface,
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       child:
@@ -82,7 +84,11 @@ class SFNavBar extends StatelessWidget {
     return Stack(
       alignment: Alignment.centerLeft,
       children: [
-        SFNavBarMobile(links: links, backgroundColor: backgroundColor),
+        SFNavBarMobile(
+          links: links,
+          backgroundColor: backgroundColor,
+          height: preferredSize.height,
+        ),
         _buildLeading(centered: true),
         _buildActionButtons(alignment: Alignment.centerRight),
       ],
