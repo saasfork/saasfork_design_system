@@ -21,7 +21,7 @@ void main() {
       final result = FormUtils.isFormValid(form);
 
       // Assert
-      expect(result, true);
+      expect(result, isTrue);
     });
 
     test('should return false when required field is empty', () {
@@ -41,7 +41,7 @@ void main() {
       final result = FormUtils.isFormValid(form);
 
       // Assert
-      expect(result, false);
+      expect(result, isFalse);
     });
 
     test('should return false when email is invalid', () {
@@ -61,7 +61,7 @@ void main() {
       final result = FormUtils.isFormValid(form);
 
       // Assert
-      expect(result, false);
+      expect(result, isFalse);
     });
 
     test('should mark all fields as touched', () {
@@ -78,15 +78,15 @@ void main() {
       final form = FormGroup({'name': nameControl, 'email': emailControl});
 
       // Verify fields are not touched initially
-      expect(nameControl.touched, false);
-      expect(emailControl.touched, false);
+      expect(nameControl.touched, isFalse);
+      expect(emailControl.touched, isFalse);
 
       // Act
       FormUtils.isFormValid(form);
 
       // Assert
-      expect(nameControl.touched, true);
-      expect(emailControl.touched, true);
+      expect(nameControl.touched, isTrue);
+      expect(emailControl.touched, isTrue);
     });
 
     test('should call setState callback if provided', () {
@@ -107,7 +107,7 @@ void main() {
       FormUtils.isFormValid(form, setState: setStateCallback);
 
       // Assert
-      expect(callbackCalled, true);
+      expect(callbackCalled, isTrue);
     });
 
     test('should handle nested form groups', () {
@@ -135,7 +135,7 @@ void main() {
       final result = FormUtils.isFormValid(form);
 
       // Assert
-      expect(result, false); // Le champ street est vide
+      expect(result, isFalse); // Le champ street est vide
     });
 
     test('should handle null values', () {
@@ -154,7 +154,7 @@ void main() {
       final result = FormUtils.isFormValid(form);
 
       // Assert
-      expect(result, false); // name est required mais null
+      expect(result, isFalse); // name est required mais null
     });
   });
 }

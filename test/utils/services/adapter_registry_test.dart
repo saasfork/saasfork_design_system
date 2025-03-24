@@ -65,7 +65,7 @@ void main() {
       final instance2 = NotificationAdapterRegistry();
 
       // Assert
-      expect(identical(instance1, instance2), true);
+      expect(identical(instance1, instance2), isTrue);
     });
 
     test('registerAdapter ajoute un adaptateur au registre', () {

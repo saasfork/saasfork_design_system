@@ -24,12 +24,12 @@ void main() {
               expect(context.screenWidth, 320);
               expect(context.screenHeight, 600);
               expect(context.screenSize, SFScreenSize.mobile);
-              expect(context.isMobile, true);
-              expect(context.isTablet, false);
-              expect(context.isDesktop, false);
-              expect(context.isLargeDesktop, false);
-              expect(context.isMobileOrTablet, true);
-              expect(context.isDesktopOrLarger, false);
+              expect(context.isMobile, isTrue);
+              expect(context.isTablet, isFalse);
+              expect(context.isDesktop, isFalse);
+              expect(context.isLargeDesktop, isFalse);
+              expect(context.isMobileOrTablet, isTrue);
+              expect(context.isDesktopOrLarger, isFalse);
               expect(
                 context.columns,
                 equals(
@@ -59,9 +59,9 @@ void main() {
             builder: (context) {
               expect(context.screenWidth, 768);
               expect(context.screenSize, SFScreenSize.tablet);
-              expect(context.isMobile, false);
-              expect(context.isTablet, true);
-              expect(context.isMobileOrTablet, true);
+              expect(context.isMobile, isFalse);
+              expect(context.isTablet, isTrue);
+              expect(context.isMobileOrTablet, isTrue);
               expect(
                 context.columns,
                 equals(
@@ -88,8 +88,8 @@ void main() {
             builder: (context) {
               expect(context.screenWidth, 1100);
               expect(context.screenSize, SFScreenSize.desktop);
-              expect(context.isDesktop, true);
-              expect(context.isDesktopOrLarger, true);
+              expect(context.isDesktop, isTrue);
+              expect(context.isDesktopOrLarger, isTrue);
               expect(
                 context.columns,
                 equals(
@@ -115,8 +115,8 @@ void main() {
             builder: (context) {
               expect(context.screenWidth, 1440);
               expect(context.screenSize, SFScreenSize.largeDesktop);
-              expect(context.isLargeDesktop, true);
-              expect(context.isDesktopOrLarger, true);
+              expect(context.isLargeDesktop, isTrue);
+              expect(context.isDesktopOrLarger, isTrue);
               expect(
                 context.columns,
                 equals(
@@ -141,8 +141,8 @@ void main() {
           child: Builder(
             builder: (context) {
               expect(context.orientation, SFScreenOrientation.portrait);
-              expect(context.isPortrait, true);
-              expect(context.isLandscape, false);
+              expect(context.isPortrait, isTrue);
+              expect(context.isLandscape, isFalse);
               return const SizedBox.shrink();
             },
           ),
@@ -159,8 +159,8 @@ void main() {
           child: Builder(
             builder: (context) {
               expect(context.orientation, SFScreenOrientation.landscape);
-              expect(context.isPortrait, false);
-              expect(context.isLandscape, true);
+              expect(context.isPortrait, isFalse);
+              expect(context.isLandscape, isTrue);
               return const SizedBox.shrink();
             },
           ),

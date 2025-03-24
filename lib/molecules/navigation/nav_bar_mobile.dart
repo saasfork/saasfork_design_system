@@ -53,15 +53,17 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
         // Simplement inverser l'animation sans supprimer les overlays immédiatement
         _animationController.reverse();
 
-        // Attendre la fin de l'animation avant de supprimer les overlays
+        // Correction pour éviter les problèmes d'écouteurs multiples
         if (_overlayEntry != null || _menuEntry != null) {
-          _animationController.addStatusListener((status) {
+          // Stocker la référence à l'écouteur pour pouvoir le supprimer correctement
+          void statusListener(AnimationStatus status) {
             if (status == AnimationStatus.dismissed) {
               _removeOverlays();
-              // Supprimer l'écouteur pour éviter les appels multiples
-              _animationController.removeStatusListener((status) {});
+              _animationController.removeStatusListener(statusListener);
             }
-          });
+          }
+
+          _animationController.addStatusListener(statusListener);
         }
       }
     });
@@ -101,7 +103,7 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
                   _toggleMenu();
                 },
                 behavior: HitTestBehavior.opaque,
-                child: Container(color: Colors.black.withOpacity(0.3)),
+                child: Container(color: Colors.black.withAlpha(30)),
               ),
             ),
           ),
@@ -184,15 +186,17 @@ class _SFNavBarMobileState extends State<SFNavBarMobile>
 
   @override
   Widget build(BuildContext context) {
-    // Simplifier le build pour ne contenir que le bouton hamburger
-    return AnimatedSwitchButton(
-      initialValue: _isMenuOpen.value,
-      onToggle: (_) => _toggleMenu(),
-      firstStateIcon: const Icon(Icons.menu_rounded),
-      secondStateIcon: const Icon(Icons.close_rounded),
-      firstStateColor: Colors.transparent,
-      secondStateColor: Colors.transparent,
-    );
+    // Utiliser Watch pour que le bouton réagisse aux changements de _isMenuOpen
+    return Watch((context) {
+      return AnimatedSwitchButton(
+        initialValue: _isMenuOpen.value,
+        onToggle: (_) => _toggleMenu(),
+        firstStateIcon: const Icon(Icons.menu_rounded),
+        secondStateIcon: const Icon(Icons.close_rounded),
+        firstStateColor: Colors.transparent,
+        secondStateColor: Colors.transparent,
+      );
+    });
   }
 }
 

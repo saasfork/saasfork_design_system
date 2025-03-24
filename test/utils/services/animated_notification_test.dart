@@ -1,12 +1,49 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:saasfork_design_system/utils/services/notifications/animated_notification.dart';
 import 'package:saasfork_design_system/utils/services/notifications/providers/time_provider.dart';
 
-import 'animated_notification_test.mocks.dart';
+// Mock class pour TimerProvider qui implémente correctement l'interface
+class MockTimerProvider implements TimerProvider {
+  void Function()? onTimer;
+  bool wasCancelled = false;
 
-@GenerateMocks([TimerProvider])
+  @override
+  Timer createTimer(Duration duration, Function() callback) {
+    onTimer = callback;
+    return MockTimer();
+  }
+
+  @override
+  void cancel(Timer timer) {
+    wasCancelled = true;
+    timer.cancel();
+  }
+}
+
+// Mock de Timer qui implémente TOUS les membres requis par l'interface
+class MockTimer implements Timer {
+  bool _isActive = true;
+  int _tick = 0;
+
+  @override
+  void cancel() {
+    _isActive = false;
+  }
+
+  @override
+  bool get isActive => _isActive;
+
+  @override
+  int get tick => _tick;
+
+  // Méthode supplémentaire pour les tests
+  void triggerTick() {
+    _tick++;
+  }
+}
+
 void main() {
   late MockTimerProvider mockTimerProvider;
 
@@ -37,7 +74,7 @@ void main() {
 
     expect(find.text('Test Notification'), findsOneWidget);
     expect(capturedState, isNotNull);
-    expect(capturedState!.isClosing, false);
+    expect(capturedState!.isClosing, isFalse);
   });
 
   testWidgets('AnimatedNotification animates on appearance', (
