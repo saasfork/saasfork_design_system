@@ -3,12 +3,7 @@
 library;
 
 // Boutons - Différents types de boutons disponibles
-export './buttons/circular_button.dart';
-export './buttons/icon_button.dart';
-export './buttons/icon_secondary_button.dart';
-export './buttons/link_button.dart';
-export './buttons/main_button.dart';
-export './buttons/secondary_button.dart';
+export './buttons/buttons.dart';
 
 // Divisers - Différents types de diviseurs disponibles
 export 'dividers/divider_with_text.dart';
