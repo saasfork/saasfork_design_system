@@ -80,8 +80,13 @@ class _SFToggleButtonState extends State<SFToggleButton>
 
   @override
   Widget build(BuildContext context) {
-    final lightColor = widget.lightModeColor ?? AppColors.orange;
-    final darkColor = widget.darkModeColor ?? AppColors.indigo;
+    final theme = Theme.of(context);
+    final lightColor = widget.lightModeColor;
+    final darkColor = widget.darkModeColor;
+
+    // Déterminer les couleurs de fond effectives
+    final effectiveLightColor = lightColor ?? AppColors.orange;
+    final effectiveDarkColor = darkColor ?? AppColors.indigo;
 
     return Watch((context) {
       final isDark = _isDarkMode.value;
@@ -92,26 +97,40 @@ class _SFToggleButtonState extends State<SFToggleButton>
               : widget.lightIcon?.icon ?? Icons.light_mode_rounded;
 
       final Color buttonColor =
-          isDark
-              ? (widget.darkModeColor ?? darkColor)
-              : (widget.lightModeColor ?? lightColor);
+          isDark ? effectiveDarkColor : effectiveLightColor;
 
-      // Détermine la couleur d'icône appropriée selon le mode et le contexte
-      Color? iconColor;
+      // Déterminer la couleur d'icône en fonction de l'état et du fond
+      Color? getIconColor() {
+        // Priorité à la couleur explicitement fournie
+        if (isDark && widget.darkIconColor != null) {
+          return widget.darkIconColor;
+        } else if (!isDark && widget.lightIconColor != null) {
+          return widget.lightIconColor;
+        }
 
-      // Priorité à la couleur explicitement fournie
-      if (isDark && widget.darkIconColor != null) {
-        iconColor = widget.darkIconColor;
-      } else if (!isDark && widget.lightIconColor != null) {
-        iconColor = widget.lightIconColor;
+        // Si le fond est transparent, utiliser la couleur du texte
+        final currentColor = isDark ? darkColor : lightColor;
+        if (currentColor == Colors.transparent || currentColor == null) {
+          return theme.textTheme.bodyLarge?.color;
+        }
+
+        // Sinon utiliser une couleur contrastante
+        return ThemeUtils.getContrastColor(buttonColor);
       }
 
-      return SFCircularButton(
-        icon: iconData,
-        size: widget.size,
-        iconColor: iconColor,
-        onPressed: _toggleMode,
-        backgroundColor: buttonColor,
+      return GestureDetector(
+        onTap: _toggleMode,
+        child: Container(
+          decoration: BoxDecoration(shape: BoxShape.circle, color: buttonColor),
+          padding: EdgeInsets.all(
+            AppSizes.getCircularButtonPadding(widget.size),
+          ),
+          child: Icon(
+            iconData,
+            color: getIconColor(),
+            size: AppSizes.getIconSize(widget.size),
+          ),
+        ),
       );
     });
   }
