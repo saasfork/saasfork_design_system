@@ -38,9 +38,8 @@ extension ResponsiveContext on BuildContext {
   bool get isMobileOrTablet => isMobile || isTablet;
   bool get isDesktopOrLarger => isDesktop || isLargeDesktop;
 
-  /// Sélectionner une valeur en fonction du type d'écran (version simplifiée)
+  /// Sélectionner une valeur en fonction du type d'écran
   T responsive<T>({required T mobile, T? tablet, T? desktop, T? largeDesktop}) {
-    // Version plus concise avec cascade
     return switch (screenSize) {
       SFScreenSize.largeDesktop => largeDesktop ?? desktop ?? tablet ?? mobile,
       SFScreenSize.desktop => desktop ?? tablet ?? mobile,

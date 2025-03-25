@@ -27,7 +27,13 @@ class SFResponsiveGrid extends StatelessWidget {
   /// Mode "maximisé" pour optimiser l'utilisation de l'espace sur grands écrans
   final bool maximize;
 
-  const SFResponsiveGrid({
+  /// Alignement des éléments dans la grille
+  final WrapAlignment alignment;
+
+  /// Espacement vertical entre les lignes
+  final double? runSpacing;
+
+  SFResponsiveGrid({
     required this.children,
     this.mobileColumns,
     this.tabletColumns,
@@ -38,8 +44,28 @@ class SFResponsiveGrid extends StatelessWidget {
     this.padding,
     this.maxWidth,
     this.maximize = false,
+    this.alignment = WrapAlignment.start,
+    this.runSpacing,
     super.key,
-  });
+  }) {
+    // Validation des colonnes
+    assert(
+      mobileColumns == null || mobileColumns! > 0,
+      'Le nombre de colonnes doit être positif',
+    );
+    assert(
+      tabletColumns == null || tabletColumns! > 0,
+      'Le nombre de colonnes doit être positif',
+    );
+    assert(
+      desktopColumns == null || desktopColumns! > 0,
+      'Le nombre de colonnes doit être positif',
+    );
+    assert(
+      largeDesktopColumns == null || largeDesktopColumns! > 0,
+      'Le nombre de colonnes doit être positif',
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,37 +73,23 @@ class SFResponsiveGrid extends StatelessWidget {
       builder: (context, constraints) {
         final screenSize = SFBreakpoints.getScreenSize(context);
         final effectiveSpacing = spacing ?? SFBreakpoints.defaultGap;
+        final effectiveRunSpacing = runSpacing ?? effectiveSpacing;
 
-        // Conserver les valeurs d'origine
-        int columns;
-        switch (screenSize) {
-          case SFScreenSize.mobile:
-            columns = mobileColumns ?? SFBreakpoints.mobileColumns;
-            break;
-          case SFScreenSize.tablet:
-            columns = tabletColumns ?? SFBreakpoints.tabletColumns;
-            break;
-          case SFScreenSize.desktop:
-            columns = desktopColumns ?? SFBreakpoints.desktopColumns;
-            break;
-          case SFScreenSize.largeDesktop:
-            columns = largeDesktopColumns ?? SFBreakpoints.largeDesktopColumns;
-            break;
-        }
+        // Calcul du nombre de colonnes effectif
+        final columns = _getEffectiveColumns(screenSize);
 
         // Calculs précis de la largeur
         final double availableWidth = constraints.maxWidth;
         final double totalSpacing = effectiveSpacing * (columns - 1);
         final double itemWidth = (availableWidth - totalSpacing) / columns;
 
-        // Utilisation de Wrap pour préserver le comportement de passage à la ligne
         return Container(
           margin: margin,
           padding: padding,
           child: Wrap(
             spacing: effectiveSpacing,
-            runSpacing: effectiveSpacing,
-            alignment: WrapAlignment.start, // Alignement original
+            runSpacing: effectiveRunSpacing,
+            alignment: alignment,
             children: List.generate(
               children.length,
               (index) => SizedBox(width: itemWidth, child: children[index]),
@@ -86,6 +98,16 @@ class SFResponsiveGrid extends StatelessWidget {
         );
       },
     );
+  }
+
+  int _getEffectiveColumns(SFScreenSize size) {
+    return switch (size) {
+      SFScreenSize.mobile => mobileColumns ?? SFBreakpoints.mobileColumns,
+      SFScreenSize.tablet => tabletColumns ?? SFBreakpoints.tabletColumns,
+      SFScreenSize.desktop => desktopColumns ?? SFBreakpoints.desktopColumns,
+      SFScreenSize.largeDesktop =>
+        largeDesktopColumns ?? SFBreakpoints.largeDesktopColumns,
+    };
   }
 }
 
@@ -141,25 +163,11 @@ class SFResponsiveContainer extends StatelessWidget {
   }
 }
 
-// Fonction utilitaire pour obtenir le padding horizontal responsive
+/// Fonction utilitaire pour obtenir le padding horizontal responsive
 EdgeInsetsGeometry getResponsiveHorizontalPadding(BuildContext context) {
-  final screenSize = SFBreakpoints.getScreenSize(context);
-  double horizontalPadding;
-
-  switch (screenSize) {
-    case SFScreenSize.mobile:
-      horizontalPadding = 16.0;
-      break;
-    case SFScreenSize.tablet:
-      horizontalPadding = 24.0;
-      break;
-    case SFScreenSize.desktop:
-      horizontalPadding = 32.0;
-      break;
-    case SFScreenSize.largeDesktop:
-      horizontalPadding = 48.0;
-      break;
-  }
-
-  return EdgeInsets.symmetric(horizontal: horizontalPadding);
+  return EdgeInsets.symmetric(
+    horizontal: SFBreakpoints.getHorizontalMargin(
+      SFBreakpoints.getScreenSize(context),
+    ),
+  );
 }

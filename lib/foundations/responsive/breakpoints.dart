@@ -13,21 +13,17 @@ class SFBreakpoints {
   /// Seuils de largeur pour chaque type d'écran
   static const double mobileBreakpoint = 0;
   static const double tabletBreakpoint = 600;
-  static const double desktopBreakpoint = 900; // Garde votre valeur originale
-  static const double largeDesktopBreakpoint =
-      1200; // Garde votre valeur originale
+  static const double desktopBreakpoint = 900;
+  static const double largeDesktopBreakpoint = 1200;
 
   /// Nombre de colonnes par défaut pour chaque type d'écran
-  /// IMPORTANT: On garde les valeurs originales pour préserver le comportement
-  static const int mobileColumns =
-      1; // Restauré à 1 pour garder la mise en page originale
-  static const int tabletColumns = 2; // Restauré à 2
-  static const int desktopColumns = 3; // Restauré à 3
-  static const int largeDesktopColumns = 4; // Restauré à 4
+  static const int mobileColumns = 1;
+  static const int tabletColumns = 2;
+  static const int desktopColumns = 3;
+  static const int largeDesktopColumns = 4;
 
   /// Espacement entre les éléments
   static const double defaultGap = 16;
-
   static const int defaultColumns = 12;
 
   /// Marges horizontales par type d'écran
@@ -57,16 +53,12 @@ class SFBreakpoints {
 
   /// Obtient le nombre de colonnes pour une taille d'écran
   static int getColumnsForScreenSize(SFScreenSize size) {
-    switch (size) {
-      case SFScreenSize.mobile:
-        return mobileColumns;
-      case SFScreenSize.tablet:
-        return tabletColumns;
-      case SFScreenSize.desktop:
-        return desktopColumns;
-      case SFScreenSize.largeDesktop:
-        return largeDesktopColumns;
-    }
+    return switch (size) {
+      SFScreenSize.mobile => mobileColumns,
+      SFScreenSize.tablet => tabletColumns,
+      SFScreenSize.desktop => desktopColumns,
+      SFScreenSize.largeDesktop => largeDesktopColumns,
+    };
   }
 
   /// Récupère la marge horizontale pour un type d'écran
