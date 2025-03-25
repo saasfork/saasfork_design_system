@@ -10,7 +10,7 @@ extension ResponsiveContext on BuildContext {
   double get screenHeight => MediaQuery.of(this).size.height;
 
   /// Type d'écran actuel
-  SFScreenSize get screenSize => SFBreakpoints.getScreenSize(screenWidth);
+  SFScreenSize get screenSize => SFBreakpoints.getScreenSize(this);
 
   /// Orientation de l'écran
   SFScreenOrientation get orientation => SFBreakpoints.getOrientation(this);

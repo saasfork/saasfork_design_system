@@ -5,12 +5,44 @@ import 'package:saasfork_design_system/foundations/responsive/responsive_context
 
 void main() {
   group('ResponsiveContext', () {
-    // Changé Breakpoints en SFBreakpoints et ScreenSize en SFScreenSize
-    test('Vérifie les points de rupture utilisés dans les tests', () {
-      expect(SFBreakpoints.getScreenSize(320), SFScreenSize.mobile);
-      expect(SFBreakpoints.getScreenSize(768), SFScreenSize.tablet);
-      expect(SFBreakpoints.getScreenSize(1100), SFScreenSize.desktop);
-      expect(SFBreakpoints.getScreenSize(1440), SFScreenSize.largeDesktop);
+    testWidgets('Vérifie les points de rupture utilisés dans les tests', (
+      tester,
+    ) async {
+      final screenSizeTests = [
+        {
+          'size': const Size(320, 600),
+          'expectedScreenSize': SFScreenSize.mobile,
+        },
+        {
+          'size': const Size(768, 1024),
+          'expectedScreenSize': SFScreenSize.tablet,
+        },
+        {
+          'size': const Size(1100, 800),
+          'expectedScreenSize': SFScreenSize.desktop,
+        },
+        {
+          'size': const Size(1440, 900),
+          'expectedScreenSize': SFScreenSize.largeDesktop,
+        },
+      ];
+
+      for (final test in screenSizeTests) {
+        await tester.pumpWidget(
+          MediaQuery(
+            data: MediaQueryData(size: test['size'] as Size),
+            child: Builder(
+              builder: (context) {
+                expect(
+                  SFBreakpoints.getScreenSize(context),
+                  test['expectedScreenSize'],
+                );
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        );
+      }
     });
 
     testWidgets('détecte correctement le type d\'écran mobile', (tester) async {

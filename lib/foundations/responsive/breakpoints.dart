@@ -28,6 +28,8 @@ class SFBreakpoints {
   /// Espacement entre les éléments
   static const double defaultGap = 16;
 
+  static const int defaultColumns = 12;
+
   /// Marges horizontales par type d'écran
   static const Map<SFScreenSize, double> horizontalMargins = {
     SFScreenSize.mobile: 16,
@@ -36,8 +38,9 @@ class SFBreakpoints {
     SFScreenSize.largeDesktop: 32,
   };
 
-  /// Déterminer le type d'écran selon la largeur
-  static SFScreenSize getScreenSize(double width) {
+  /// Détermine la taille de l'écran en fonction de la largeur
+  static SFScreenSize getScreenSize(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     if (width >= largeDesktopBreakpoint) return SFScreenSize.largeDesktop;
     if (width >= desktopBreakpoint) return SFScreenSize.desktop;
     if (width >= tabletBreakpoint) return SFScreenSize.tablet;
