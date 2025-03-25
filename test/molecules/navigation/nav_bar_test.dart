@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:saasfork_design_system/molecules/navigation/nav_bar_mobile.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
 void main() {
@@ -77,6 +76,11 @@ void main() {
 
       // Vérifier que les actions sont toujours affichées
       expect(find.text('Connexion'), findsOneWidget);
+
+      expect(
+        tester.widget<SFNavBarMobile>(find.byType(SFNavBarMobile)).links,
+        equals(links),
+      );
     });
 
     testWidgets('applique correctement les propriétés personnalisées', (
@@ -173,5 +177,36 @@ void main() {
       expect(find.byType(SFNavBar), findsOneWidget);
       expect(find.text('Logo'), findsOneWidget);
     });
+
+    testWidgets(
+      'ne rend pas SFNavBarMobile quand links est vide en mode mobile',
+      (WidgetTester tester) async {
+        // Simuler un écran de petite taille (mobile)
+        tester.view.physicalSize = const Size(400, 800);
+        tester.view.devicePixelRatio = 1.0;
+        addTearDown(() => tester.view.reset());
+
+        final Widget leading = Text('Logo');
+        final List<SFNavLink> links = []; // Liste vide intentionnellement
+        final List<Widget> actions = [
+          TextButton(onPressed: () {}, child: Text('Connexion')),
+        ];
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SFNavBar(leading: leading, links: links, actions: actions),
+            ),
+          ),
+        );
+
+        // Vérifier que le leading et les actions sont toujours affichés
+        expect(find.text('Logo'), findsOneWidget);
+        expect(find.text('Connexion'), findsOneWidget);
+
+        // Vérifier que SFNavBarMobile n'est PAS rendu quand links est vide
+        expect(find.byType(SFNavBarMobile), findsNothing);
+      },
+    );
   });
 }
