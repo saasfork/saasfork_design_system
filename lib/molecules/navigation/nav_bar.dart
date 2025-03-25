@@ -84,11 +84,12 @@ class SFNavBar extends StatelessWidget implements PreferredSizeWidget {
     return Stack(
       alignment: Alignment.centerLeft,
       children: [
-        SFNavBarMobile(
-          links: links,
-          backgroundColor: backgroundColor,
-          height: preferredSize.height,
-        ),
+        if (links.isNotEmpty)
+          SFNavBarMobile(
+            links: links,
+            backgroundColor: backgroundColor,
+            height: preferredSize.height,
+          ),
         _buildLeading(centered: true),
         _buildActionButtons(alignment: Alignment.centerRight),
       ],
