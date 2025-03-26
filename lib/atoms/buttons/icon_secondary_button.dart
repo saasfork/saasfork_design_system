@@ -8,6 +8,7 @@ class SFSecondaryIconButton extends StatelessWidget {
   final Color? iconColor;
   final String? label;
   final IconPosition iconPosition;
+  final bool disabled;
 
   const SFSecondaryIconButton({
     required this.icon,
@@ -16,13 +17,14 @@ class SFSecondaryIconButton extends StatelessWidget {
     this.iconColor,
     this.label,
     this.iconPosition = IconPosition.start,
+    this.disabled = false,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: disabled ? null : onPressed,
       style: _getButtonStyle(context),
       child: _buildButtonContent(context),
     );
@@ -31,10 +33,12 @@ class SFSecondaryIconButton extends StatelessWidget {
   Widget _buildButtonContent(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final defaultIconColor = isDarkMode ? Colors.white : Colors.grey.shade700;
+    final Color effectiveIconColor =
+        disabled ? AppColors.grey.s400 : (iconColor ?? defaultIconColor);
 
     final iconWidget = Icon(
       icon,
-      color: iconColor ?? defaultIconColor,
+      color: effectiveIconColor,
       size: AppSizes.getIconSize(size),
     );
 
@@ -44,7 +48,10 @@ class SFSecondaryIconButton extends StatelessWidget {
 
     final textWidget = Text(
       label!,
-      style: AppTypography.getScaledStyle(AppTypography.labelLarge, size),
+      style: AppTypography.getScaledStyle(
+        AppTypography.labelLarge,
+        size,
+      ).copyWith(color: disabled ? AppColors.grey.s400 : null),
     );
 
     return Row(
@@ -65,7 +72,7 @@ class SFSecondaryIconButton extends StatelessWidget {
     final theme = Theme.of(context).outlinedButtonTheme.style;
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    return theme?.copyWith(
+    final baseStyle = theme?.copyWith(
       backgroundColor:
           Theme.of(context).outlinedButtonTheme.style!.backgroundColor,
       padding: WidgetStateProperty.all(_getButtonPadding()),
@@ -81,6 +88,15 @@ class SFSecondaryIconButton extends StatelessWidget {
         isDarkMode ? BorderSide.none : BorderSide(color: Colors.grey.shade400),
       ),
     );
+
+    if (disabled) {
+      return baseStyle?.copyWith(
+        backgroundColor: WidgetStateProperty.all(Colors.transparent),
+        side: WidgetStateProperty.all(BorderSide(color: AppColors.grey.s300)),
+      );
+    }
+
+    return baseStyle;
   }
 
   EdgeInsetsGeometry _getButtonPadding() {

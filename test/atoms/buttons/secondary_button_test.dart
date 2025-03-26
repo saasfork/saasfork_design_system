@@ -112,5 +112,47 @@ void main() {
       );
       expect(darkThemeButton, isNotNull);
     });
+
+    testWidgets('respects disabled state', (WidgetTester tester) async {
+      // Arrange
+      const label = 'Disabled Button';
+      bool wasPressed = false;
+
+      // Act - render a disabled button
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFSecondaryButton(
+              label: label,
+              onPressed: () {
+                wasPressed = true;
+              },
+              disabled: true,
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      expect(find.text(label), findsOneWidget);
+
+      // Find the underlying OutlinedButton
+      final outlinedButton = tester.widget<OutlinedButton>(
+        find.byType(OutlinedButton),
+      );
+
+      // Verify that onPressed is null when disabled
+      expect(outlinedButton.onPressed, isNull);
+
+      // Try tapping the button
+      await tester.tap(find.byType(OutlinedButton));
+
+      // Verify the callback wasn't called
+      expect(wasPressed, isFalse);
+
+      // Check the text color is grey when disabled
+      final textWidget = tester.widget<Text>(find.text(label));
+      expect(textWidget.style?.color, equals(AppColors.grey.s400));
+    });
   });
 }

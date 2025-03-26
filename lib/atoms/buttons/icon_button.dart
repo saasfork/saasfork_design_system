@@ -8,6 +8,7 @@ class SFIconButton extends StatelessWidget {
   final Color? iconColor;
   final String? label;
   final IconPosition iconPosition;
+  final bool disabled;
 
   const SFIconButton({
     required this.icon,
@@ -16,13 +17,14 @@ class SFIconButton extends StatelessWidget {
     this.iconColor,
     this.label,
     this.iconPosition = IconPosition.start,
+    this.disabled = false,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: disabled ? null : onPressed,
       style: _getButtonStyle(context),
       child: _buildButtonContent(context),
     );
@@ -31,7 +33,7 @@ class SFIconButton extends StatelessWidget {
   Widget _buildButtonContent(BuildContext context) {
     final iconWidget = Icon(
       icon,
-      color: iconColor ?? Colors.white,
+      color: disabled ? AppColors.grey.s400 : (iconColor ?? Colors.white),
       size: AppSizes.getIconSize(size),
     );
 
@@ -41,7 +43,10 @@ class SFIconButton extends StatelessWidget {
 
     final textWidget = Text(
       label!,
-      style: AppTypography.getScaledStyle(AppTypography.labelLarge, size),
+      style: AppTypography.getScaledStyle(
+        AppTypography.labelLarge,
+        size,
+      ).copyWith(color: disabled ? AppColors.grey.s400 : null),
     );
 
     return Row(
@@ -61,7 +66,7 @@ class SFIconButton extends StatelessWidget {
   ButtonStyle? _getButtonStyle(BuildContext context) {
     final theme = Theme.of(context).elevatedButtonTheme.style;
 
-    return theme?.copyWith(
+    final baseStyle = theme?.copyWith(
       padding: WidgetStateProperty.all(_getButtonPadding()),
       minimumSize: WidgetStateProperty.all(
         label != null ? null : _getButtonSize(),
@@ -72,6 +77,16 @@ class SFIconButton extends StatelessWidget {
         ),
       ),
     );
+
+    // Appliquer le style pour l'état disabled
+    if (disabled) {
+      return baseStyle?.copyWith(
+        backgroundColor: WidgetStateProperty.all(AppColors.grey.s200),
+        side: WidgetStateProperty.all(BorderSide(color: AppColors.grey.s200)),
+      );
+    }
+
+    return baseStyle;
   }
 
   EdgeInsetsGeometry _getButtonPadding() {

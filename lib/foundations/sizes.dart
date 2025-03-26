@@ -109,12 +109,27 @@ class AppSizes {
         return 4.0;
       case ComponentSize.sm:
         return 6.0;
+      case ComponentSize.md:
+        return 8.0;
       case ComponentSize.lg:
         return 12.0;
       case ComponentSize.xl:
         return 16.0;
+    }
+  }
+
+  static double getRadius(ComponentSize size) {
+    switch (size) {
+      case ComponentSize.xs:
+        return 4.0;
+      case ComponentSize.sm:
+        return 6.0;
       case ComponentSize.md:
         return 8.0;
+      case ComponentSize.lg:
+        return 10.0;
+      case ComponentSize.xl:
+        return 12.0;
     }
   }
 }

@@ -342,4 +342,47 @@ void main() {
     final iconWidget = tester.widget<Icon>(find.byType(Icon));
     expect(iconWidget.color, equals(Colors.white));
   });
+
+  testWidgets('SFCircularButton should respect disabled state', (
+    WidgetTester tester,
+  ) async {
+    // Arrange
+    bool buttonPressed = false;
+
+    // Act - Render a disabled button
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SFCircularButton(
+            icon: Icons.add,
+            onPressed: () {
+              buttonPressed = true;
+            },
+            disabled: true,
+          ),
+        ),
+      ),
+    );
+
+    // Find the underlying ElevatedButton
+    final elevatedButton = tester.widget<ElevatedButton>(
+      find.descendant(
+        of: find.byType(SFCircularButton),
+        matching: find.byType(ElevatedButton),
+      ),
+    );
+
+    // Assert - Check that the onPressed is null when disabled
+    expect(elevatedButton.onPressed, isNull);
+
+    // Try tapping the button
+    await tester.tap(find.byType(SFCircularButton));
+
+    // Verify callback wasn't called
+    expect(buttonPressed, isFalse);
+
+    // Check icon color is grey when disabled
+    final iconWidget = tester.widget<Icon>(find.byType(Icon));
+    expect(iconWidget.color, equals(AppColors.grey.s400));
+  });
 }

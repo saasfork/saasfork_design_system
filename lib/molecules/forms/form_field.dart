@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:saasfork_design_system/atoms/forms/form_message.dart';
 import 'package:saasfork_design_system/foundations/colors.dart';
 import 'package:saasfork_design_system/foundations/spacing.dart';
 
@@ -37,16 +38,7 @@ class SFFormfield extends StatelessWidget {
           ),
         ),
         input,
-        Text(
-          errorMessage ?? hintMessage ?? '',
-          style: TextStyle(
-            fontStyle: FontStyle.italic,
-            color:
-                errorMessage != null && errorMessage!.isNotEmpty
-                    ? AppColors.red.s400
-                    : AppColors.gray.s400,
-          ),
-        ),
+        SFFormMessage(errorMessage: errorMessage, hintMessage: hintMessage),
       ],
     );
   }

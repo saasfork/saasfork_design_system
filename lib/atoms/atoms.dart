@@ -3,14 +3,21 @@
 library;
 
 // Boutons - Différents types de boutons disponibles
-export './buttons/buttons.dart';
+export 'buttons/buttons.dart';
+
+// Icons - Différents types d'icônes disponibles
+export 'icons/icon.dart';
+
+// Images - Différents types images disponibles
+export 'images/image_square.dart';
+
+// Inputs - Différents types d'inputs disponibles
+export 'inputs/text_field.dart';
+export 'inputs/password_field.dart';
+export 'inputs/file_field.dart';
 
 // Divisers - Différents types de diviseurs disponibles
 export 'dividers/divider_with_text.dart';
 
-// Inputs - Différents types d'inputs disponibles
-export './inputs/text_field.dart';
-export './inputs/password_field.dart';
-
-// Icons - Différents types d'icônes disponibles
-export './icons/icon.dart';
+// Interactives - Différents types d'interactifs disponibles
+export 'interactives/removable_content.dart';

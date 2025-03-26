@@ -31,6 +31,4 @@ migrate_working_dir/
 build/
 
 pubspec_overrides.yaml
-
-# Fichiers générés par Mockito
 *.mocks.dart

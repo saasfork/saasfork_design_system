@@ -8,6 +8,7 @@ class SFCircularButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color? iconColor;
   final Color? backgroundColor;
+  final bool disabled;
 
   const SFCircularButton({
     required this.icon,
@@ -15,6 +16,7 @@ class SFCircularButton extends StatelessWidget {
     this.size = ComponentSize.md,
     this.iconColor,
     this.backgroundColor,
+    this.disabled = false,
     super.key,
   });
 
@@ -34,9 +36,13 @@ class SFCircularButton extends StatelessWidget {
       width: _getButtonDimension(),
       height: _getButtonDimension(),
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: disabled ? null : onPressed,
         style: _getButtonStyle(context),
-        child: Icon(icon, color: effectiveIconColor, size: _getIconSize()),
+        child: Icon(
+          icon,
+          color: disabled ? AppColors.grey.s400 : effectiveIconColor,
+          size: _getIconSize(),
+        ),
       ),
     );
   }
@@ -51,6 +57,14 @@ class SFCircularButton extends StatelessWidget {
       fixedSize: WidgetStateProperty.all(Size.square(_getButtonDimension())),
       maximumSize: WidgetStateProperty.all(Size.square(_getButtonDimension())),
     );
+
+    // Appliquer le style pour l'état disabled
+    if (disabled) {
+      return baseStyle?.copyWith(
+        backgroundColor: WidgetStateProperty.all(AppColors.grey.s200),
+        side: WidgetStateProperty.all(BorderSide(color: AppColors.grey.s200)),
+      );
+    }
 
     // Appliquer la couleur personnalisée si fournie
     if (backgroundColor != null) {

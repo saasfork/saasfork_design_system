@@ -276,5 +276,49 @@ void main() {
       expect(find.byIcon(Icons.add), findsOneWidget);
       expect(find.text('Add Item'), findsOneWidget);
     });
+
+    testWidgets('should respect disabled state', (WidgetTester tester) async {
+      // Arrange
+      bool wasPressed = false;
+
+      // Act - render a disabled button
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFIconButton(
+              icon: Icons.add,
+              label: 'Add Item',
+              onPressed: () {
+                wasPressed = true;
+              },
+              disabled: true,
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      // Find the underlying ElevatedButton
+      final elevatedButton = tester.widget<ElevatedButton>(
+        find.byType(ElevatedButton),
+      );
+
+      // Verify that onPressed is null when disabled
+      expect(elevatedButton.onPressed, isNull);
+
+      // Try tapping the button
+      await tester.tap(find.byType(SFIconButton));
+
+      // Verify callback wasn't called
+      expect(wasPressed, isFalse);
+
+      // Check the icon color is grey when disabled
+      final iconWidget = tester.widget<Icon>(find.byIcon(Icons.add));
+      expect(iconWidget.color, equals(AppColors.grey.s400));
+
+      // Check the text color is grey when disabled
+      final textWidget = tester.widget<Text>(find.text('Add Item'));
+      expect(textWidget.style?.color, equals(AppColors.grey.s400));
+    });
   });
 }

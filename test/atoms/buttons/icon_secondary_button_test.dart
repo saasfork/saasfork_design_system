@@ -334,5 +334,50 @@ void main() {
       // Alternativement, on peut aussi sauter ce test
       // Si la fonctionnalité est testée visuellement dans Widgetbook
     });
+
+    testWidgets('should respect disabled state', (WidgetTester tester) async {
+      // Arrange
+      bool wasPressed = false;
+      const String testLabel = 'Add Item';
+
+      // Act - render a disabled button
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFSecondaryIconButton(
+              icon: Icons.add,
+              label: testLabel,
+              onPressed: () {
+                wasPressed = true;
+              },
+              disabled: true,
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      // Find the underlying OutlinedButton
+      final outlinedButton = tester.widget<OutlinedButton>(
+        find.byType(OutlinedButton),
+      );
+
+      // Verify that onPressed is null when disabled
+      expect(outlinedButton.onPressed, isNull);
+
+      // Try tapping the button
+      await tester.tap(find.byType(SFSecondaryIconButton));
+
+      // Verify callback wasn't called
+      expect(wasPressed, isFalse);
+
+      // Check the icon color is grey when disabled
+      final iconWidget = tester.widget<Icon>(find.byIcon(Icons.add));
+      expect(iconWidget.color, equals(AppColors.grey.s400));
+
+      // Check the text color is grey when disabled
+      final textWidget = tester.widget<Text>(find.text(testLabel));
+      expect(textWidget.style?.color, equals(AppColors.grey.s400));
+    });
   });
 }
