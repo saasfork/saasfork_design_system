@@ -37,6 +37,21 @@ class AppSizes {
     }
   }
 
+  static EdgeInsets getButtonPadding(ComponentSize size) {
+    switch (size) {
+      case ComponentSize.xs:
+        return const EdgeInsets.all(4);
+      case ComponentSize.sm:
+        return const EdgeInsets.all(6);
+      case ComponentSize.md:
+        return const EdgeInsets.all(8);
+      case ComponentSize.lg:
+        return const EdgeInsets.all(10);
+      case ComponentSize.xl:
+        return const EdgeInsets.all(12);
+    }
+  }
+
   /// Convertit une taille de composant en EdgeInsets pour le padding des inputs
   static EdgeInsets getInputPadding(ComponentSize size) {
     switch (size) {
@@ -130,6 +145,21 @@ class AppSizes {
         return 10.0;
       case ComponentSize.xl:
         return 12.0;
+    }
+  }
+
+  static Size getButtonSize(ComponentSize size) {
+    switch (size) {
+      case ComponentSize.xs:
+        return const Size(16, 16);
+      case ComponentSize.sm:
+        return const Size(32, 32);
+      case ComponentSize.md:
+        return const Size(36, 36);
+      case ComponentSize.lg:
+        return const Size(40, 40);
+      case ComponentSize.xl:
+        return const Size(48, 48);
     }
   }
 }

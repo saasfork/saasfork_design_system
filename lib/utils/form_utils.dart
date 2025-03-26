@@ -47,7 +47,7 @@ class FormUtils {
         else if (control.validators.isNotEmpty) {
           // Vérifier les validateurs
           if (control.validators.any(
-            (validator) => validator == Validators.required,
+            (validator) => validator is RequiredValidator,
           )) {
             if (control.value == null ||
                 (control.value is String &&

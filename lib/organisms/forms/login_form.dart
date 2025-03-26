@@ -70,7 +70,7 @@ class _SFLoginFormState extends State<SFLoginForm> {
           isRequired: form
               .control('email')
               .validators
-              .any((validator) => validator == Validators.required),
+              .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_email'] ?? '',
           input: SFTextField(
             placeholder: widget.additionalData['placeholder_email'] ?? '',
@@ -88,7 +88,7 @@ class _SFLoginFormState extends State<SFLoginForm> {
           isRequired: form
               .control('password')
               .validators
-              .any((validator) => validator == Validators.required),
+              .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_password'] ?? '',
           input: SFPasswordField(
             placeholder: widget.additionalData['placeholder_password'] ?? '',

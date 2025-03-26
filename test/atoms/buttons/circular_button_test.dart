@@ -297,11 +297,11 @@ void main() {
     (WidgetTester tester) async {
       // Map des tailles d'icônes attendues pour chaque taille de composant
       final Map<ComponentSize, double> expectedIconSizes = {
-        ComponentSize.xs: 16.0,
-        ComponentSize.sm: 20.0,
-        ComponentSize.md: 24.0,
-        ComponentSize.lg: 28.0,
-        ComponentSize.xl: 32.0,
+        ComponentSize.xs: 12.0,
+        ComponentSize.sm: 16.0,
+        ComponentSize.md: 18.0,
+        ComponentSize.lg: 20.0,
+        ComponentSize.xl: 22.0,
       };
 
       for (final size in ComponentSize.values) {

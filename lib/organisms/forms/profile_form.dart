@@ -82,7 +82,7 @@ class _SFProfileFormState extends State<SFProfileForm> {
           isRequired: form
               .control('email')
               .validators
-              .any((validator) => validator == Validators.required),
+              .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_email'] ?? '',
           input: SFTextField(
             placeholder: widget.additionalData['placeholder_email'] ?? '',
@@ -100,7 +100,7 @@ class _SFProfileFormState extends State<SFProfileForm> {
           isRequired: form
               .control('username')
               .validators
-              .any((validator) => validator == Validators.required),
+              .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_username'] ?? '',
           input: SFTextField(
             placeholder: widget.additionalData['placeholder_username'] ?? '',

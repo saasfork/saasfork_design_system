@@ -75,9 +75,13 @@ class SFSecondaryIconButton extends StatelessWidget {
     final baseStyle = theme?.copyWith(
       backgroundColor:
           Theme.of(context).outlinedButtonTheme.style!.backgroundColor,
-      padding: WidgetStateProperty.all(_getButtonPadding()),
+      padding: WidgetStateProperty.all(
+        label == null
+            ? AppSizes.getButtonPadding(size)
+            : AppSizes.getPadding(size),
+      ),
       minimumSize: WidgetStateProperty.all(
-        label != null ? null : _getButtonSize(),
+        label != null ? null : AppSizes.getButtonSize(size),
       ),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
@@ -97,39 +101,5 @@ class SFSecondaryIconButton extends StatelessWidget {
     }
 
     return baseStyle;
-  }
-
-  EdgeInsetsGeometry _getButtonPadding() {
-    if (label != null) {
-      return AppSizes.getPadding(size);
-    }
-
-    switch (size) {
-      case ComponentSize.xs:
-        return const EdgeInsets.all(4);
-      case ComponentSize.sm:
-        return const EdgeInsets.all(6);
-      case ComponentSize.md:
-        return const EdgeInsets.all(8);
-      case ComponentSize.lg:
-        return const EdgeInsets.all(10);
-      case ComponentSize.xl:
-        return const EdgeInsets.all(12);
-    }
-  }
-
-  Size _getButtonSize() {
-    switch (size) {
-      case ComponentSize.xs:
-        return const Size(16, 16);
-      case ComponentSize.sm:
-        return const Size(32, 32);
-      case ComponentSize.md:
-        return const Size(36, 36);
-      case ComponentSize.lg:
-        return const Size(40, 40);
-      case ComponentSize.xl:
-        return const Size(48, 48);
-    }
   }
 }

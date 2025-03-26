@@ -41,7 +41,7 @@ class SFCircularButton extends StatelessWidget {
         child: Icon(
           icon,
           color: disabled ? AppColors.grey.s400 : effectiveIconColor,
-          size: _getIconSize(),
+          size: AppSizes.getIconSize(size),
         ),
       ),
     );
@@ -91,22 +91,6 @@ class SFCircularButton extends StatelessWidget {
         return 56.0;
       case ComponentSize.xl:
         return 64.0;
-    }
-  }
-
-  // Méthode pour obtenir la taille de l'icône en fonction de la taille du bouton
-  double _getIconSize() {
-    switch (size) {
-      case ComponentSize.xs:
-        return 16.0;
-      case ComponentSize.sm:
-        return 20.0;
-      case ComponentSize.md:
-        return 24.0;
-      case ComponentSize.lg:
-        return 28.0;
-      case ComponentSize.xl:
-        return 32.0;
     }
   }
 }

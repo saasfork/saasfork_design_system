@@ -56,7 +56,7 @@ class _SFForgotPasswordFormState extends State<SFForgotPasswordForm> {
           isRequired: form
               .control('email')
               .validators
-              .any((validator) => validator == Validators.required),
+              .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_email'] ?? '',
           input: SFTextField(
             placeholder: widget.additionalData['placeholder_email'] ?? '',

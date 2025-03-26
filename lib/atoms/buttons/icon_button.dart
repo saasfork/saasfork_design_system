@@ -6,6 +6,7 @@ class SFIconButton extends StatelessWidget {
   final ComponentSize size;
   final VoidCallback onPressed;
   final Color? iconColor;
+  final Color? buttonColor;
   final String? label;
   final IconPosition iconPosition;
   final bool disabled;
@@ -15,6 +16,7 @@ class SFIconButton extends StatelessWidget {
     required this.onPressed,
     this.size = ComponentSize.md,
     this.iconColor,
+    this.buttonColor,
     this.label,
     this.iconPosition = IconPosition.start,
     this.disabled = false,
@@ -67,9 +69,13 @@ class SFIconButton extends StatelessWidget {
     final theme = Theme.of(context).elevatedButtonTheme.style;
 
     final baseStyle = theme?.copyWith(
-      padding: WidgetStateProperty.all(_getButtonPadding()),
+      padding: WidgetStateProperty.all(
+        label == null
+            ? AppSizes.getButtonPadding(size)
+            : AppSizes.getPadding(size),
+      ),
       minimumSize: WidgetStateProperty.all(
-        label != null ? null : _getButtonSize(),
+        label != null ? null : AppSizes.getButtonSize(size),
       ),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
@@ -86,40 +92,14 @@ class SFIconButton extends StatelessWidget {
       );
     }
 
+    // Appliquer la couleur personnalisée du bouton si spécifiée
+    if (buttonColor != null) {
+      return baseStyle?.copyWith(
+        backgroundColor: WidgetStateProperty.all(buttonColor),
+        side: WidgetStateProperty.all(BorderSide(color: buttonColor!)),
+      );
+    }
+
     return baseStyle;
-  }
-
-  EdgeInsetsGeometry _getButtonPadding() {
-    if (label != null) {
-      return AppSizes.getPadding(size);
-    }
-
-    switch (size) {
-      case ComponentSize.xs:
-        return const EdgeInsets.all(4);
-      case ComponentSize.sm:
-        return const EdgeInsets.all(6);
-      case ComponentSize.md:
-        return const EdgeInsets.all(8);
-      case ComponentSize.lg:
-        return const EdgeInsets.all(10);
-      case ComponentSize.xl:
-        return const EdgeInsets.all(12);
-    }
-  }
-
-  Size _getButtonSize() {
-    switch (size) {
-      case ComponentSize.xs:
-        return const Size(16, 16);
-      case ComponentSize.sm:
-        return const Size(32, 32);
-      case ComponentSize.md:
-        return const Size(36, 36);
-      case ComponentSize.lg:
-        return const Size(40, 40);
-      case ComponentSize.xl:
-        return const Size(48, 48);
-    }
   }
 }
