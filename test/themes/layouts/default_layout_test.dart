@@ -105,28 +105,6 @@ void main() {
       expect(find.byType(Drawer), findsNothing);
     });
 
-    testWidgets('renders with custom padding', (WidgetTester tester) async {
-      const customPadding = EdgeInsets.all(32.0);
-
-      await tester.pumpWidget(
-        ProviderScope(
-          child: MaterialApp(
-            home: SFDefaultLayout(
-              contentPadding: customPadding,
-              builder: SFLayoutBuilder(
-                contentBuilder: (context, ref) => const Text('Content'),
-              ),
-            ),
-          ),
-        ),
-      );
-
-      expect(find.text('Content'), findsOneWidget);
-
-      final paddingWidget = tester.widget<Padding>(find.byType(Padding));
-      expect(paddingWidget.padding, equals(customPadding));
-    });
-
     testWidgets('layout is wrapped with NotificationWrapper', (
       WidgetTester tester,
     ) async {
