@@ -5,29 +5,24 @@ import 'package:flutter/material.dart';
 import 'package:saasfork_design_system/atoms/images/abstract_image.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
-class ImageSquare extends AbstractImageWidget {
-  final double size;
-  final ComponentSize radius;
+class ImageCircle extends AbstractImageWidget {
+  final double diameter;
 
-  const ImageSquare({
+  const ImageCircle({
     super.key,
-    required this.size,
+    required this.diameter,
     super.imageSource,
-    this.radius = ComponentSize.md,
     super.imageLoader,
   });
 
   @override
-  State<ImageSquare> createState() => _ImageSquareState();
+  State<ImageCircle> createState() => _ImageCircleState();
 }
 
-class _ImageSquareState extends AbstractImageWidgetState<ImageSquare> {
+class _ImageCircleState extends AbstractImageWidgetState<ImageCircle> {
   @override
   Widget buildClippedContainer(Widget child) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppSizes.getRadius(widget.radius)),
-      child: child,
-    );
+    return ClipOval(child: child);
   }
 
   @override
@@ -104,7 +99,11 @@ class _ImageSquareState extends AbstractImageWidgetState<ImageSquare> {
       width: getSize(),
       height: getSize(),
       color: AppColors.gray.s50,
-      child: Icon(Icons.image, color: AppColors.gray.s400),
+      child: Icon(
+        Icons.person,
+        color: AppColors.gray.s400,
+        size: getSize() * 0.5,
+      ),
     );
   }
 
@@ -115,12 +114,16 @@ class _ImageSquareState extends AbstractImageWidgetState<ImageSquare> {
       width: getSize(),
       height: getSize(),
       color: AppColors.gray.s50,
-      child: Icon(Icons.broken_image, color: AppColors.gray.s400),
+      child: Icon(
+        Icons.broken_image,
+        color: AppColors.gray.s400,
+        size: getSize() * 0.5,
+      ),
     );
   }
 
   @override
   double getSize() {
-    return widget.size;
+    return widget.diameter;
   }
 }

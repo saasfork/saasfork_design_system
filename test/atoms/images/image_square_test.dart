@@ -35,7 +35,7 @@ void main() {
         MaterialApp(
           home: ImageSquare(
             size: 100,
-            imageFile: null,
+            imageSource: null,
             imageLoader: mockImageLoader,
           ),
         ),
@@ -60,7 +60,7 @@ void main() {
         MaterialApp(
           home: ImageSquare(
             size: 100,
-            imageFile: null,
+            imageSource: null,
             radius: ComponentSize.lg,
             imageLoader: mockImageLoader,
           ),
@@ -94,7 +94,7 @@ void main() {
           MaterialApp(
             home: ImageSquare(
               size: 100,
-              imageFile: imageSource,
+              imageSource: imageSource,
               imageLoader: mockImageLoader,
             ),
           ),
@@ -134,7 +134,7 @@ void main() {
 
                 return ImageSquare(
                   size: 100,
-                  imageFile: imageSource,
+                  imageSource: imageSource,
                   imageLoader: mockImageLoader,
                 );
               },

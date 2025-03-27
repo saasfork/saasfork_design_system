@@ -10,6 +10,7 @@ export 'icons/icon.dart';
 
 // Images - Différents types images disponibles
 export 'images/image_square.dart';
+export 'images/image_circle.dart';
 
 // Inputs - Différents types d'inputs disponibles
 export 'inputs/text_field.dart';
