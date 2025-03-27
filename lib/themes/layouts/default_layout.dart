@@ -35,10 +35,7 @@ class SFDefaultLayout extends ConsumerWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Padding(
-            padding: contentPadding,
-            child: builder.contentBuilder(context, ref),
-          ),
+          builder.contentBuilder(context, ref),
 
           if (builder.footerBuilder != null)
             Positioned(
