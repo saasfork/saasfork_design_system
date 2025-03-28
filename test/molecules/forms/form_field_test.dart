@@ -165,4 +165,60 @@ void main() {
       );
     },
   );
+
+  testWidgets('SFFormfield does not display label when it is null', (
+    WidgetTester tester,
+  ) async {
+    // Arrangement
+    final input = TextFormField(
+      decoration: const InputDecoration(border: OutlineInputBorder()),
+    );
+
+    // Act
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: SFFormfield(label: null, input: input))),
+    );
+
+    // Assert
+    final formField = find.byType(SFFormfield);
+    final column = tester.widget<Column>(
+      find.descendant(of: formField, matching: find.byType(Column)),
+    );
+
+    // Le premier widget dans la colonne ne devrait pas être un Text (label)
+    expect(column.children.first, isNot(isA<Text>()));
+
+    // Vérifier que seuls les widgets input et SFFormMessage sont présents
+    expect(column.children.length, 2);
+    expect(column.children.first, isA<TextFormField>());
+    expect(column.children.last, isA<SFFormMessage>());
+  });
+
+  testWidgets('SFFormfield does not display label when it is empty', (
+    WidgetTester tester,
+  ) async {
+    // Arrangement
+    final input = TextFormField(
+      decoration: const InputDecoration(border: OutlineInputBorder()),
+    );
+
+    // Act
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: SFFormfield(label: '', input: input))),
+    );
+
+    // Assert
+    final formField = find.byType(SFFormfield);
+    final column = tester.widget<Column>(
+      find.descendant(of: formField, matching: find.byType(Column)),
+    );
+
+    // Le premier widget dans la colonne ne devrait pas être un Text (label)
+    expect(column.children.first, isNot(isA<Text>()));
+
+    // Vérifier que seuls les widgets input et SFFormMessage sont présents
+    expect(column.children.length, 2);
+    expect(column.children.first, isA<TextFormField>());
+    expect(column.children.last, isA<SFFormMessage>());
+  });
 }

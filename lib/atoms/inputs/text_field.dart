@@ -118,7 +118,7 @@ class SFTextField extends StatelessWidget {
         margin: const EdgeInsets.only(left: 1),
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm,
-          vertical: AppSpacing.xs,
+          vertical: 7,
         ),
         decoration: BoxDecoration(
           color: backgroundColor,
@@ -127,10 +127,7 @@ class SFTextField extends StatelessWidget {
             bottomLeft: Radius.circular(borderRadius),
           ),
         ),
-        child: Container(
-          margin: const EdgeInsets.only(bottom: AppSpacing.xs),
-          child: Text(prefixText!, style: style),
-        ),
+        child: Text(prefixText!, style: style),
       ),
     );
   }
