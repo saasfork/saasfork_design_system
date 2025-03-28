@@ -6,12 +6,16 @@ class SFTextField extends StatelessWidget {
   final bool? isInError;
   final ComponentSize size;
   final TextEditingController? controller;
+  final Color? backgroundColor;
+  final String? prefixText;
 
   const SFTextField({
     required this.placeholder,
     this.isInError = false,
     this.size = ComponentSize.md,
     this.controller,
+    this.backgroundColor,
+    this.prefixText,
     super.key,
   });
 
@@ -19,37 +23,114 @@ class SFTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final inputTheme = theme.inputDecorationTheme;
-    final inputPadding = AppSizes.getInputPadding(size);
 
-    final TextStyle? errorHintStyle = inputTheme.hintStyle?.copyWith(
-      color:
-          inputTheme.errorBorder is OutlineInputBorder
-              ? (inputTheme.errorBorder as OutlineInputBorder).borderSide.color
-              : AppColors.red.s300,
+    // Optimisation des calculs de base
+    final bool hasError = isInError == true;
+    final bool hasPrefix = prefixText != null && prefixText!.isNotEmpty;
+
+    // Récupérer le border radius depuis le thème de manière sécurisée
+    final double borderRadius =
+        inputTheme.enabledBorder is OutlineInputBorder
+            ? (inputTheme.enabledBorder as OutlineInputBorder)
+                .borderRadius
+                .topLeft
+                .x
+            : AppSpacing.sm;
+
+    // Configuration des styles de texte
+    final textStyle = AppTypography.getScaledStyle(
+      AppTypography.bodyLarge,
+      size,
     );
+
+    // Déterminer la couleur pour l'état d'erreur de manière sécurisée
+    final Color errorColor =
+        inputTheme.errorBorder is OutlineInputBorder
+            ? (inputTheme.errorBorder as OutlineInputBorder).borderSide.color
+            : AppColors.red.s300;
+
+    // Style pour le hint et le préfixe
+    final hintStyle =
+        hasError
+            ? textStyle.copyWith(color: errorColor)
+            : textStyle.copyWith(color: inputTheme.hintStyle?.color);
+
+    // Bordures selon l'état avec valeurs par défaut
+    final InputBorder defaultBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(borderRadius),
+    );
+
+    final InputBorder defaultErrorBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(borderRadius),
+      borderSide: BorderSide(color: errorColor),
+    );
+
+    final InputBorder activeBorder =
+        hasError
+            ? (inputTheme.errorBorder ?? defaultErrorBorder)
+            : (inputTheme.enabledBorder ?? defaultBorder);
+
+    final InputBorder focusedBorder =
+        hasError
+            ? (inputTheme.focusedErrorBorder ?? defaultErrorBorder)
+            : (inputTheme.focusedBorder ?? defaultBorder);
+
+    // Couleur de fond du préfixe
+    final Color prefixBackgroundColor =
+        hasError ? AppColors.red.s50 : AppColors.gray.s50;
 
     return TextField(
       controller: controller,
-      style: AppTypography.getScaledStyle(AppTypography.bodyLarge, size),
+      style: textStyle,
       decoration: InputDecoration(
         hintText: placeholder,
-        hintStyle:
-            isInError == true
-                ? errorHintStyle
-                : AppTypography.getScaledStyle(
-                  AppTypography.bodyLarge,
-                  size,
-                ).copyWith(color: inputTheme.hintStyle?.color),
-        contentPadding: inputPadding,
+        hintStyle: hintStyle,
+        contentPadding: AppSizes.getInputPadding(size),
         constraints: AppSizes.getInputConstraints(size),
-        enabledBorder:
-            isInError == true
-                ? theme.inputDecorationTheme.errorBorder
-                : theme.inputDecorationTheme.enabledBorder,
-        focusedBorder:
-            isInError == true
-                ? theme.inputDecorationTheme.focusedErrorBorder
-                : theme.inputDecorationTheme.focusedBorder,
+        enabledBorder: activeBorder,
+        focusedBorder: focusedBorder,
+        filled: backgroundColor != null || inputTheme.filled == true,
+        fillColor: backgroundColor ?? inputTheme.fillColor,
+        prefixIcon:
+            hasPrefix
+                ? _buildPrefix(
+                  borderRadius: borderRadius,
+                  style: hintStyle,
+                  backgroundColor: prefixBackgroundColor,
+                )
+                : null,
+        disabledBorder: inputTheme.disabledBorder ?? defaultBorder,
+        border: inputTheme.border ?? defaultBorder,
+      ),
+    );
+  }
+
+  // Méthode extraite pour construire le préfixe
+  Widget _buildPrefix({
+    required double borderRadius,
+    required TextStyle? style,
+    required Color backgroundColor,
+  }) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      widthFactor: 1.0,
+      child: Container(
+        margin: const EdgeInsets.only(left: 1),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xs,
+        ),
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(borderRadius),
+            bottomLeft: Radius.circular(borderRadius),
+          ),
+        ),
+        child: Container(
+          margin: const EdgeInsets.only(bottom: AppSpacing.xs),
+          child: Text(prefixText!, style: style),
+        ),
       ),
     );
   }

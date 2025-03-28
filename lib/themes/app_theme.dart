@@ -2,43 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
 class AppTheme {
+  // Constantes pour les valeurs fréquemment utilisées
+  static const double defaultBorderRadius = AppSpacing.sm;
+  static const double defaultElevation = 0.0;
+
+  // Méthode utilitaire pour créer les bordures d'input
   static OutlineInputBorder _createInputBorder(Color color) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(AppSpacing.sm),
+      borderRadius: BorderRadius.circular(defaultBorderRadius),
       borderSide: BorderSide(color: color),
     );
   }
 
+  // Méthode pour obtenir la couleur de fond du préfixe
+  static Color getPrefixBackgroundColor(
+    BuildContext context, {
+    bool isError = false,
+  }) {
+    if (isError) {
+      return AppColors.red.s50;
+    }
+
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.light
+        ? AppColors.gray.s50
+        : AppColors.grey.s700;
+  }
+
+  // Styles pour les boutons élevés
   static ButtonStyle _createElevatedButtonStyle({
     required Color backgroundColor,
     required Color foregroundColor,
     BorderSide? side,
   }) {
     return ButtonStyle(
-      backgroundColor: WidgetStateProperty.resolveWith((states) {
-        // Toujours respecter la couleur de fond spécifiée
-        return backgroundColor;
-      }),
-      foregroundColor: WidgetStateProperty.resolveWith((states) {
-        // Pour les boutons transparents, utiliser la couleur du texte du thème
-        if (backgroundColor == Colors.transparent) {
-          // Ici, nous retournons null pour que le système utilise la couleur du texte du thème
-          return null;
-        }
-        return foregroundColor;
-      }),
+      backgroundColor: WidgetStateProperty.resolveWith((_) => backgroundColor),
+      foregroundColor: WidgetStateProperty.resolveWith(
+        (states) =>
+            backgroundColor == Colors.transparent ? null : foregroundColor,
+      ),
       padding: WidgetStateProperty.all(AppSizes.getPadding(ComponentSize.md)),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.sm),
+          borderRadius: BorderRadius.circular(defaultBorderRadius),
           side: side ?? BorderSide.none,
         ),
       ),
       textStyle: WidgetStateProperty.all(AppTypography.labelLarge),
-      elevation: WidgetStateProperty.all(0),
+      elevation: WidgetStateProperty.all(defaultElevation),
     );
   }
 
+  // Styles pour les boutons avec contour
   static ButtonStyle _createOutlinedButtonStyle({
     required Color foregroundColor,
     required Color backgroundColor,
@@ -51,7 +66,7 @@ class AppTheme {
       textStyle: WidgetStateProperty.all(AppTypography.labelLarge),
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.sm),
+          borderRadius: BorderRadius.circular(defaultBorderRadius),
           side: side ?? BorderSide.none,
         ),
       ),
@@ -67,6 +82,7 @@ class AppTheme {
     );
   }
 
+  // Thème pour les décorations d'input
   static InputDecorationTheme _createInputDecorationTheme({
     required Color fillColor,
     required Color hintColor,
@@ -75,51 +91,54 @@ class AppTheme {
     required Color errorBorderColor,
     ComponentSize size = ComponentSize.md,
   }) {
+    final baseTextStyle = AppTypography.getScaledStyle(
+      AppTypography.bodyLarge,
+      size,
+    );
+
     return InputDecorationTheme(
       filled: true,
       fillColor: fillColor,
       hoverColor: Colors.transparent,
-      hintStyle: AppTypography.getScaledStyle(
-        AppTypography.bodyLarge,
-        size,
-      ).copyWith(color: hintColor),
+      hintStyle: baseTextStyle.copyWith(color: hintColor),
       enabledBorder: _createInputBorder(enabledBorderColor),
       focusedBorder: _createInputBorder(focusedBorderColor),
       errorBorder: _createInputBorder(errorBorderColor),
       focusedErrorBorder: _createInputBorder(errorBorderColor),
+      // Adaptez les paddings en fonction de la taille
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical:
+            size == ComponentSize.lg
+                ? AppSpacing.md
+                : (size == ComponentSize.sm ? AppSpacing.xs : AppSpacing.sm),
+      ),
+      isDense: size == ComponentSize.sm,
     );
   }
 
-  // Nouvelle méthode pour créer un TextTheme basé sur AppTypography
+  // Créer un thème de texte basé sur AppTypography
   static TextTheme _createTextTheme(Color textColor) {
     return TextTheme(
-      // Styles d'affichage
       displayLarge: AppTypography.displayLarge.copyWith(color: textColor),
       displayMedium: AppTypography.displayMedium.copyWith(color: textColor),
       displaySmall: AppTypography.displaySmall.copyWith(color: textColor),
-
-      // Styles de titres
       headlineLarge: AppTypography.headlineLarge.copyWith(color: textColor),
       headlineMedium: AppTypography.headlineMedium.copyWith(color: textColor),
       headlineSmall: AppTypography.headlineSmall.copyWith(color: textColor),
-
-      // Styles de titres d'éléments
       titleLarge: AppTypography.titleLarge.copyWith(color: textColor),
       titleMedium: AppTypography.titleMedium.copyWith(color: textColor),
       titleSmall: AppTypography.titleSmall.copyWith(color: textColor),
-
-      // Styles de corps de texte
       bodyLarge: AppTypography.bodyLarge.copyWith(color: textColor),
       bodyMedium: AppTypography.bodyMedium.copyWith(color: textColor),
       bodySmall: AppTypography.bodySmall.copyWith(color: textColor),
-
-      // Styles d'étiquettes
       labelLarge: AppTypography.labelLarge.copyWith(color: textColor),
       labelMedium: AppTypography.labelMedium.copyWith(color: textColor),
       labelSmall: AppTypography.labelSmall.copyWith(color: textColor),
     );
   }
 
+  // Configuration du thème clair
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: Colors.white,
@@ -189,6 +208,7 @@ class AppTheme {
     ),
   );
 
+  // Configuration du thème sombre
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: AppColors.grey.s900,
