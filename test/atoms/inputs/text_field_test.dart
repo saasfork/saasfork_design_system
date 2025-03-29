@@ -263,6 +263,90 @@ void main() {
         reason: 'Aucun container avec décoration trouvé',
       );
     });
+
+    testWidgets('should not display suffix icon when suffixWidget is null', (
+      WidgetTester tester,
+    ) async {
+      // ARRANGE
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: SFTextField(placeholder: 'Test Placeholder')),
+        ),
+      );
+
+      // ASSERT
+      expect(find.byType(TextField), findsOneWidget);
+
+      // Verify no suffix icon is present
+      final TextField textField = tester.widget<TextField>(
+        find.byType(TextField),
+      );
+      expect(textField.decoration?.suffixIcon, isNull);
+    });
+
+    testWidgets('should display suffix icon when suffixWidget is provided', (
+      WidgetTester tester,
+    ) async {
+      // ARRANGE
+      const testIcon = Icon(Icons.search);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(
+              placeholder: 'Test Placeholder',
+              suffixWidget: testIcon,
+            ),
+          ),
+        ),
+      );
+
+      // ASSERT
+      expect(find.byType(TextField), findsOneWidget);
+
+      // Verify suffix icon is present
+      final TextField textField = tester.widget<TextField>(
+        find.byType(TextField),
+      );
+      expect(textField.decoration?.suffixIcon, isNotNull);
+
+      // Find the icon itself
+      expect(find.byIcon(Icons.search), findsOneWidget);
+    });
+
+    testWidgets(
+      'should display CircularProgressIndicator when provided as suffixWidget',
+      (WidgetTester tester) async {
+        // ARRANGE
+        final loadingIndicator = Container(
+          width: 24,
+          height: 24,
+          padding: const EdgeInsets.all(4),
+          child: const CircularProgressIndicator(),
+        );
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SFTextField(
+                placeholder: 'Test Placeholder',
+                suffixWidget: loadingIndicator,
+              ),
+            ),
+          ),
+        );
+
+        // ASSERT
+        expect(find.byType(TextField), findsOneWidget);
+        expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+        // Verify suffix icon is present
+        final TextField textField = tester.widget<TextField>(
+          find.byType(TextField),
+        );
+        expect(textField.decoration?.suffixIcon, isNotNull);
+      },
+    );
   });
 
   group('SFTextField - FocusNode tests', () {

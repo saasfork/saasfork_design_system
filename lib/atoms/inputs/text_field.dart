@@ -9,6 +9,7 @@ class SFTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final Color? backgroundColor;
   final String? prefixText;
+  final Widget? suffixWidget;
 
   const SFTextField({
     required this.placeholder,
@@ -18,6 +19,7 @@ class SFTextField extends StatelessWidget {
     this.focusNode,
     this.backgroundColor,
     this.prefixText,
+    this.suffixWidget,
     super.key,
   });
 
@@ -29,6 +31,7 @@ class SFTextField extends StatelessWidget {
     // Optimisation des calculs de base
     final bool hasError = isInError == true;
     final bool hasPrefix = prefixText != null && prefixText!.isNotEmpty;
+    final bool hasSuffix = suffixWidget != null;
 
     // Récupérer le border radius depuis le thème de manière sécurisée
     final double borderRadius =
@@ -102,6 +105,7 @@ class SFTextField extends StatelessWidget {
                   backgroundColor: prefixBackgroundColor,
                 )
                 : null,
+        suffixIcon: hasSuffix ? suffixWidget : null,
         disabledBorder: inputTheme.disabledBorder ?? defaultBorder,
         border: inputTheme.border ?? defaultBorder,
       ),
