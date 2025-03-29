@@ -6,6 +6,7 @@ class SFTextField extends StatelessWidget {
   final bool? isInError;
   final ComponentSize size;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
   final Color? backgroundColor;
   final String? prefixText;
 
@@ -14,6 +15,7 @@ class SFTextField extends StatelessWidget {
     this.isInError = false,
     this.size = ComponentSize.md,
     this.controller,
+    this.focusNode,
     this.backgroundColor,
     this.prefixText,
     super.key,
@@ -82,6 +84,7 @@ class SFTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       style: textStyle,
+      focusNode: focusNode,
       decoration: InputDecoration(
         hintText: placeholder,
         hintStyle: hintStyle,

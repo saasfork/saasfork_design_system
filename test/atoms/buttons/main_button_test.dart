@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:saasfork_design_system/atoms/buttons/main_button.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
 void main() {

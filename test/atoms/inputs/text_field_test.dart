@@ -264,4 +264,93 @@ void main() {
       );
     });
   });
+
+  group('SFTextField - FocusNode tests', () {
+    testWidgets('Should use provided focusNode', (WidgetTester tester) async {
+      // Arrange
+      final FocusNode focusNode = FocusNode();
+
+      // Act
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(),
+          home: Scaffold(
+            body: SFTextField(
+              placeholder: 'Test placeholder',
+              focusNode: focusNode,
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      final TextField textField = tester.widget(find.byType(TextField));
+      expect(textField.focusNode, focusNode);
+    });
+
+    testWidgets(
+      'Should receive focus when focusNode.requestFocus() is called',
+      (WidgetTester tester) async {
+        // Arrange
+        final FocusNode focusNode = FocusNode();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: ThemeData(),
+            home: Scaffold(
+              body: SFTextField(
+                placeholder: 'Test placeholder',
+                focusNode: focusNode,
+              ),
+            ),
+          ),
+        );
+
+        // Act
+        focusNode.requestFocus();
+        await tester.pump();
+
+        // Assert
+        expect(focusNode.hasFocus, isTrue);
+      },
+    );
+
+    testWidgets('Should lose focus when focusNode.unfocus() is called', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      final FocusNode focusNode = FocusNode();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(),
+          home: Scaffold(
+            body: SFTextField(
+              placeholder: 'Test placeholder',
+              focusNode: focusNode,
+            ),
+          ),
+        ),
+      );
+
+      // Focus first
+      focusNode.requestFocus();
+      await tester.pump();
+      expect(focusNode.hasFocus, isTrue);
+
+      // Act
+      focusNode.unfocus();
+      await tester.pump();
+
+      // Assert
+      expect(focusNode.hasFocus, isFalse);
+    });
+
+    tearDown(() {
+      // Clean up focus nodes after each test
+      FocusManager.instance.highlightStrategy =
+          FocusHighlightStrategy.automatic;
+      FocusManager.instance.rootScope.unfocus();
+    });
+  });
 }

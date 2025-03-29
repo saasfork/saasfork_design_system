@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:saasfork_design_system/foundations/sizes.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
 class SFCircularButton extends StatelessWidget {
