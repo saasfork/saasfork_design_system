@@ -24,10 +24,27 @@ class SFDropdown extends StatefulWidget {
   State<SFDropdown> createState() => _SFDropdownState();
 }
 
-class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
+class _SFDropdownState extends State<SFDropdown>
+    with SignalsMixin, SingleTickerProviderStateMixin {
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
   late final _isOpen = createSignal(false);
+  late final AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   void _toggleDropdown() {
     if (_isOpen.value) {
@@ -41,12 +58,15 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
     _overlayEntry = _createOverlayEntry();
     Overlay.of(context).insert(_overlayEntry!);
     _isOpen.value = true;
+    _animationController.forward(from: 0.0);
   }
 
   void _closeDropdown() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-    _isOpen.value = false;
+    _animationController.reverse().then((_) {
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+      _isOpen.value = false;
+    });
   }
 
   OverlayEntry _createOverlayEntry() {
@@ -55,19 +75,29 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
     final theme = Theme.of(context);
 
     return OverlayEntry(
-      builder:
-          (context) => Stack(
-            children: [
-              Positioned.fill(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: _closeDropdown,
-                  child: Container(color: Colors.transparent),
-                ),
+      builder: (context) {
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: _closeDropdown,
+                child: Container(color: Colors.transparent),
               ),
-
-              Positioned(
-                width: size.width,
+            ),
+            Positioned(
+              width: size.width,
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return Opacity(
+                    opacity: _animationController.value,
+                    child: Transform.translate(
+                      offset: Offset(0, (1 - _animationController.value) * -20),
+                      child: child,
+                    ),
+                  );
+                },
                 child: CompositedTransformFollower(
                   link: _layerLink,
                   offset: Offset(0, size.height + AppSpacing.sm),
@@ -156,8 +186,10 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
+        );
+      },
     );
   }
 
