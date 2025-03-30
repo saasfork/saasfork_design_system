@@ -6,6 +6,10 @@ library;
 export 'buttons/animated_switch_button.dart';
 export 'buttons/toggle_button.dart';
 
+// Dropdown
+export 'dropdown/dropdown_option.dart';
+export 'dropdown/dropdown.dart';
+
 // Forms
 export 'forms/form_field.dart';
 export 'forms/form_file_field.dart';
