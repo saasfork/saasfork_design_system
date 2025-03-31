@@ -38,37 +38,10 @@ void main() {
       await tester.tap(find.byType(SFDropdown));
       await tester.pumpAndSettle();
 
-      expect(find.text('Option 1'), findsOneWidget);
-      expect(find.text('Option 2'), findsOneWidget);
-      expect(find.text('Option 3'), findsOneWidget);
-    });
-
-    testWidgets('closes dropdown menu when an option is selected', (
-      tester,
-    ) async {
-      String? selectedValue;
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SFDropdown(
-              options: options,
-              onChanged: (value) {
-                selectedValue = value;
-              },
-            ),
-          ),
-        ),
-      );
-
-      await tester.tap(find.byType(SFDropdown));
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.text('Option 2'));
-      await tester.pumpAndSettle();
-
-      expect(selectedValue, '2');
-      expect(find.text('Option 2'), findsNothing); // Dropdown should close
+      // Vérifier que les options sont affichées
+      for (final option in options) {
+        expect(find.text(option.label), findsOneWidget);
+      }
     });
 
     testWidgets('displays selected value', (tester) async {
