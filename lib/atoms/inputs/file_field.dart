@@ -2,7 +2,6 @@ import 'package:cross_file/cross_file.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
-import 'package:saasfork_design_system/utils/expected_file.dart';
 import 'package:signals/signals_flutter.dart';
 
 class SFFileField extends StatefulWidget {
