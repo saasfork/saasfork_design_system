@@ -148,6 +148,21 @@ class AppSizes {
     }
   }
 
+  static BorderRadius getBorderCircular(ComponentSize size) {
+    switch (size) {
+      case ComponentSize.xs:
+        return BorderRadius.circular(6.0);
+      case ComponentSize.sm:
+        return BorderRadius.circular(8.0);
+      case ComponentSize.md:
+        return BorderRadius.circular(12.0);
+      case ComponentSize.lg:
+        return BorderRadius.circular(16.0);
+      case ComponentSize.xl:
+        return BorderRadius.circular(22.0);
+    }
+  }
+
   static Size getButtonSize(ComponentSize size) {
     switch (size) {
       case ComponentSize.xs:
