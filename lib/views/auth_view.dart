@@ -85,6 +85,7 @@ class SFAuthViewState extends State<SFAuthView> {
                   : null,
         ),
         Column(
+          spacing: AppSpacing.sm,
           children: [
             _richText(
               text:
@@ -94,7 +95,6 @@ class SFAuthViewState extends State<SFAuthView> {
                 _setPage(1);
               },
             ),
-            const SizedBox(height: 8),
             _richText(
               link: formData.authForgotPassword.link,
               onTap: () {
