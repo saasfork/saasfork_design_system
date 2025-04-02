@@ -22,3 +22,6 @@ export 'navigation/nav_bar_mobile.dart';
 // Overlays
 export 'overlays/dialog.dart';
 export 'overlays/notification.dart';
+
+// Pricing
+export 'pricing/price_default.dart';
