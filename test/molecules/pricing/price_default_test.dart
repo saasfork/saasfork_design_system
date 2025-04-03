@@ -13,7 +13,7 @@ void main() {
             body: SFPriceDefault(
               value: 1000,
               currency: SFCurrency.eur,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
             ),
           ),
         ),
@@ -33,7 +33,7 @@ void main() {
             body: SFPriceDefault(
               value: 1099,
               currency: SFCurrency.eur,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
             ),
           ),
         ),
@@ -52,7 +52,7 @@ void main() {
             body: SFPriceDefault(
               value: 1099,
               currency: SFCurrency.usd,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
             ),
           ),
         ),
@@ -72,7 +72,7 @@ void main() {
             body: SFPriceDefault(
               value: 1099,
               currency: SFCurrency.jpy,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
             ),
           ),
         ),
@@ -92,7 +92,7 @@ void main() {
             body: SFPriceDefault(
               value: 1000,
               currency: SFCurrency.eur,
-              period: SFPricePeriod.yearly,
+              period: SFPricePeriod.year,
             ),
           ),
         ),
@@ -120,7 +120,7 @@ void main() {
             body: SFPriceDefault(
               value: 1000,
               currency: SFCurrency.eur,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
               size: ComponentSize.xs,
             ),
           ),
@@ -133,7 +133,7 @@ void main() {
             body: SFPriceDefault(
               value: 1000,
               currency: SFCurrency.eur,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
               size: ComponentSize.xl,
             ),
           ),
@@ -152,7 +152,7 @@ void main() {
             body: SFPriceDefault(
               value: 1000,
               currency: SFCurrency.eur,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
               showPeriod: false,
             ),
           ),
@@ -171,7 +171,7 @@ void main() {
             body: SFPriceDefault(
               value: 1000,
               currency: SFCurrency.eur,
-              period: SFPricePeriod.monthly,
+              period: SFPricePeriod.month,
               useCurrencyCode: true,
             ),
           ),
@@ -183,11 +183,10 @@ void main() {
     });
 
     test('SFPricePeriod.label returns correct value', () {
-      expect(SFPricePeriod.daily.label, equals('day'));
-      expect(SFPricePeriod.weekly.label, equals('week'));
-      expect(SFPricePeriod.monthly.label, equals('month'));
-      expect(SFPricePeriod.quarterly.label, equals('quarter'));
-      expect(SFPricePeriod.yearly.label, equals('year'));
+      expect(SFPricePeriod.day.label, equals('day'));
+      expect(SFPricePeriod.week.label, equals('week'));
+      expect(SFPricePeriod.month.label, equals('month'));
+      expect(SFPricePeriod.year.label, equals('year'));
       expect(SFPricePeriod.lifetime.label, equals('once'));
     });
   });

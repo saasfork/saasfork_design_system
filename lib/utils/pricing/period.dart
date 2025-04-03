@@ -1,24 +1,21 @@
 /// Enumération des périodes de tarification possibles
 enum SFPricePeriod {
-  daily,
-  weekly,
-  monthly,
-  quarterly,
-  yearly,
+  day,
+  week,
+  month,
+  year,
   lifetime;
 
   /// Retourne la représentation textuelle de la période
   String get label {
     switch (this) {
-      case SFPricePeriod.daily:
+      case SFPricePeriod.day:
         return 'day';
-      case SFPricePeriod.weekly:
+      case SFPricePeriod.week:
         return 'week';
-      case SFPricePeriod.monthly:
+      case SFPricePeriod.month:
         return 'month';
-      case SFPricePeriod.quarterly:
-        return 'quarter';
-      case SFPricePeriod.yearly:
+      case SFPricePeriod.year:
         return 'year';
       case SFPricePeriod.lifetime:
         return 'once';
