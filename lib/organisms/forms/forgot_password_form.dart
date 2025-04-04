@@ -33,16 +33,37 @@ class _SFForgotPasswordFormState extends State<SFForgotPasswordForm> {
     ),
   });
 
+  late final FocusNode _emailFocusNode;
+  late final FocusNode _buttonNode;
   late TextEditingController _emailController;
 
   @override
   void initState() {
     super.initState();
+    _emailFocusNode = FocusNode();
+    _buttonNode = FocusNode();
     _emailController = TextEditingController(text: form.control('email').value);
 
     _emailController.addListener(() {
       form.control('email').value = _emailController.text;
     });
+  }
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _buttonNode.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  void _fieldFocusChange(
+    BuildContext context,
+    FocusNode currentFocus,
+    FocusNode nextFocus,
+  ) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 
   @override
@@ -59,6 +80,12 @@ class _SFForgotPasswordFormState extends State<SFForgotPasswordForm> {
               .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_email'] ?? '',
           input: SFTextField(
+            focusNode: _emailFocusNode,
+            autofocus: true,
+            onSubmitted: (value) {
+              _fieldFocusChange(context, _emailFocusNode, _buttonNode);
+            },
+            textInputAction: TextInputAction.done,
             placeholder: widget.additionalData['placeholder_email'] ?? '',
             controller: _emailController,
             size: widget.size,
@@ -71,6 +98,7 @@ class _SFForgotPasswordFormState extends State<SFForgotPasswordForm> {
                   : null,
         ),
         SFMainButton(
+          focusNode: _buttonNode,
           label: widget.additionalData['forgot_password_button'] ?? '',
           onPressed: () {
             if (FormUtils.isFormValid(form, setState: () => setState(() {}))) {

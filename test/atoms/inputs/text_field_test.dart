@@ -437,4 +437,174 @@ void main() {
       FocusManager.instance.rootScope.unfocus();
     });
   });
+
+  group('SFTextField - Fonctionnalités supplémentaires', () {
+    testWidgets('onSubmitted est appelé correctement', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      bool wasSubmitted = false;
+      String submittedValue = '';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(
+              placeholder: 'Test',
+              onSubmitted: (value) {
+                wasSubmitted = true;
+                submittedValue = value;
+              },
+            ),
+          ),
+        ),
+      );
+
+      // Act
+      await tester.enterText(find.byType(TextField), 'Hello');
+      await tester.testTextInput.receiveAction(TextInputAction.done);
+      await tester.pump();
+
+      // Assert
+      expect(wasSubmitted, isTrue);
+      expect(submittedValue, equals('Hello'));
+    });
+
+    testWidgets('autofocus fonctionne correctement', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(placeholder: 'Test', autofocus: true),
+          ),
+        ),
+      );
+
+      // Assert
+      final TextField textField = tester.widget(find.byType(TextField));
+      expect(textField.autofocus, isTrue);
+
+      // Vérifier que le champ a bien le focus
+      await tester.pump();
+      expect(
+        FocusScope.of(tester.element(find.byType(TextField))).hasFocus,
+        isTrue,
+      );
+    });
+
+    testWidgets('textInputAction est correctement appliqué', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(
+              placeholder: 'Test',
+              textInputAction: TextInputAction.search,
+            ),
+          ),
+        ),
+      );
+
+      // Assert
+      final TextField textField = tester.widget(find.byType(TextField));
+      expect(textField.textInputAction, equals(TextInputAction.search));
+    });
+
+    testWidgets('builder fonctionne correctement', (WidgetTester tester) async {
+      // Arrange
+      Widget customBuilder(BuildContext context, Widget child) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.purple, width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: child,
+        );
+      }
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(placeholder: 'Test', builder: customBuilder),
+          ),
+        ),
+      );
+
+      // Assert
+      final customContainer =
+          find
+              .ancestor(
+                of: find.byType(TextField),
+                matching: find.byType(Container),
+              )
+              .first;
+
+      final Container container = tester.widget(customContainer);
+      final BoxDecoration decoration = container.decoration as BoxDecoration;
+      expect(decoration.border, isA<Border>());
+
+      final Border border = decoration.border as Border;
+      expect(border.top.color, equals(Colors.purple));
+      expect(border.top.width, equals(2));
+    });
+
+    testWidgets('semanticsLabel fonctionne correctement', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      const String customLabel = 'Champ de recherche';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(placeholder: 'Test', semanticsLabel: customLabel),
+          ),
+        ),
+      );
+
+      // Assert
+      // Trouver le Semantics qui est associé directement à SFTextField
+      final semanticsWidget =
+          find
+              .descendant(
+                of: find.byType(SFTextField),
+                matching: find.byType(Semantics),
+              )
+              .first;
+
+      final Semantics semantics = tester.widget(semanticsWidget);
+      expect(semantics.properties.label, equals(customLabel));
+      expect(semantics.properties.textField, isTrue);
+    });
+
+    testWidgets('utilise placeholder comme semanticsLabel quand non spécifié', (
+      WidgetTester tester,
+    ) async {
+      // Arrange
+      const String placeholder = 'Entrez votre texte ici';
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(body: SFTextField(placeholder: placeholder)),
+        ),
+      );
+
+      // Assert
+      // Trouver le Semantics qui est associé directement à SFTextField
+      final semanticsWidget =
+          find
+              .descendant(
+                of: find.byType(SFTextField),
+                matching: find.byType(Semantics),
+              )
+              .first;
+
+      final Semantics semantics = tester.widget(semanticsWidget);
+      expect(semantics.properties.label, equals(placeholder));
+    });
+  });
 }

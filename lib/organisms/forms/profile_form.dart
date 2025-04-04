@@ -40,6 +40,10 @@ class _SFProfileFormState extends State<SFProfileForm> {
   late TextEditingController _emailController;
   late TextEditingController _usernameController;
 
+  late final FocusNode _emailFocusNode;
+  late final FocusNode _usernameFocusNode;
+  late final FocusNode _buttonNode;
+
   @override
   void initState() {
     super.initState();
@@ -60,6 +64,10 @@ class _SFProfileFormState extends State<SFProfileForm> {
       text: form.control('username').value,
     );
 
+    _emailFocusNode = FocusNode();
+    _usernameFocusNode = FocusNode();
+    _buttonNode = FocusNode();
+
     _emailController.addListener(() {
       form.control('email').value = _emailController.text;
       form.control('email').updateValueAndValidity();
@@ -69,6 +77,25 @@ class _SFProfileFormState extends State<SFProfileForm> {
       form.control('username').value = _usernameController.text;
       form.control('username').updateValueAndValidity();
     });
+  }
+
+  @override
+  void dispose() {
+    _emailFocusNode.dispose();
+    _usernameFocusNode.dispose();
+    _buttonNode.dispose();
+    _emailController.dispose();
+    _usernameController.dispose();
+    super.dispose();
+  }
+
+  void _fieldFocusChange(
+    BuildContext context,
+    FocusNode currentFocus,
+    FocusNode nextFocus,
+  ) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 
   @override
@@ -85,6 +112,11 @@ class _SFProfileFormState extends State<SFProfileForm> {
               .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_email'] ?? '',
           input: SFTextField(
+            focusNode: _emailFocusNode,
+            autofocus: true,
+            onSubmitted: (value) {
+              _fieldFocusChange(context, _emailFocusNode, _usernameFocusNode);
+            },
             placeholder: widget.additionalData['placeholder_email'] ?? '',
             controller: _emailController,
             size: widget.size,
@@ -103,6 +135,11 @@ class _SFProfileFormState extends State<SFProfileForm> {
               .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_username'] ?? '',
           input: SFTextField(
+            focusNode: _usernameFocusNode,
+            onSubmitted: (value) {
+              _fieldFocusChange(context, _usernameFocusNode, _buttonNode);
+            },
+            textInputAction: TextInputAction.done,
             placeholder: widget.additionalData['placeholder_username'] ?? '',
             controller: _usernameController,
             size: widget.size,
@@ -117,6 +154,7 @@ class _SFProfileFormState extends State<SFProfileForm> {
                   : null,
         ),
         SFMainButton(
+          focusNode: _buttonNode,
           label: widget.additionalData['save_button'] ?? '',
           onPressed: () {
             if (FormUtils.isFormValid(form, setState: () => setState(() {}))) {

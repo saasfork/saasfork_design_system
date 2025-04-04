@@ -14,6 +14,7 @@ class SFTextField extends StatelessWidget {
   final String? prefixText;
   final Widget? suffixWidget;
   final String? semanticsLabel;
+  final Widget Function(BuildContext, Widget)? builder;
 
   const SFTextField({
     required this.placeholder,
@@ -28,6 +29,7 @@ class SFTextField extends StatelessWidget {
     this.prefixText,
     this.suffixWidget,
     this.semanticsLabel,
+    this.builder,
     super.key,
   });
 
@@ -92,42 +94,45 @@ class SFTextField extends StatelessWidget {
     final Color prefixBackgroundColor =
         hasError ? AppColors.red.s50 : AppColors.gray.s50;
 
-    return Semantics(
-      label: semanticsLabel ?? placeholder,
-      textField: true,
-      child: TextField(
-        controller: controller,
-        style: textStyle,
-        focusNode: focusNode,
-        autofocus: autofocus,
-        onSubmitted: onSubmitted,
-        textInputAction: textInputAction,
-        decoration: InputDecoration(
-          hintText: placeholder,
-          hintStyle: hintStyle,
-          contentPadding: AppSizes.getInputPadding(size),
-          constraints: AppSizes.getInputConstraints(size),
-          enabledBorder: activeBorder,
-          focusedBorder: focusedBorder,
-          filled: backgroundColor != null || inputTheme.filled == true,
-          fillColor: backgroundColor ?? inputTheme.fillColor,
-          prefixIcon:
-              hasPrefix
-                  ? _buildPrefix(
-                    borderRadius: borderRadius,
-                    style: hintStyle,
-                    backgroundColor: prefixBackgroundColor,
-                  )
-                  : null,
-          suffixIcon: hasSuffix ? suffixWidget : null,
-          disabledBorder: inputTheme.disabledBorder ?? defaultBorder,
-          border: inputTheme.border ?? defaultBorder,
-        ),
+    final textField = TextField(
+      controller: controller,
+      style: textStyle,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      onSubmitted: onSubmitted,
+      textInputAction: textInputAction,
+      decoration: InputDecoration(
+        hintText: placeholder,
+        hintStyle: hintStyle,
+        contentPadding: AppSizes.getInputPadding(size),
+        constraints: AppSizes.getInputConstraints(size),
+        enabledBorder: activeBorder,
+        focusedBorder: focusedBorder,
+        filled: backgroundColor != null || inputTheme.filled == true,
+        fillColor: backgroundColor ?? inputTheme.fillColor,
+        prefixIcon:
+            hasPrefix
+                ? _buildPrefix(
+                  borderRadius: borderRadius,
+                  style: hintStyle,
+                  backgroundColor: prefixBackgroundColor,
+                )
+                : null,
+        suffixIcon: hasSuffix ? suffixWidget : null,
+        disabledBorder: inputTheme.disabledBorder ?? defaultBorder,
+        border: inputTheme.border ?? defaultBorder,
       ),
     );
+
+    final wrappedTextField = Semantics(
+      label: semanticsLabel ?? placeholder,
+      textField: true,
+      child: builder != null ? builder!(context, textField) : textField,
+    );
+
+    return wrappedTextField;
   }
 
-  // Méthode extraite pour construire le préfixe
   Widget _buildPrefix({
     required double borderRadius,
     required TextStyle? style,

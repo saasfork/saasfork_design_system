@@ -11,6 +11,9 @@ class SFPasswordField extends StatefulWidget {
   final TextInputAction textInputAction;
   final Function(String)? onSubmitted;
   final String? semanticsLabel;
+  final String? semanticsHint;
+  final String? helperTextShowPassword;
+  final String? helperTextHidePassword;
 
   const SFPasswordField({
     required this.placeholder,
@@ -22,6 +25,9 @@ class SFPasswordField extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.onSubmitted,
     this.semanticsLabel,
+    this.semanticsHint = 'Double-tap and hold to show password',
+    this.helperTextShowPassword = 'Show Password',
+    this.helperTextHidePassword = 'Hide Password',
     super.key,
   });
 
@@ -34,58 +40,49 @@ class _SFPasswordFieldState extends State<SFPasswordField> {
 
   @override
   Widget build(BuildContext context) {
+    final iconSize = AppSizes.getIconSize(widget.size);
     final theme = Theme.of(context);
-    final inputTheme = theme.inputDecorationTheme;
-    final inputPadding = AppSizes.getInputPadding(widget.size);
 
-    final TextStyle? errorHintStyle = inputTheme.hintStyle?.copyWith(
-      color:
-          inputTheme.errorBorder is OutlineInputBorder
-              ? (inputTheme.errorBorder as OutlineInputBorder).borderSide.color
-              : AppColors.red.s300,
+    final suffixWidget = IconButton(
+      icon: Icon(
+        _obscureText ? Icons.visibility_off : Icons.visibility,
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+        size: iconSize,
+      ),
+      tooltip:
+          _obscureText
+              ? widget.helperTextShowPassword
+              : widget.helperTextHidePassword,
+      onPressed: () => setState(() => _obscureText = !_obscureText),
     );
 
     return Semantics(
-      label: widget.semanticsLabel ?? widget.placeholder,
-      textField: true,
-      child: TextField(
-        autofocus: widget.autofocus,
-        focusNode: widget.focusNode,
-        controller: widget.controller,
-        obscureText: _obscureText,
-        onSubmitted: widget.onSubmitted,
-        textInputAction: widget.textInputAction,
-        style: AppTypography.getScaledStyle(
-          AppTypography.bodyLarge,
-          widget.size,
-        ),
-        decoration: InputDecoration(
-          hintText: widget.placeholder,
-          hintStyle:
-              widget.isInError == true
-                  ? errorHintStyle
-                  : AppTypography.getScaledStyle(
-                    AppTypography.bodyLarge,
-                    widget.size,
-                  ).copyWith(color: inputTheme.hintStyle?.color),
-          contentPadding: inputPadding,
-          constraints: AppSizes.getInputConstraints(widget.size),
-          enabledBorder:
-              widget.isInError == true
-                  ? theme.inputDecorationTheme.errorBorder
-                  : theme.inputDecorationTheme.enabledBorder,
-          focusedBorder:
-              widget.isInError == true
-                  ? theme.inputDecorationTheme.focusedErrorBorder
-                  : theme.inputDecorationTheme.focusedBorder,
-          suffixIcon: IconButton(
-            icon: Icon(
-              _obscureText ? Icons.visibility_off : Icons.visibility,
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-              size: AppSizes.getIconSize(widget.size),
-            ),
-            onPressed: () => setState(() => _obscureText = !_obscureText),
-          ),
+      hint: widget.semanticsHint,
+      child: ExcludeSemantics(
+        child: SFTextField(
+          placeholder: widget.placeholder,
+          isInError: widget.isInError,
+          size: widget.size,
+          controller: widget.controller,
+          focusNode: widget.focusNode,
+          autofocus: widget.autofocus,
+          textInputAction: widget.textInputAction,
+          onSubmitted: widget.onSubmitted,
+          semanticsLabel: widget.semanticsLabel,
+          suffixWidget: suffixWidget,
+          builder: (context, textField) {
+            final tf = textField as TextField;
+            return TextField(
+              controller: tf.controller,
+              focusNode: tf.focusNode,
+              style: tf.style,
+              decoration: tf.decoration,
+              textInputAction: tf.textInputAction,
+              onSubmitted: tf.onSubmitted,
+              autofocus: tf.autofocus,
+              obscureText: _obscureText,
+            );
+          },
         ),
       ),
     );
