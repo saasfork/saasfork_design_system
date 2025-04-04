@@ -7,6 +7,8 @@ class SFMainButton extends StatelessWidget {
   final bool disabled;
   final VoidCallback? onPressed;
   final Color? color;
+  final FocusNode? focusNode;
+  final String? semanticsLabel;
 
   const SFMainButton({
     required this.label,
@@ -14,20 +16,27 @@ class SFMainButton extends StatelessWidget {
     this.size = ComponentSize.md,
     this.color,
     this.disabled = false,
+    this.focusNode,
+    this.semanticsLabel,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: disabled ? null : onPressed,
-      style: _getButtonStyle(context),
-      child: Text(
-        label,
-        style: AppTypography.getScaledStyle(
-          AppTypography.labelLarge,
-          size,
-        ).copyWith(color: disabled ? AppColors.grey.s400 : null),
+    return Semantics(
+      label: semanticsLabel ?? label,
+      button: true,
+      child: ElevatedButton(
+        focusNode: focusNode,
+        onPressed: disabled ? null : onPressed,
+        style: _getButtonStyle(context),
+        child: Text(
+          label,
+          style: AppTypography.getScaledStyle(
+            AppTypography.labelLarge,
+            size,
+          ).copyWith(color: disabled ? AppColors.grey.s400 : null),
+        ),
       ),
     );
   }

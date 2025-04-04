@@ -6,12 +6,22 @@ class SFPasswordField extends StatefulWidget {
   final bool? isInError;
   final ComponentSize size;
   final TextEditingController controller;
+  final FocusNode? focusNode;
+  final bool autofocus;
+  final TextInputAction textInputAction;
+  final Function(String)? onSubmitted;
+  final String? semanticsLabel;
 
   const SFPasswordField({
     required this.placeholder,
     this.isInError = false,
     this.size = ComponentSize.md,
     required this.controller,
+    this.focusNode,
+    this.autofocus = false,
+    this.textInputAction = TextInputAction.next,
+    this.onSubmitted,
+    this.semanticsLabel,
     super.key,
   });
 
@@ -35,36 +45,47 @@ class _SFPasswordFieldState extends State<SFPasswordField> {
               : AppColors.red.s300,
     );
 
-    return TextField(
-      controller: widget.controller,
-      obscureText: _obscureText,
-      style: AppTypography.getScaledStyle(AppTypography.bodyLarge, widget.size),
-      decoration: InputDecoration(
-        hintText: widget.placeholder,
-        hintStyle:
-            widget.isInError == true
-                ? errorHintStyle
-                : AppTypography.getScaledStyle(
-                  AppTypography.bodyLarge,
-                  widget.size,
-                ).copyWith(color: inputTheme.hintStyle?.color),
-        contentPadding: inputPadding,
-        constraints: AppSizes.getInputConstraints(widget.size),
-        enabledBorder:
-            widget.isInError == true
-                ? theme.inputDecorationTheme.errorBorder
-                : theme.inputDecorationTheme.enabledBorder,
-        focusedBorder:
-            widget.isInError == true
-                ? theme.inputDecorationTheme.focusedErrorBorder
-                : theme.inputDecorationTheme.focusedBorder,
-        suffixIcon: IconButton(
-          icon: Icon(
-            _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
-            size: AppSizes.getIconSize(widget.size),
+    return Semantics(
+      label: widget.semanticsLabel ?? widget.placeholder,
+      textField: true,
+      child: TextField(
+        autofocus: widget.autofocus,
+        focusNode: widget.focusNode,
+        controller: widget.controller,
+        obscureText: _obscureText,
+        onSubmitted: widget.onSubmitted,
+        textInputAction: widget.textInputAction,
+        style: AppTypography.getScaledStyle(
+          AppTypography.bodyLarge,
+          widget.size,
+        ),
+        decoration: InputDecoration(
+          hintText: widget.placeholder,
+          hintStyle:
+              widget.isInError == true
+                  ? errorHintStyle
+                  : AppTypography.getScaledStyle(
+                    AppTypography.bodyLarge,
+                    widget.size,
+                  ).copyWith(color: inputTheme.hintStyle?.color),
+          contentPadding: inputPadding,
+          constraints: AppSizes.getInputConstraints(widget.size),
+          enabledBorder:
+              widget.isInError == true
+                  ? theme.inputDecorationTheme.errorBorder
+                  : theme.inputDecorationTheme.enabledBorder,
+          focusedBorder:
+              widget.isInError == true
+                  ? theme.inputDecorationTheme.focusedErrorBorder
+                  : theme.inputDecorationTheme.focusedBorder,
+          suffixIcon: IconButton(
+            icon: Icon(
+              _obscureText ? Icons.visibility_off : Icons.visibility,
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+              size: AppSizes.getIconSize(widget.size),
+            ),
+            onPressed: () => setState(() => _obscureText = !_obscureText),
           ),
-          onPressed: () => setState(() => _obscureText = !_obscureText),
         ),
       ),
     );

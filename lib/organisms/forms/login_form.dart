@@ -39,12 +39,20 @@ class _SFLoginFormState extends State<SFLoginForm> {
     ),
   });
 
+  late final FocusNode _emailFocusNode;
+  late final FocusNode _passwordFocusNode;
+  late final FocusNode _buttonNode;
+
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
   @override
   void initState() {
     super.initState();
+    _emailFocusNode = FocusNode();
+    _passwordFocusNode = FocusNode();
+    _buttonNode = FocusNode();
+
     _emailController = TextEditingController(text: form.control('email').value);
     _passwordController = TextEditingController(
       text: form.control('password').value,
@@ -57,6 +65,26 @@ class _SFLoginFormState extends State<SFLoginForm> {
     _passwordController.addListener(() {
       form.control('password').value = _passwordController.text;
     });
+  }
+
+  @override
+  void dispose() {
+    // Libérer les ressources
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _buttonNode.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _fieldFocusChange(
+    BuildContext context,
+    FocusNode currentFocus,
+    FocusNode nextFocus,
+  ) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
   }
 
   @override
@@ -73,6 +101,11 @@ class _SFLoginFormState extends State<SFLoginForm> {
               .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_email'] ?? '',
           input: SFTextField(
+            focusNode: _emailFocusNode,
+            autofocus: true,
+            onSubmitted: (value) {
+              _fieldFocusChange(context, _emailFocusNode, _passwordFocusNode);
+            },
             placeholder: widget.additionalData['placeholder_email'] ?? '',
             controller: _emailController,
             size: widget.size,
@@ -91,6 +124,11 @@ class _SFLoginFormState extends State<SFLoginForm> {
               .any((validator) => validator is RequiredValidator),
           label: widget.additionalData['label_password'] ?? '',
           input: SFPasswordField(
+            focusNode: _passwordFocusNode,
+            onSubmitted: (value) {
+              _fieldFocusChange(context, _passwordFocusNode, _buttonNode);
+            },
+            textInputAction: TextInputAction.done,
             placeholder: widget.additionalData['placeholder_password'] ?? '',
             controller: _passwordController,
             size: widget.size,
@@ -105,13 +143,14 @@ class _SFLoginFormState extends State<SFLoginForm> {
                   : null,
         ),
         SFMainButton(
-          label: widget.additionalData['login_button'] ?? '',
+          focusNode: _buttonNode,
+          label: widget.additionalData['login_button'] ?? 'Login',
+          size: widget.size,
           onPressed: () {
             if (FormUtils.isFormValid(form, setState: () => setState(() {}))) {
               widget.onSubmit?.call(form.value);
             }
           },
-          size: widget.size,
         ),
       ],
     );

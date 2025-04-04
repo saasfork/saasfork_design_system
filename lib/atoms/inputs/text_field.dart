@@ -7,19 +7,27 @@ class SFTextField extends StatelessWidget {
   final ComponentSize size;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final bool autofocus;
+  final TextInputAction textInputAction;
+  final Function(String)? onSubmitted;
   final Color? backgroundColor;
   final String? prefixText;
   final Widget? suffixWidget;
+  final String? semanticsLabel;
 
   const SFTextField({
     required this.placeholder,
     this.isInError = false,
     this.size = ComponentSize.md,
+    this.textInputAction = TextInputAction.next,
+    this.autofocus = false,
     this.controller,
     this.focusNode,
+    this.onSubmitted,
     this.backgroundColor,
     this.prefixText,
     this.suffixWidget,
+    this.semanticsLabel,
     super.key,
   });
 
@@ -84,30 +92,37 @@ class SFTextField extends StatelessWidget {
     final Color prefixBackgroundColor =
         hasError ? AppColors.red.s50 : AppColors.gray.s50;
 
-    return TextField(
-      controller: controller,
-      style: textStyle,
-      focusNode: focusNode,
-      decoration: InputDecoration(
-        hintText: placeholder,
-        hintStyle: hintStyle,
-        contentPadding: AppSizes.getInputPadding(size),
-        constraints: AppSizes.getInputConstraints(size),
-        enabledBorder: activeBorder,
-        focusedBorder: focusedBorder,
-        filled: backgroundColor != null || inputTheme.filled == true,
-        fillColor: backgroundColor ?? inputTheme.fillColor,
-        prefixIcon:
-            hasPrefix
-                ? _buildPrefix(
-                  borderRadius: borderRadius,
-                  style: hintStyle,
-                  backgroundColor: prefixBackgroundColor,
-                )
-                : null,
-        suffixIcon: hasSuffix ? suffixWidget : null,
-        disabledBorder: inputTheme.disabledBorder ?? defaultBorder,
-        border: inputTheme.border ?? defaultBorder,
+    return Semantics(
+      label: semanticsLabel ?? placeholder,
+      textField: true,
+      child: TextField(
+        controller: controller,
+        style: textStyle,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        onSubmitted: onSubmitted,
+        textInputAction: textInputAction,
+        decoration: InputDecoration(
+          hintText: placeholder,
+          hintStyle: hintStyle,
+          contentPadding: AppSizes.getInputPadding(size),
+          constraints: AppSizes.getInputConstraints(size),
+          enabledBorder: activeBorder,
+          focusedBorder: focusedBorder,
+          filled: backgroundColor != null || inputTheme.filled == true,
+          fillColor: backgroundColor ?? inputTheme.fillColor,
+          prefixIcon:
+              hasPrefix
+                  ? _buildPrefix(
+                    borderRadius: borderRadius,
+                    style: hintStyle,
+                    backgroundColor: prefixBackgroundColor,
+                  )
+                  : null,
+          suffixIcon: hasSuffix ? suffixWidget : null,
+          disabledBorder: inputTheme.disabledBorder ?? defaultBorder,
+          border: inputTheme.border ?? defaultBorder,
+        ),
       ),
     );
   }
