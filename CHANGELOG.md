@@ -1,3 +1,21 @@
+## 0.0.5
+
+* Added list components:
+  * New `SFItem` component for displaying icon and label combinations
+  * New `SFItemList` component for creating lists with customizable icons
+  * Support for different sizes and custom styling options
+
+* Added pricing components:
+  * New `SFPriceDefault` component with flexible currency and period display
+  * Support for different currency formats and internationalization
+  * Optimized rendering for various component sizes
+
+* Improved accessibility:
+  * Enhanced semantic markup across components
+  * Improved screen reader compatibility
+  * Better keyboard navigation support
+  * Optimized focus management
+
 ## 0.0.4
 
 * Added layout system:
@@ -35,4 +53,4 @@
 
 ## 0.0.1
 
-* Initial version 
+* Initial version

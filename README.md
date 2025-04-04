@@ -622,6 +622,62 @@ Container(
 final columns = context.columns; // 1-12 selon la taille d'écran
 ```
 
+## Pricing Components
+
+### SFPriceDefault
+
+`SFPriceDefault` est un composant permettant d'afficher un prix avec devise et période de facturation, utilisable dans différents contextes comme les pages de tarification ou les récapitulatifs de commande.
+
+#### Fonctionnalités
+
+- Affichage formaté d'un prix avec sa devise
+- Support pour différentes devises avec positionnement personnalisable du symbole
+- Affichage optionnel de la période de facturation
+- Adaptation automatique selon différentes tailles (xs, sm, md, lg, xl)
+- Optimisé pour l'accessibilité et la performance
+
+#### Exemples d'utilisation
+
+```dart
+// Utilisation du code de devise au lieu du symbole
+SFPriceDefault(
+  value: 15000,
+  currency: SFCurrency.eur,
+  period: SFPricePeriod.year, 
+  useCurrencyCode: true, // Affiche "EUR" au lieu de "€"
+  size: ComponentSize.lg,
+)
+```
+
+## List Components
+
+### SFItemList
+
+`SFItemList` permet d'afficher facilement une liste d'éléments avec des icônes, idéale pour les fonctionnalités d'un produit, les listes de bénéfices ou les résumés de plan tarifaire.
+
+#### Fonctionnalités
+
+- Affichage d'une liste verticale d'éléments avec icônes et libellés
+- Personnalisation des icônes par élément ou utilisation d'une icône par défaut
+- Support pour différentes tailles de composants
+- Personnalisation de la couleur des icônes
+- Optimisé pour les listes statiques dans un layout
+
+#### Exemples d'utilisation
+
+```dart
+// Combinaison avec icônes personnalisées et icône par défaut
+SFItemList(
+  items: [
+    SFItemListData(label: "Sauvegarde automatique", icon: Icons.backup),
+    SFItemListData(label: "Intégration Slack"), // Utilisera l'icône par défaut
+    SFItemListData(label: "Gestion des accès", icon: Icons.security),
+  ],
+  defaultIcon: Icons.check_circle,
+  iconColor: Theme.of(context).colorScheme.secondary,
+)
+```
+
 ## Contribution
 
 Pour contribuer au design system, veuillez consulter notre guide de contribution et suivre nos conventions de codage.
