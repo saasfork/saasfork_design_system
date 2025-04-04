@@ -12,6 +12,7 @@ abstract class AppLocalizations {
 
 /// Implémentation qui récupère dynamiquement les traductions de `S`
 class GeneratedLocalizations implements AppLocalizations {
+  // ignore: prefer_typing_uninitialized_variables
   final context;
 
   GeneratedLocalizations(this.context);
