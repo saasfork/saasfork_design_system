@@ -19,6 +19,7 @@ class SFItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
+      contentPadding: EdgeInsets.all(0.0),
       leading: Icon(
         icon,
         size: AppSizes.getIconSize(size),
