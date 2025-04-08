@@ -260,7 +260,7 @@ class AppTheme {
       unselectedTrackColor: Colors.white,
       selectedTrackBorderColor: AppColors.indigo,
       unselectedTrackBorderColor: AppColors.gray.s300,
-      disabledThumbColor: Colors.white,
+      disabledThumbColor: AppColors.gray.s200,
       disabledTrackColor: AppColors.gray.s200,
       disabledTrackBorderColor: AppColors.gray.s300,
     ),

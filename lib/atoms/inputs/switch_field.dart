@@ -9,6 +9,7 @@ class SFSwitchField extends StatelessWidget {
   final Color? inactiveThumbColor;
   final Color? activeTrackColor;
   final Color? inactiveTrackColor;
+  final String? tooltipMessage;
 
   const SFSwitchField({
     super.key,
@@ -19,6 +20,7 @@ class SFSwitchField extends StatelessWidget {
     this.inactiveThumbColor,
     this.activeTrackColor,
     this.inactiveTrackColor,
+    this.tooltipMessage = 'Ce champ est désactivé',
   });
 
   @override
@@ -27,7 +29,7 @@ class SFSwitchField extends StatelessWidget {
     final Color defaultActiveTrackColor =
         activeTrackColor ?? AppColors.indigo.s100;
 
-    return Opacity(
+    final Widget switchWidget = Opacity(
       opacity: isDisabled ? 0.5 : 1.0,
       child: Switch(
         value: value,
@@ -38,5 +40,13 @@ class SFSwitchField extends StatelessWidget {
         inactiveTrackColor: inactiveTrackColor,
       ),
     );
+
+    return isDisabled
+        ? Tooltip(
+          message: tooltipMessage,
+          preferBelow: false,
+          child: switchWidget,
+        )
+        : switchWidget;
   }
 }

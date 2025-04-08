@@ -14,4 +14,14 @@ class ProfileModel {
   Map<String, dynamic> toMap() {
     return {'email': email, 'username': username};
   }
+
+  ProfileModel copyWith({
+    String? email,
+    String? username,
+  }) {
+    return ProfileModel(
+      email: email ?? this.email,
+      username: username ?? this.username,
+    );
+  }
 }
