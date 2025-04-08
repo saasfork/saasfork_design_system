@@ -21,10 +21,7 @@ void main() {
       expect(textField.controller, isNull);
       expect(textField.decoration!.hintText, equals('Enter text'));
       expect(textField.decoration!.filled, isTrue);
-      expect(
-        textField.enabled,
-        isFalse,
-      ); // Vérifier que disabled=true par défaut
+      expect(textField.enabled, isTrue);
     });
 
     testWidgets('renders in error state', (WidgetTester tester) async {

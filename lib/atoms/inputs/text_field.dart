@@ -31,7 +31,7 @@ class SFTextField extends StatelessWidget {
     this.suffixWidget,
     this.semanticsLabel,
     this.builder,
-    this.disabled = true,
+    this.disabled = false,
     super.key,
   });
 

@@ -14,6 +14,7 @@ class SFPasswordField extends StatefulWidget {
   final String? semanticsHint;
   final String? helperTextShowPassword;
   final String? helperTextHidePassword;
+  final bool disabled;
 
   const SFPasswordField({
     required this.placeholder,
@@ -28,6 +29,7 @@ class SFPasswordField extends StatefulWidget {
     this.semanticsHint = 'Double-tap and hold to show password',
     this.helperTextShowPassword = 'Show Password',
     this.helperTextHidePassword = 'Hide Password',
+    this.disabled = false,
     super.key,
   });
 
@@ -70,6 +72,7 @@ class _SFPasswordFieldState extends State<SFPasswordField> {
           onSubmitted: widget.onSubmitted,
           semanticsLabel: widget.semanticsLabel,
           suffixWidget: suffixWidget,
+          disabled: widget.disabled,
           builder: (context, textField) {
             final tf = textField as TextField;
             return TextField(
