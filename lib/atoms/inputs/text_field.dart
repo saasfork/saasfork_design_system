@@ -15,6 +15,7 @@ class SFTextField extends StatelessWidget {
   final Widget? suffixWidget;
   final String? semanticsLabel;
   final Widget Function(BuildContext, Widget)? builder;
+  final bool disabled;
 
   const SFTextField({
     required this.placeholder,
@@ -30,6 +31,7 @@ class SFTextField extends StatelessWidget {
     this.suffixWidget,
     this.semanticsLabel,
     this.builder,
+    this.disabled = true,
     super.key,
   });
 
@@ -94,6 +96,18 @@ class SFTextField extends StatelessWidget {
     final Color prefixBackgroundColor =
         hasError ? AppColors.red.s50 : AppColors.gray.s50;
 
+    // Couleur de fond pour l'état désactivé (light mode: AppColors.gray.s100, dark mode: AppColors.gray.s700)
+    Color? fillColor = backgroundColor ?? inputTheme.fillColor;
+    if (disabled) {
+      // Utiliser une couleur de fond spécifique pour l'état désactivé
+      fillColor =
+          theme.brightness == Brightness.light
+              ? AppColors
+                  .gray
+                  .s50 // Mode clair
+              : AppColors.gray.s700; // Mode sombre
+    }
+
     final textField = TextField(
       controller: controller,
       style: textStyle,
@@ -101,6 +115,7 @@ class SFTextField extends StatelessWidget {
       autofocus: autofocus,
       onSubmitted: onSubmitted,
       textInputAction: textInputAction,
+      enabled: !disabled,
       decoration: InputDecoration(
         hintText: placeholder,
         hintStyle: hintStyle,
@@ -108,8 +123,9 @@ class SFTextField extends StatelessWidget {
         constraints: AppSizes.getInputConstraints(size),
         enabledBorder: activeBorder,
         focusedBorder: focusedBorder,
-        filled: backgroundColor != null || inputTheme.filled == true,
-        fillColor: backgroundColor ?? inputTheme.fillColor,
+        filled:
+            true, // Toujours remplir pour que la couleur de fond soit appliquée
+        fillColor: fillColor,
         prefixIcon:
             hasPrefix
                 ? _buildPrefix(

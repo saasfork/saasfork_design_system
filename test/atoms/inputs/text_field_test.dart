@@ -20,7 +20,11 @@ void main() {
       final TextField textField = tester.widget(find.byType(TextField));
       expect(textField.controller, isNull);
       expect(textField.decoration!.hintText, equals('Enter text'));
-      expect(textField.decoration!.filled, isFalse);
+      expect(textField.decoration!.filled, isTrue);
+      expect(
+        textField.enabled,
+        isFalse,
+      ); // Vérifier que disabled=true par défaut
     });
 
     testWidgets('renders in error state', (WidgetTester tester) async {
@@ -80,6 +84,8 @@ void main() {
             body: SFTextField(
               placeholder: 'Test',
               backgroundColor: customColor,
+              disabled:
+                  false, // Désactiver le mode disabled pour voir la couleur personnalisée
             ),
           ),
         ),
@@ -362,6 +368,7 @@ void main() {
             body: SFTextField(
               placeholder: 'Test placeholder',
               focusNode: focusNode,
+              disabled: false,
             ),
           ),
         ),
@@ -385,6 +392,7 @@ void main() {
               body: SFTextField(
                 placeholder: 'Test placeholder',
                 focusNode: focusNode,
+                disabled: false,
               ),
             ),
           ),
@@ -412,6 +420,7 @@ void main() {
             body: SFTextField(
               placeholder: 'Test placeholder',
               focusNode: focusNode,
+              disabled: false,
             ),
           ),
         ),
@@ -451,6 +460,7 @@ void main() {
           home: Scaffold(
             body: SFTextField(
               placeholder: 'Test',
+              disabled: false, // Activer le champ pour permettre la soumission
               onSubmitted: (value) {
                 wasSubmitted = true;
                 submittedValue = value;
@@ -477,7 +487,11 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: SFTextField(placeholder: 'Test', autofocus: true),
+            body: SFTextField(
+              placeholder: 'Test',
+              autofocus: true,
+              disabled: false, // Activer le champ pour permettre le focus
+            ),
           ),
         ),
       );
@@ -605,6 +619,169 @@ void main() {
 
       final Semantics semantics = tester.widget(semanticsWidget);
       expect(semantics.properties.label, equals(placeholder));
+    });
+  });
+
+  group('SFTextField - État désactivé', () {
+    testWidgets('affiche correctement lorsque disabled=true', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(inputDecorationTheme: const InputDecorationTheme()),
+          home: const Scaffold(
+            body: SFTextField(placeholder: 'Champ désactivé', disabled: true),
+          ),
+        ),
+      );
+
+      final TextField textField = tester.widget(find.byType(TextField));
+
+      // Vérifier que le TextField est bien désactivé
+      expect(textField.enabled, isFalse);
+
+      // Vérifier que le fond est rempli
+      expect(textField.decoration?.filled, isTrue);
+    });
+
+    testWidgets('ne permet pas l\'édition lorsque désactivé', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(placeholder: 'Champ désactivé', disabled: true),
+          ),
+        ),
+      );
+
+      // Tentative d'entrer du texte
+      await tester.enterText(find.byType(TextField), 'Test text');
+      await tester.pump();
+
+      // Vérifier qu'aucun texte n'a été entré (le champ est désactivé)
+      expect(find.text('Test text'), findsNothing);
+    });
+
+    testWidgets('garde la même couleur de bordure que l\'état normal', (
+      WidgetTester tester,
+    ) async {
+      final Color normalBorderColor = AppColors.gray.s300;
+
+      // D'abord, créer un champ normal pour capturer sa couleur de bordure
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(
+            inputDecorationTheme: InputDecorationTheme(
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: normalBorderColor),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: normalBorderColor),
+              ),
+            ),
+          ),
+          home: const Scaffold(
+            body: Column(
+              children: [
+                SFTextField(placeholder: 'Champ normal', disabled: false),
+                SFTextField(placeholder: 'Champ désactivé', disabled: true),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      // Obtenir les deux TextField pour comparer leurs bordures
+      final TextField normalTextField = tester.widget(
+        find.byType(TextField).first,
+      );
+      final TextField disabledTextField = tester.widget(
+        find.byType(TextField).last,
+      );
+
+      // Vérifier que les bordures ont la même couleur
+      final OutlineInputBorder normalBorder =
+          normalTextField.decoration!.enabledBorder as OutlineInputBorder;
+      final OutlineInputBorder disabledBorder =
+          disabledTextField.decoration!.disabledBorder as OutlineInputBorder;
+
+      expect(
+        disabledBorder.borderSide.color,
+        equals(normalBorder.borderSide.color),
+      );
+    });
+
+    testWidgets(
+      'est correctement désactivé quand disabled=true est passé au constructeur',
+      (WidgetTester tester) async {
+        // Créer un contrôleur pour vérifier qu'on ne peut pas modifier le texte
+        final controller = TextEditingController();
+
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SFTextField(
+                placeholder: 'Champ désactivé',
+                disabled: true,
+                controller: controller,
+              ),
+            ),
+          ),
+        );
+
+        // Vérifier que le TextField est désactivé au niveau du widget
+        final TextField textField = tester.widget(find.byType(TextField));
+        expect(textField.enabled, isFalse);
+
+        // Essayer de taper du texte programmatiquement (ne devrait pas fonctionner visuellement)
+        controller.text = 'Texte test';
+        await tester.pump();
+
+        // Le texte est visible dans le contrôleur, mais le champ est visuellement désactivé
+        expect(controller.text, equals('Texte test'));
+        expect(textField.enabled, isFalse);
+      },
+    );
+
+    testWidgets('affiche correctement lorsque disabled=false', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: ThemeData(inputDecorationTheme: const InputDecorationTheme()),
+          home: const Scaffold(
+            body: SFTextField(placeholder: 'Champ activé', disabled: false),
+          ),
+        ),
+      );
+
+      final TextField textField = tester.widget(find.byType(TextField));
+
+      // Vérifier que le TextField est bien activé
+      expect(textField.enabled, isTrue);
+
+      // Vérifier que le fond est rempli
+      expect(textField.decoration?.filled, isTrue);
+    });
+
+    testWidgets('permet l\'édition lorsque disabled=false', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFTextField(placeholder: 'Champ activé', disabled: false),
+          ),
+        ),
+      );
+
+      // Tentative d'entrer du texte
+      await tester.enterText(find.byType(TextField), 'Test text');
+      await tester.pump();
+
+      // Vérifier que le texte a bien été entré
+      expect(find.text('Test text'), findsOneWidget);
     });
   });
 }

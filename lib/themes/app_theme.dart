@@ -89,6 +89,7 @@ class AppTheme {
     required Color enabledBorderColor,
     required Color focusedBorderColor,
     required Color errorBorderColor,
+    Color? disabledFillColor,
     ComponentSize size = ComponentSize.md,
   }) {
     final baseTextStyle = AppTypography.getScaledStyle(
@@ -105,6 +106,8 @@ class AppTheme {
       focusedBorder: _createInputBorder(focusedBorderColor),
       errorBorder: _createInputBorder(errorBorderColor),
       focusedErrorBorder: _createInputBorder(errorBorderColor),
+      // Utiliser la même couleur de bordure pour l'état désactivé que pour l'état normal
+      disabledBorder: _createInputBorder(enabledBorderColor),
       // Adaptez les paddings en fonction de la taille
       contentPadding: EdgeInsets.symmetric(
         horizontal: AppSpacing.md,
@@ -248,6 +251,7 @@ class AppTheme {
       enabledBorderColor: AppColors.gray.s300,
       focusedBorderColor: AppColors.indigo.s400,
       errorBorderColor: AppColors.red.s300,
+      disabledFillColor: AppColors.gray.s100,
     ),
     switchTheme: _createSwitchThemeData(
       selectedThumbColor: AppColors.indigo,
@@ -318,6 +322,7 @@ class AppTheme {
       enabledBorderColor: AppColors.gray.s600,
       focusedBorderColor: AppColors.indigo.s400,
       errorBorderColor: AppColors.red.s300,
+      disabledFillColor: AppColors.gray.s700,
     ),
     switchTheme: _createSwitchThemeData(
       selectedThumbColor: AppColors.indigo.s200,
