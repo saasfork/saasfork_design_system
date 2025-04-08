@@ -16,6 +16,7 @@ export 'images/image_circle.dart';
 export 'inputs/text_field.dart';
 export 'inputs/password_field.dart';
 export 'inputs/file_field.dart';
+export 'inputs/switch_field.dart';
 
 // Divisers - Différents types de diviseurs disponibles
 export 'dividers/divider_with_text.dart';

@@ -138,6 +138,52 @@ class AppTheme {
     );
   }
 
+  // Méthode pour créer un SwitchThemeData cohérent avec le reste du design system
+  static SwitchThemeData _createSwitchThemeData({
+    required Color selectedThumbColor,
+    required Color unselectedThumbColor,
+    required Color selectedTrackColor,
+    required Color unselectedTrackColor,
+    required Color selectedTrackBorderColor,
+    required Color unselectedTrackBorderColor,
+    Color? disabledThumbColor,
+    Color? disabledTrackColor,
+    Color? disabledTrackBorderColor,
+  }) {
+    return SwitchThemeData(
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return disabledThumbColor ?? Colors.white;
+        }
+        if (states.contains(WidgetState.selected)) {
+          return selectedThumbColor;
+        }
+        return unselectedThumbColor;
+      }),
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return disabledTrackColor ?? AppColors.gray.s200;
+        }
+        if (states.contains(WidgetState.selected)) {
+          return selectedTrackColor;
+        }
+        return unselectedTrackColor;
+      }),
+      trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.disabled)) {
+          return disabledTrackBorderColor ?? AppColors.gray.s300;
+        }
+        if (states.contains(WidgetState.selected)) {
+          return selectedTrackBorderColor;
+        }
+        return unselectedTrackBorderColor;
+      }),
+      trackOutlineWidth: WidgetStateProperty.all(1.0),
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      splashRadius: 20.0,
+    );
+  }
+
   // Configuration du thème clair
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
@@ -203,6 +249,17 @@ class AppTheme {
       focusedBorderColor: AppColors.indigo.s400,
       errorBorderColor: AppColors.red.s300,
     ),
+    switchTheme: _createSwitchThemeData(
+      selectedThumbColor: AppColors.indigo,
+      unselectedThumbColor: AppColors.gray.s200,
+      selectedTrackColor: Colors.white,
+      unselectedTrackColor: Colors.white,
+      selectedTrackBorderColor: AppColors.indigo,
+      unselectedTrackBorderColor: AppColors.gray.s300,
+      disabledThumbColor: Colors.white,
+      disabledTrackColor: AppColors.gray.s200,
+      disabledTrackBorderColor: AppColors.gray.s300,
+    ),
     iconTheme: IconThemeData(
       color: AppColors.grey.s800, // Couleur d'icône par défaut en mode clair
     ),
@@ -261,6 +318,17 @@ class AppTheme {
       enabledBorderColor: AppColors.gray.s600,
       focusedBorderColor: AppColors.indigo.s400,
       errorBorderColor: AppColors.red.s300,
+    ),
+    switchTheme: _createSwitchThemeData(
+      selectedThumbColor: AppColors.indigo.s200,
+      unselectedThumbColor: AppColors.grey.s100,
+      selectedTrackColor: AppColors.gray.s700,
+      unselectedTrackColor: AppColors.gray.s700,
+      selectedTrackBorderColor: AppColors.indigo.s200,
+      unselectedTrackBorderColor: AppColors.gray.s300,
+      disabledThumbColor: AppColors.gray.s400,
+      disabledTrackColor: AppColors.gray.s600,
+      disabledTrackBorderColor: AppColors.gray.s500,
     ),
     iconTheme: IconThemeData(
       color: AppColors.grey.s50, // Couleur d'icône par défaut en mode sombre
