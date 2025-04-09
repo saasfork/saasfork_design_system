@@ -26,7 +26,9 @@ class SFLinkButton extends StatelessWidget {
     final theme = Theme.of(context).textButtonTheme.style;
 
     return theme?.copyWith(
-      padding: WidgetStateProperty.all(AppSizes.getPadding(size)),
+      padding: WidgetStateProperty.all(
+        EdgeInsets.symmetric(horizontal: AppSpacing.xs),
+      ),
       textStyle: WidgetStateProperty.all(
         AppTypography.getScaledStyle(AppTypography.labelLarge, size),
       ),
