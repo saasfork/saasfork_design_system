@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:saasfork_design_system/atoms/images/abstract_image.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
-class ImageCircle extends AbstractImageWidget {
+class SFImageCircle extends AbstractImageWidget {
   final double diameter;
 
-  const ImageCircle({
+  const SFImageCircle({
     super.key,
     required this.diameter,
     super.imageSource,
@@ -16,10 +16,10 @@ class ImageCircle extends AbstractImageWidget {
   });
 
   @override
-  State<ImageCircle> createState() => _ImageCircleState();
+  State<SFImageCircle> createState() => _ImageCircleState();
 }
 
-class _ImageCircleState extends AbstractImageWidgetState<ImageCircle> {
+class _ImageCircleState extends AbstractImageWidgetState<SFImageCircle> {
   @override
   Widget buildClippedContainer(Widget child) {
     return ClipOval(child: child);
