@@ -29,3 +29,6 @@ export 'overlays/notification.dart';
 
 // Pricing
 export 'pricing/price_default.dart';
+
+// Social
+export 'socials/social_proof.dart';
