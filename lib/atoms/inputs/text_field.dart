@@ -94,7 +94,7 @@ class SFTextField extends StatelessWidget {
 
     // Couleur de fond du préfixe
     final Color prefixBackgroundColor =
-        hasError ? AppColors.red.s50 : AppColors.gray.s50;
+        hasError ? AppColors.red.withAlpha(10) : AppColors.gray.s50;
 
     // Couleur de fond pour l'état désactivé (light mode: AppColors.gray.s100, dark mode: AppColors.gray.s700)
     Color? fillColor = backgroundColor ?? inputTheme.fillColor;

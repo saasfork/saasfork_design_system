@@ -205,7 +205,7 @@ void main() {
           foundDecoratedContainer = true;
           final BoxDecoration decoration =
               container.decoration as BoxDecoration;
-          expect(decoration.color, equals(AppColors.red.s50));
+          expect(decoration.color, equals(AppColors.red.withAlpha(10)));
           break;
         }
       }
