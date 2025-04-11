@@ -29,6 +29,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 /// [spacing] Espacement entre les éléments.
 /// [maxWidth] Largeur maximale du composant (par défaut 80% de l'écran).
 /// [semanticsLabel] Texte personnalisé pour l'accessibilité (lecteurs d'écran).
+/// [isLoading] Indique si le composant est en état de chargement.
+/// [skeletonAvatarCount] Nombre d'avatars à afficher dans le squelette (par défaut 3).
 class SFSocialProof extends StatelessWidget {
   final List<String> imageUrls;
   final String text;
@@ -37,6 +39,7 @@ class SFSocialProof extends StatelessWidget {
   final double? maxWidth;
   final String? semanticsLabel;
   final bool isLoading;
+  final int skeletonAvatarCount;
 
   const SFSocialProof({
     super.key,
@@ -47,13 +50,14 @@ class SFSocialProof extends StatelessWidget {
     this.maxWidth,
     this.semanticsLabel,
     this.isLoading = false,
+    this.skeletonAvatarCount = 3,
   });
 
   @override
   Widget build(BuildContext context) {
     // Si le widget est en chargement, afficher le squelette
     if (isLoading) {
-      return _buildSkeleton(context, text: text);
+      return _buildSkeleton(context);
     }
 
     final TextStyle scaledStyle = AppTypography.getScaledStyle(
@@ -88,7 +92,7 @@ class SFSocialProof extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: AppSpacing.md,
+            spacing: AppSpacing.xs,
             children: [
               SizedBox(
                 width: stackWidth,
@@ -151,53 +155,69 @@ class SFSocialProof extends StatelessWidget {
     );
   }
 
-  Widget _buildSkeleton(BuildContext context, {String? text}) {
-    const double imageSize = 40.0;
-    const double borderWidth = 2.0;
-    const double totalImageSize = imageSize + borderWidth * 2;
-    const double overlapFactor = 0.6;
+  Widget _buildSkeleton(BuildContext context) {
+    // Appliquer le même facteur d'échelle au squelette qu'au widget normal
+    final TextStyle scaledStyle = AppTypography.getScaledStyle(
+      AppTypography.bodyLarge,
+      spacing,
+    );
 
-    final int avatarCount = 3;
+    final double scaleFactor =
+        scaledStyle.fontSize! / AppTypography.bodyLarge.fontSize!;
+    final double adjustedImageSize = imageSize * scaleFactor;
+
+    const double borderWidth = 2.0;
+    final double totalImageSize = adjustedImageSize + borderWidth * 2;
+    final double overlapFactor = 0.6;
+
     final double stackWidth =
-        totalImageSize + (avatarCount - 1) * (totalImageSize * overlapFactor);
+        totalImageSize +
+        (skeletonAvatarCount - 1) * (totalImageSize * overlapFactor);
 
     return Skeletonizer.zone(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: AppSpacing.md,
-        children: [
-          // Stack d'avatars
-          SizedBox(
-            width: stackWidth,
-            height: totalImageSize,
-            child: Stack(
-              children: List.generate(avatarCount, (index) {
-                return Positioned(
-                  left: index * (totalImageSize * overlapFactor),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.surface,
-                        width: borderWidth,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: maxWidth ?? MediaQuery.of(context).size.width * 0.8,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: AppSpacing.xs,
+          children: [
+            // Stack d'avatars
+            SizedBox(
+              width: stackWidth,
+              height: totalImageSize,
+              child: Stack(
+                children: List.generate(skeletonAvatarCount, (index) {
+                  return Positioned(
+                    left: index * (totalImageSize * overlapFactor),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.surface,
+                          width: borderWidth,
+                        ),
                       ),
+                      // Utiliser la taille ajustée pour le squelette
+                      child: Bone.circle(size: adjustedImageSize),
                     ),
-                    // Utiliser un Bone.circle avec size au lieu de diameter
-                    child: Bone.circle(size: imageSize),
-                  ),
-                );
-              }),
+                  );
+                }),
+              ),
             ),
-          ),
-          // Texte du skeleton - utiliser le texte fourni s'il existe
-          Flexible(
-            child:
-                text != null
-                    ? Text(text, style: AppTypography.bodyLarge)
-                    : Bone.text(words: 3),
-          ),
-        ],
+            // Texte du skeleton - utiliser le style mis à l'échelle
+            Flexible(
+              child: Text(
+                text,
+                style: scaledStyle,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
