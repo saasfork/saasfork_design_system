@@ -1,3 +1,8 @@
+## 0.0.7
+
+* Added new features:
+  * Added skeleton in `SFSocialProof` component
+
 ## 0.0.6
 
 * Added new components:
