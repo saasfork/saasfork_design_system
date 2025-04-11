@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:saasfork_design_system/atoms/images/abstract_image.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
@@ -62,30 +63,20 @@ class _ImageCircleState extends AbstractImageWidgetState<SFImageCircle> {
 
   @override
   Widget buildNetworkImage(String url) {
-    return Image.network(
-      url,
+    return CachedNetworkImage(
+      imageUrl: url,
       key: ValueKey('network_image_$url'),
       width: getSize(),
       height: getSize(),
       fit: BoxFit.cover,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Container(
-          width: getSize(),
-          height: getSize(),
-          color: AppColors.gray.s50,
-          child: Center(
-            child: CircularProgressIndicator(
-              value:
-                  loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-            ),
+      filterQuality: FilterQuality.medium,
+      placeholder:
+          (context, url) => Container(
+            width: getSize(),
+            height: getSize(),
+            color: Theme.of(context).colorScheme.primary.withAlpha(10),
           ),
-        );
-      },
-      errorBuilder: (context, error, stackTrace) {
+      errorWidget: (context, url, error) {
         debugPrint('Erreur d\'affichage de l\'image réseau: $error');
         return buildErrorPlaceholder();
       },
@@ -113,10 +104,10 @@ class _ImageCircleState extends AbstractImageWidgetState<SFImageCircle> {
       key: const ValueKey('error_placeholder'),
       width: getSize(),
       height: getSize(),
-      color: AppColors.gray.s50,
+      color: Theme.of(context).colorScheme.primary.withAlpha(10),
       child: Icon(
         Icons.broken_image,
-        color: AppColors.gray.s400,
+        color: Theme.of(context).colorScheme.onPrimary,
         size: getSize() * 0.5,
       ),
     );
