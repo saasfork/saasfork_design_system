@@ -1,3 +1,11 @@
+## 0.0.6
+
+* Added new components:
+  * New `SFPriceDefault` component for displaying price information
+  * New `SFSocialProof` component for displaying social validation and trust signals
+
+* Added fix for minor bugs
+
 ## 0.0.5
 
 * Added list components:
