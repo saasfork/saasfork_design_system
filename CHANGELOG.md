@@ -5,6 +5,7 @@
 
 * Updated features
   * Changed variable structures and added a new color option for `SFDialog` component
+  * Added multiline support for `SFTextField` component
 
 ## 0.0.6
 
