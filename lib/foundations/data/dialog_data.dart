@@ -6,7 +6,7 @@ class DialogData {
 
   Map<String, String> toMap() {
     return {
-      'desactivate_button': desactivateButton,
+      'action_button': desactivateButton,
       'activate_button': activateButton,
     };
   }

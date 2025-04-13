@@ -162,7 +162,7 @@ showDialog(
       Navigator.of(context).pop();
     },
     additionalData: {
-      'desactivate_button': 'Désactiver',
+      'action_button': 'Désactiver',
       'cancel_button': 'Annuler',
     },
   ),

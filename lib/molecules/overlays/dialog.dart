@@ -9,7 +9,8 @@ class SFDialog extends StatelessWidget {
   final double width;
   final IconData? icon;
   final VoidCallback onCancel;
-  final VoidCallback onDeactivate;
+  final VoidCallback onAction;
+  final Color? actionButtonColor;
   final Map<String, String> additionalData;
 
   const SFDialog({
@@ -19,12 +20,13 @@ class SFDialog extends StatelessWidget {
     this.messageWidget,
     this.width = 400,
     required this.onCancel,
-    required this.onDeactivate,
+    required this.onAction,
     this.icon,
     this.additionalData = const {
-      'desactivate_button': 'Deactivate',
+      'action_button': 'Deactivate',
       'cancel_button': 'Cancel',
     },
+    this.actionButtonColor,
   });
 
   @override
@@ -107,10 +109,9 @@ class SFDialog extends StatelessWidget {
                       children: [
                         SFMainButton(
                           label:
-                              additionalData['desactivate_button'] ??
-                              'Deactivate',
-                          color: AppColors.danger,
-                          onPressed: onDeactivate,
+                              additionalData['action_button'] ?? 'Deactivate',
+                          color: actionButtonColor ?? AppColors.danger,
+                          onPressed: onAction,
                         ),
                         SFSecondaryButton(
                           label: additionalData['cancel_button'] ?? 'Cancel',
@@ -129,10 +130,9 @@ class SFDialog extends StatelessWidget {
                         ),
                         SFMainButton(
                           label:
-                              additionalData['desactivate_button'] ??
-                              'Deactivate',
-                          color: AppColors.danger,
-                          onPressed: onDeactivate,
+                              additionalData['action_button'] ?? 'Deactivate',
+                          color: actionButtonColor ?? AppColors.danger,
+                          onPressed: onAction,
                         ),
                       ],
                     ),
