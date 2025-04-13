@@ -1,7 +1,10 @@
-## 0.0.7
+## 0.0.7 (EDITING)
 
 * Added new features:
   * Added skeleton in `SFSocialProof` component
+
+* Updated features
+  * Changed variable structures and added a new color option for `SFDialog` component
 
 ## 0.0.6
 
