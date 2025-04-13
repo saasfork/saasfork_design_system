@@ -4,7 +4,8 @@ import 'package:saasfork_design_system/foundations/foundations.dart';
 
 class SFDialog extends StatelessWidget {
   final String title;
-  final String message;
+  final String? message;
+  final Widget? messageWidget;
   final double width;
   final IconData? icon;
   final VoidCallback onCancel;
@@ -14,7 +15,8 @@ class SFDialog extends StatelessWidget {
   const SFDialog({
     super.key,
     required this.title,
-    required this.message,
+    this.message,
+    this.messageWidget,
     this.width = 400,
     required this.onCancel,
     required this.onDeactivate,
@@ -27,9 +29,13 @@ class SFDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    assert(
+      message != null || messageWidget != null,
+      'Either message or messageWidget must be provided.',
+    );
+
     final screenWidth = MediaQuery.of(context).size.width;
-    final useVerticalLayout =
-        screenWidth < 480; // Seuil pour basculer en affichage vertical
+    final useVerticalLayout = screenWidth < 480;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -81,15 +87,17 @@ class SFDialog extends StatelessWidget {
                                 ? TextAlign.start
                                 : TextAlign.center,
                       ),
-                      Text(
-                        message,
-                        style: AppTypography.bodyMedium,
-                        softWrap: true,
-                        textAlign:
-                            !useVerticalLayout
-                                ? TextAlign.start
-                                : TextAlign.center,
-                      ),
+                      if (message != null && message!.isNotEmpty)
+                        Text(
+                          message!,
+                          style: AppTypography.bodyMedium,
+                          softWrap: true,
+                          textAlign:
+                              !useVerticalLayout
+                                  ? TextAlign.start
+                                  : TextAlign.center,
+                        ),
+                      if (messageWidget != null) messageWidget!,
                     ],
                   ),
                   if (useVerticalLayout)
