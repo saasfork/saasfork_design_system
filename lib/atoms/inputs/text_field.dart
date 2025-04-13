@@ -16,6 +16,9 @@ class SFTextField extends StatelessWidget {
   final String? semanticsLabel;
   final Widget Function(BuildContext, Widget)? builder;
   final bool disabled;
+  final bool multiline;
+  final int? maxLines;
+  final int? minLines;
 
   const SFTextField({
     required this.placeholder,
@@ -32,6 +35,9 @@ class SFTextField extends StatelessWidget {
     this.semanticsLabel,
     this.builder,
     this.disabled = false,
+    this.multiline = false,
+    this.maxLines,
+    this.minLines,
     super.key,
   });
 
@@ -114,13 +120,17 @@ class SFTextField extends StatelessWidget {
       focusNode: focusNode,
       autofocus: autofocus,
       onSubmitted: onSubmitted,
-      textInputAction: textInputAction,
+      textInputAction: multiline ? TextInputAction.newline : textInputAction,
       enabled: !disabled,
+      maxLines: multiline ? maxLines : 1,
+      minLines: multiline ? minLines ?? 3 : 1,
+      expands: false,
+      keyboardType: multiline ? TextInputType.multiline : TextInputType.text,
       decoration: InputDecoration(
         hintText: placeholder,
         hintStyle: hintStyle,
         contentPadding: AppSizes.getInputPadding(size),
-        constraints: AppSizes.getInputConstraints(size),
+        constraints: multiline ? null : AppSizes.getInputConstraints(size),
         enabledBorder: activeBorder,
         focusedBorder: focusedBorder,
         filled:
