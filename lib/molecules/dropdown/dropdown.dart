@@ -9,6 +9,8 @@ class SFDropdown extends StatefulWidget {
   final String placeholder;
   final ComponentSize size;
   final bool isError;
+  final Widget Function(BuildContext, DropdownOption value, bool isOpen)
+  builder;
 
   const SFDropdown({
     super.key,
@@ -18,6 +20,7 @@ class SFDropdown extends StatefulWidget {
     this.placeholder = "Select an option",
     this.size = ComponentSize.md,
     this.isError = false,
+    required this.builder,
   });
 
   @override
@@ -48,20 +51,6 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
       (option) => option.value == widget.selectedValue,
       orElse: () => DropdownOption(label: widget.placeholder, value: ''),
     );
-
-    final textStyle = AppTypography.getScaledStyle(
-      AppTypography.bodyLarge.copyWith(height: 1.2),
-      widget.size,
-    );
-
-    final borderColor =
-        widget.isError
-            ? theme.inputDecorationTheme.errorBorder?.borderSide.color
-            : _isOpen.value
-            ? theme.inputDecorationTheme.focusedBorder?.borderSide.color
-            : theme.inputDecorationTheme.enabledBorder?.borderSide.color;
-
-    final inputPadding = AppSizes.getInputPadding(widget.size);
 
     return PopupMenuButton<String>(
       key: _dropdownKey,
@@ -111,49 +100,7 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
           );
         }).toList();
       },
-      child: Container(
-        padding: inputPadding,
-        constraints: BoxConstraints(
-          minHeight: AppSizes.getInputConstraints(widget.size).minHeight,
-        ),
-        decoration: BoxDecoration(
-          color: theme.inputDecorationTheme.fillColor,
-          borderRadius: BorderRadius.circular(AppTheme.defaultBorderRadius),
-          border: Border.all(color: borderColor ?? AppColors.gray.s300),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Text(
-                selectedOption.label,
-                style: textStyle.copyWith(
-                  color:
-                      selectedOption.value.isEmpty
-                          ? widget.isError
-                              ? theme
-                                  .inputDecorationTheme
-                                  .errorBorder
-                                  ?.borderSide
-                                  .color
-                              : theme.inputDecorationTheme.hintStyle?.color
-                          : theme.textTheme.bodyLarge?.color,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ),
-            Icon(
-              _isOpen.value
-                  ? Icons.keyboard_arrow_up_rounded
-                  : Icons.keyboard_arrow_down_rounded,
-              color: theme.iconTheme.color,
-              size: AppSizes.getIconSize(widget.size),
-            ),
-          ],
-        ),
-      ),
+      child: widget.builder(context, selectedOption, _isOpen.value),
     );
   }
 }

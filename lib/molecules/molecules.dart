@@ -9,6 +9,7 @@ export 'buttons/toggle_button.dart';
 // Dropdown
 export 'dropdown/dropdown_option.dart';
 export 'dropdown/dropdown.dart';
+export 'dropdown/select_field_dropdown.dart';
 
 // Forms
 export 'forms/form_field.dart';

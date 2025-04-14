@@ -20,6 +20,13 @@ void main() {
               options: options,
               onChanged: (_) {},
               placeholder: 'Select an option',
+              builder:
+                  (context, option, isOpen) => SelectedFieldDropdown(
+                    value: option,
+                    isOpen: isOpen,
+                    isError: false,
+                    size: ComponentSize.md,
+                  ),
             ),
           ),
         ),
@@ -31,7 +38,19 @@ void main() {
     testWidgets('opens dropdown menu when tapped', (tester) async {
       await tester.pumpWidget(
         MaterialApp(
-          home: Scaffold(body: SFDropdown(options: options, onChanged: (_) {})),
+          home: Scaffold(
+            body: SFDropdown(
+              options: options,
+              onChanged: (_) {},
+              builder:
+                  (context, option, isOpen) => SelectedFieldDropdown(
+                    value: option,
+                    isOpen: isOpen,
+                    isError: false,
+                    size: ComponentSize.md,
+                  ),
+            ),
+          ),
         ),
       );
 
@@ -52,6 +71,13 @@ void main() {
               options: options,
               selectedValue: '3',
               onChanged: (_) {},
+              builder:
+                  (context, option, isOpen) => SelectedFieldDropdown(
+                    value: option,
+                    isOpen: isOpen,
+                    isError: false,
+                    size: ComponentSize.md,
+                  ),
             ),
           ),
         ),
