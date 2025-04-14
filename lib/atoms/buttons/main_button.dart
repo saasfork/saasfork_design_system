@@ -51,7 +51,6 @@ class SFMainButton extends StatelessWidget {
       textStyle: WidgetStateProperty.all(
         AppTypography.getScaledStyle(AppTypography.labelLarge, size),
       ),
-      // Ajouter la personnalisation du rayon si un rayon personnalisé est fourni
       shape:
           radius != null
               ? WidgetStateProperty.all(

@@ -6,12 +6,16 @@ class SFSecondaryButton extends StatelessWidget {
   final ComponentSize size;
   final VoidCallback onPressed;
   final bool disabled;
+  final double? radius;
+  final bool hideBorder;
 
   const SFSecondaryButton({
     required this.label,
     required this.onPressed,
     this.size = ComponentSize.md,
     this.disabled = false,
+    this.hideBorder = false,
+    this.radius,
     super.key,
   });
 
@@ -42,16 +46,34 @@ class SFSecondaryButton extends StatelessWidget {
       textStyle: WidgetStateProperty.all(
         AppTypography.getScaledStyle(AppTypography.labelLarge, size),
       ),
-      side: WidgetStateProperty.all(
-        isDarkMode ? BorderSide.none : BorderSide(color: Colors.grey.shade400),
-      ),
+      shape:
+          radius != null
+              ? WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(radius!),
+                ),
+              )
+              : null,
+      side:
+          hideBorder
+              ? WidgetStateProperty.all(BorderSide.none)
+              : WidgetStateProperty.all(
+                isDarkMode
+                    ? BorderSide.none
+                    : BorderSide(color: Colors.grey.shade400),
+              ),
     );
 
     // Appliquer le style pour l'état disabled
     if (disabled) {
       return baseStyle?.copyWith(
         backgroundColor: WidgetStateProperty.all(Colors.transparent),
-        side: WidgetStateProperty.all(BorderSide(color: AppColors.grey.s300)),
+        side:
+            hideBorder
+                ? WidgetStateProperty.all(BorderSide.none)
+                : WidgetStateProperty.all(
+                  BorderSide(color: AppColors.grey.s300),
+                ),
       );
     }
 
