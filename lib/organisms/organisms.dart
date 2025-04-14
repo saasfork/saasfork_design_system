@@ -11,5 +11,8 @@ export './forms/profile_form.dart';
 // marketing
 export 'marketing//widgets/heading_annoncement.dart';
 
+// pricing
+export './pricing/price_card.dart';
+
 // Structure
 export 'structure/footer_section.dart';
