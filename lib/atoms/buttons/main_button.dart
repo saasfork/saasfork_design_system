@@ -9,6 +9,7 @@ class SFMainButton extends StatelessWidget {
   final Color? color;
   final FocusNode? focusNode;
   final String? semanticsLabel;
+  final double? radius;
 
   const SFMainButton({
     required this.label,
@@ -18,6 +19,7 @@ class SFMainButton extends StatelessWidget {
     this.disabled = false,
     this.focusNode,
     this.semanticsLabel,
+    this.radius,
     super.key,
   });
 
@@ -49,6 +51,16 @@ class SFMainButton extends StatelessWidget {
       textStyle: WidgetStateProperty.all(
         AppTypography.getScaledStyle(AppTypography.labelLarge, size),
       ),
+      // Ajouter la personnalisation du rayon si un rayon personnalisé est fourni
+      shape:
+          radius != null
+              ? WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(radius!),
+                  side: BorderSide(color: color ?? AppColors.indigo),
+                ),
+              )
+              : null,
     );
 
     // Appliquer le style pour l'état disabled
