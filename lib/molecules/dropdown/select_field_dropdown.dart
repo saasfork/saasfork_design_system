@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
 
 class SelectedFieldDropdown extends StatelessWidget {
-  final DropdownOption? value;
+  final SFDropdownOption? value;
   final ComponentSize size;
   final bool isError;
   final bool isOpen;

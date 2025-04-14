@@ -5,9 +5,9 @@ import 'package:saasfork_design_system/saasfork_design_system.dart';
 void main() {
   group('SFDropdown', () {
     final options = [
-      DropdownOption(label: 'Option 1', value: '1'),
-      DropdownOption(label: 'Option 2', value: '2'),
-      DropdownOption(label: 'Option 3', value: '3'),
+      SFDropdownOption(label: 'Option 1', value: '1'),
+      SFDropdownOption(label: 'Option 2', value: '2'),
+      SFDropdownOption(label: 'Option 3', value: '3'),
     ];
 
     testWidgets('displays placeholder when no value is selected', (

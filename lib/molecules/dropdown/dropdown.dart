@@ -3,13 +3,14 @@ import 'package:saasfork_design_system/saasfork_design_system.dart';
 import 'package:signals/signals_flutter.dart';
 
 class SFDropdown extends StatefulWidget {
-  final List<DropdownOption> options;
+  final List<SFDropdownOption> options;
   final String? selectedValue;
   final ValueChanged<String> onChanged;
   final String placeholder;
   final ComponentSize size;
   final bool isError;
-  final Widget Function(BuildContext, DropdownOption value, bool isOpen)
+  final double? width;
+  final Widget Function(BuildContext, SFDropdownOption value, bool isOpen)
   builder;
 
   const SFDropdown({
@@ -20,6 +21,7 @@ class SFDropdown extends StatefulWidget {
     this.placeholder = "Select an option",
     this.size = ComponentSize.md,
     this.isError = false,
+    this.width, // Ajout dans le constructeur
     required this.builder,
   });
 
@@ -35,13 +37,22 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final RenderBox renderBox =
-          _dropdownKey.currentContext?.findRenderObject() as RenderBox;
-      setState(() {
-        _dropdownWidth = renderBox.size.width;
+
+    // Si une largeur personnalisée est fournie, l'utiliser directement
+    if (widget.width != null) {
+      _dropdownWidth = widget.width!;
+    } else {
+      // Sinon, mesurer la taille du widget après le rendu
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final RenderBox? renderBox =
+            _dropdownKey.currentContext?.findRenderObject() as RenderBox?;
+        if (renderBox != null) {
+          setState(() {
+            _dropdownWidth = renderBox.size.width;
+          });
+        }
       });
-    });
+    }
   }
 
   @override
@@ -49,7 +60,7 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
     final theme = Theme.of(context);
     final selectedOption = widget.options.firstWhere(
       (option) => option.value == widget.selectedValue,
-      orElse: () => DropdownOption(label: widget.placeholder, value: ''),
+      orElse: () => SFDropdownOption(label: widget.placeholder, value: ''),
     );
 
     return PopupMenuButton<String>(
@@ -68,8 +79,8 @@ class _SFDropdownState extends State<SFDropdown> with SignalsMixin {
       elevation: 4,
       position: PopupMenuPosition.under,
       constraints: BoxConstraints(
-        minWidth: _dropdownWidth,
-        maxWidth: _dropdownWidth,
+        minWidth: widget.width ?? _dropdownWidth,
+        maxWidth: widget.width ?? _dropdownWidth,
       ),
       offset: const Offset(0, AppSpacing.sm),
       shape: RoundedRectangleBorder(

@@ -1,6 +1,6 @@
-class DropdownOption {
+class SFDropdownOption {
   final String label;
   final String value;
 
-  DropdownOption({required this.label, required this.value});
+  SFDropdownOption({required this.label, required this.value});
 }
