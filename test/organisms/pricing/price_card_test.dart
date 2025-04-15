@@ -8,14 +8,19 @@ void main() {
       WidgetTester tester,
     ) async {
       // ARRANGE
+      final priceModel = SFPriceCardModel(
+        unitAmount: 1000, // 10.00 €
+        currency: SFCurrency.eur,
+        pricePeriod: SFPricePeriod.month,
+      );
+
       // ACT
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: SFPriceCard(
               title: 'Basique',
-              price: '10€',
-              period: 'mois',
+              itemPrice: priceModel,
               buttonLabel: 'Souscrire',
               onPressed: () {},
             ),
@@ -26,7 +31,7 @@ void main() {
       // ASSERT
       expect(find.text('Basique'), findsOneWidget);
       expect(find.text('10€'), findsOneWidget);
-      expect(find.text('/mois'), findsOneWidget);
+      expect(find.text('/ month'), findsOneWidget);
       expect(find.text('Souscrire'), findsOneWidget);
     });
 
@@ -35,6 +40,11 @@ void main() {
     ) async {
       // ARRANGE
       const description = 'Forfait idéal pour démarrer';
+      final priceModel = SFPriceCardModel(
+        unitAmount: 1000,
+        currency: SFCurrency.eur,
+        pricePeriod: SFPricePeriod.month,
+      );
 
       // ACT
       await tester.pumpWidget(
@@ -42,8 +52,7 @@ void main() {
           home: Scaffold(
             body: SFPriceCard(
               title: 'Basique',
-              price: '10€',
-              period: 'mois',
+              itemPrice: priceModel,
               buttonLabel: 'Souscrire',
               description: description,
               onPressed: () {},
@@ -61,6 +70,11 @@ void main() {
     ) async {
       // ARRANGE
       const description = 'Forfait idéal pour démarrer';
+      final priceModel = SFPriceCardModel(
+        unitAmount: 1000,
+        currency: SFCurrency.eur,
+        pricePeriod: SFPricePeriod.month,
+      );
 
       // ACT
       await tester.pumpWidget(
@@ -68,8 +82,7 @@ void main() {
           home: Scaffold(
             body: SFPriceCard(
               title: 'Basique',
-              price: '10€',
-              period: 'mois',
+              itemPrice: priceModel,
               buttonLabel: 'Souscrire',
               onPressed: () {},
             ),
@@ -82,10 +95,15 @@ void main() {
     });
 
     testWidgets(
-      'afficher correctement le label populaire quand isPopular est true',
+      'afficher correctement le label populaire quand il est fourni',
       (WidgetTester tester) async {
         // ARRANGE
         const labelText = 'Populaire';
+        final priceModel = SFPriceCardModel(
+          unitAmount: 2900,
+          currency: SFCurrency.eur,
+          pricePeriod: SFPricePeriod.month,
+        );
 
         // ACT
         await tester.pumpWidget(
@@ -93,11 +111,9 @@ void main() {
             home: Scaffold(
               body: SFPriceCard(
                 title: 'Standard',
-                price: '29€',
-                period: 'mois',
+                itemPrice: priceModel,
                 buttonLabel: 'Souscrire',
-                isPopular: true,
-                label: labelText,
+                labelPopular: labelText,
                 onPressed: () {},
               ),
             ),
@@ -109,33 +125,34 @@ void main() {
       },
     );
 
-    testWidgets(
-      'ne pas afficher le label populaire quand isPopular est false',
-      (WidgetTester tester) async {
-        // ARRANGE
-        const labelText = 'Populaire';
+    testWidgets('ne pas afficher le label populaire quand il est absent', (
+      WidgetTester tester,
+    ) async {
+      // ARRANGE
+      const labelText = 'Populaire';
+      final priceModel = SFPriceCardModel(
+        unitAmount: 2900,
+        currency: SFCurrency.eur,
+        pricePeriod: SFPricePeriod.month,
+      );
 
-        // ACT
-        await tester.pumpWidget(
-          MaterialApp(
-            home: Scaffold(
-              body: SFPriceCard(
-                title: 'Standard',
-                price: '29€',
-                period: 'mois',
-                buttonLabel: 'Souscrire',
-                isPopular: false,
-                label: labelText,
-                onPressed: () {},
-              ),
+      // ACT
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFPriceCard(
+              title: 'Standard',
+              itemPrice: priceModel,
+              buttonLabel: 'Souscrire',
+              onPressed: () {},
             ),
           ),
-        );
+        ),
+      );
 
-        // ASSERT
-        expect(find.text(labelText), findsNothing);
-      },
-    );
+      // ASSERT
+      expect(find.text(labelText), findsNothing);
+    });
 
     testWidgets(
       'afficher correctement les fonctionnalités quand elles sont fournies',
@@ -146,6 +163,11 @@ void main() {
           'Support email',
           'Accès à toutes les fonctionnalités',
         ];
+        final priceModel = SFPriceCardModel(
+          unitAmount: 4900,
+          currency: SFCurrency.eur,
+          pricePeriod: SFPricePeriod.month,
+        );
 
         // ACT
         await tester.pumpWidget(
@@ -153,8 +175,7 @@ void main() {
             home: Scaffold(
               body: SFPriceCard(
                 title: 'Premium',
-                price: '49€',
-                period: 'mois',
+                itemPrice: priceModel,
                 buttonLabel: 'Souscrire',
                 features: features,
                 onPressed: () {},
@@ -173,7 +194,12 @@ void main() {
     testWidgets(
       'ne pas afficher la section fonctionnalités quand elle est absente',
       (WidgetTester tester) async {
-        // ARRANGE - Création d'une liste vide pour tester l'absence d'items
+        // ARRANGE
+        final priceModel = SFPriceCardModel(
+          unitAmount: 1000,
+          currency: SFCurrency.eur,
+          pricePeriod: SFPricePeriod.month,
+        );
 
         // ACT
         await tester.pumpWidget(
@@ -181,8 +207,7 @@ void main() {
             home: Scaffold(
               body: SFPriceCard(
                 title: 'Basique',
-                price: '10€',
-                period: 'mois',
+                itemPrice: priceModel,
                 buttonLabel: 'Souscrire',
                 onPressed: () {},
                 features: [], // Liste vide de fonctionnalités
@@ -201,6 +226,11 @@ void main() {
       (WidgetTester tester) async {
         // ARRANGE
         bool buttonPressed = false;
+        final priceModel = SFPriceCardModel(
+          unitAmount: 1000,
+          currency: SFCurrency.eur,
+          pricePeriod: SFPricePeriod.month,
+        );
 
         // ACT
         await tester.pumpWidget(
@@ -208,8 +238,7 @@ void main() {
             home: Scaffold(
               body: SFPriceCard(
                 title: 'Basique',
-                price: '10€',
-                period: 'mois',
+                itemPrice: priceModel,
                 buttonLabel: 'Souscrire',
                 onPressed: () => buttonPressed = true,
               ),
@@ -225,5 +254,71 @@ void main() {
         expect(buttonPressed, isTrue);
       },
     );
+
+    testWidgets(
+      'afficher correctement les économies lorsque comparePrice est fourni',
+      (WidgetTester tester) async {
+        // ARRANGE
+        final itemPrice = SFPriceCardModel(
+          unitAmount: 20000, // 200€
+          currency: SFCurrency.eur,
+          pricePeriod: SFPricePeriod.year,
+        );
+
+        final comparePrice = SFPriceCardModel(
+          unitAmount: 2000, // 20€
+          currency: SFCurrency.eur,
+          pricePeriod: SFPricePeriod.month,
+        );
+
+        // ACT
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: SFPriceCard(
+                title: 'Annuel',
+                itemPrice: itemPrice,
+                buttonLabel: 'Souscrire',
+                onPressed: () {},
+                comparePrice: comparePrice,
+                savingsLabel: (percentage) => 'Économisez $percentage%',
+              ),
+            ),
+          ),
+        );
+
+        // ASSERT
+        expect(find.text('Économisez 17%'), findsOneWidget);
+      },
+    );
+
+    testWidgets('utiliser le periodLabel personnalisé quand il est fourni', (
+      WidgetTester tester,
+    ) async {
+      // ARRANGE
+      final priceModel = SFPriceCardModel(
+        unitAmount: 1000,
+        currency: SFCurrency.eur,
+        pricePeriod: SFPricePeriod.month,
+      );
+
+      // ACT
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SFPriceCard(
+              title: 'Basique',
+              itemPrice: priceModel,
+              buttonLabel: 'Souscrire',
+              onPressed: () {},
+              periodLabel: (period) => 'par mois',
+            ),
+          ),
+        ),
+      );
+
+      // ASSERT
+      expect(find.text('/ par mois'), findsOneWidget);
+    });
   });
 }
