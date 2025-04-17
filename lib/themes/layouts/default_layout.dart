@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:saasfork_core/saasfork_core.dart';
 import 'package:saasfork_design_system/themes/layouts/layout_builder.dart';
 import 'package:saasfork_design_system/themes/wrappers/notification_wrapper.dart';
+import 'package:saasfork_design_system/themes/wrappers/seo_wrapper.dart';
 
 class SFDefaultLayout extends ConsumerWidget {
   final SFLayoutBuilder builder;
   final EdgeInsets contentPadding;
+  final SFSEOModel? seoModel;
 
   const SFDefaultLayout({
     required this.builder,
+    this.seoModel,
     this.contentPadding = const EdgeInsets.all(16.0),
     super.key,
   });
@@ -48,6 +52,6 @@ class SFDefaultLayout extends ConsumerWidget {
       ),
     );
 
-    return layout;
+    return SFSeoWrapper(seoModel: seoModel, child: layout);
   }
 }
