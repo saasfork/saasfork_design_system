@@ -1,6 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_seo/flutter_seo.dart';
 import 'package:saasfork_core/saasfork_core.dart';
+
+// Import conditionnel
+import 'package:saasfork_design_system/themes/wrappers/helpers/seo_helper.dart'
+    if (dart.library.html) 'package:saasfork_design_system/utils/helpers/seo_helper_web.dart';
 
 class SFSeoWrapper extends StatefulWidget {
   final Widget child;
@@ -15,16 +19,18 @@ class SFSeoWrapper extends StatefulWidget {
 class _SFSeoWrapperState extends State<SFSeoWrapper> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      HeadTagUtil.setTitle(widget.seoModel?.title ?? '');
-      HeadTagUtil.setHead(
-        title: widget.seoModel?.title ?? '',
-        description: widget.seoModel?.description ?? '',
-        keywords: widget.seoModel?.keywords ?? [],
-        imageUrl: widget.seoModel?.imageUrl ?? '',
-        url: widget.seoModel?.url ?? '',
-      );
-    });
+    if (kIsWeb) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Utilise l'interface SEOHelper qui sera résolue conditionnellement
+        SEOHelper.setMetadata(
+          title: widget.seoModel?.title ?? '',
+          description: widget.seoModel?.description ?? '',
+          keywords: widget.seoModel?.keywords ?? [],
+          imageUrl: widget.seoModel?.imageUrl ?? '',
+          url: widget.seoModel?.url ?? '',
+        );
+      });
+    }
     super.initState();
   }
 
