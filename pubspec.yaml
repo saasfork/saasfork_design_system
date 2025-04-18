@@ -16,7 +16,7 @@ dependencies:
   reactive_forms: ^17.0.1
   signals: ^6.0.2
 
-  saasfork_core: ^0.0.5
+  saasfork_core: ^0.0.7
   flutter_riverpod: ^2.6.1
   cross_file: ^0.3.4+2
   file_picker: ^9.2.1
