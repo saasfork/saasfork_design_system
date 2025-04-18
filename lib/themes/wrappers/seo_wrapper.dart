@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:saasfork_core/saasfork_core.dart';
 
 // Import conditionnel
-import 'package:saasfork_design_system/themes/wrappers/helpers/seo_helper.dart'
-    if (dart.library.html) 'package:saasfork_design_system/utils/helpers/seo_helper_web.dart';
+import './helpers/seo_helper.dart'
+    if (dart.library.html) './helpers/seo_helper_web.dart';
 
 class SFSeoWrapper extends StatefulWidget {
   final Widget child;
@@ -21,7 +21,6 @@ class _SFSeoWrapperState extends State<SFSeoWrapper> {
   void initState() {
     if (kIsWeb) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Utilise l'interface SEOHelper qui sera résolue conditionnellement
         SEOHelper.setMetadata(
           title: widget.seoModel?.title ?? '',
           description: widget.seoModel?.description ?? '',
