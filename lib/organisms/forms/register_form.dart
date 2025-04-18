@@ -8,12 +8,14 @@ class SFRegisterForm extends StatefulWidget {
   final double spacing;
   final Map<String, dynamic> additionalData;
   final Function(Map<String, dynamic>)? onSubmit;
+  final bool isLoading;
 
   const SFRegisterForm({
     super.key,
     this.onSubmit,
     this.size = ComponentSize.md,
     this.spacing = AppSpacing.sm,
+    this.isLoading = false,
     this.additionalData = const {
       'label_email': 'Email',
       'placeholder_email': 'Enter your email',
@@ -143,7 +145,8 @@ class _SFRegisterFormState extends State<SFRegisterForm> {
         ),
         SFMainButton(
           focusNode: _buttonNode,
-          label: widget.additionalData['register_button'] ?? '',
+          disabled: widget.isLoading,
+          label: widget.additionalData['register_button'] ?? 'Register',
           onPressed: () {
             if (FormUtils.isFormValid(form, setState: () => setState(() {}))) {
               widget.onSubmit?.call(form.value);

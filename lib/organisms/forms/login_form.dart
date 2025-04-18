@@ -8,12 +8,14 @@ class SFLoginForm extends StatefulWidget {
   final double spacing;
   final Map<String, dynamic> additionalData;
   final Function(Map<String, dynamic>)? onSubmit;
+  final bool isLoading;
 
   const SFLoginForm({
     super.key,
     this.onSubmit,
     this.size = ComponentSize.md,
     this.spacing = AppSpacing.sm,
+    this.isLoading = false,
     this.additionalData = const {
       'label_email': 'E-mail',
       'placeholder_email': 'Enter your email',
@@ -144,6 +146,7 @@ class _SFLoginFormState extends State<SFLoginForm> {
         ),
         SFMainButton(
           focusNode: _buttonNode,
+          disabled: widget.isLoading,
           label: widget.additionalData['login_button'] ?? 'Login',
           size: widget.size,
           onPressed: () {

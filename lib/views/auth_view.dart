@@ -2,10 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:saasfork_design_system/saasfork_design_system.dart';
+import 'package:signals/signals_flutter.dart';
 
 class SFAuthView extends StatefulWidget {
   final AuthFormData additionalData;
-  final Function(LoginModel)? onLogin;
+  final Future Function(LoginModel)? onLogin;
   final Function(RegisterModel)? onRegister;
   final Function(ForgotPasswordModel)? onForgotPassword;
   final Function? onGoogleConnect;
@@ -25,7 +26,8 @@ class SFAuthView extends StatefulWidget {
   State<SFAuthView> createState() => SFAuthViewState();
 }
 
-class SFAuthViewState extends State<SFAuthView> {
+class SFAuthViewState extends State<SFAuthView> with SignalsMixin {
+  late final _isLoading = createSignal<bool>(false);
   final PageController _pageController = PageController();
   late AuthFormData formData;
   int _currentPageIndex = 0;
@@ -75,12 +77,15 @@ class SFAuthViewState extends State<SFAuthView> {
       spacing: AppSpacing.md,
       children: [
         SFLoginForm(
+          isLoading: _isLoading.value,
           additionalData: formData.toMap(),
           onSubmit:
               widget.onLogin != null
-                  ? (loginData) {
+                  ? (loginData) async {
                     final typedValues = LoginModel.fromMap(loginData);
-                    widget.onLogin!(typedValues);
+                    _isLoading.value = true;
+                    await widget.onLogin!(typedValues);
+                    _isLoading.value = false;
                   }
                   : null,
         ),

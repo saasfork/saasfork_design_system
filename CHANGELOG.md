@@ -7,6 +7,7 @@
   * Changed variable structures and added a new color option for `SFDialog` component
   * Added multiline support for `SFTextField` component
   * Updated `SFDropdown` component to be more generic
+  * Added loading state to `SFRegisterForm`, `SFLoginForm` and `SFProfileForm` component
 
 ## 0.0.6
 

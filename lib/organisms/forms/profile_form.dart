@@ -11,6 +11,7 @@ class SFProfileForm extends StatefulWidget {
   final ProfileModel? profileModel;
   final Function(Map<String, dynamic>)? onSubmit;
   final VoidCallback? onDelete;
+  final bool isLoading;
 
   const SFProfileForm({
     super.key,
@@ -19,6 +20,7 @@ class SFProfileForm extends StatefulWidget {
     this.profileModel,
     this.size = ComponentSize.md,
     this.spacing = AppSpacing.sm,
+    this.isLoading = false,
     this.additionalData = const {
       'label_email': 'E-mail',
       'placeholder_email': 'Entrez votre email',
@@ -155,7 +157,8 @@ class _SFProfileFormState extends State<SFProfileForm> {
         ),
         SFMainButton(
           focusNode: _buttonNode,
-          label: widget.additionalData['save_button'] ?? '',
+          disabled: widget.isLoading,
+          label: widget.additionalData['save_button'] ?? 'Save',
           onPressed: () {
             if (FormUtils.isFormValid(form, setState: () => setState(() {}))) {
               widget.onSubmit?.call(form.value);
