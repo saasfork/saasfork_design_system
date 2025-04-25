@@ -6,6 +6,7 @@ import 'package:saasfork_design_system/foundations/spacing.dart';
 
 class SFFormfield extends StatelessWidget {
   final String? label;
+  final Widget? labelCustom;
   final Widget input;
   final String? hintMessage;
   final String? errorMessage;
@@ -17,6 +18,7 @@ class SFFormfield extends StatelessWidget {
   const SFFormfield({
     super.key,
     this.label,
+    this.labelCustom,
     required this.input,
     this.hintMessage,
     this.errorMessage,
@@ -40,10 +42,15 @@ class SFFormfield extends StatelessWidget {
               : Theme.of(context).textTheme.bodyLarge?.color,
     );
 
-    final Widget? labelWidget =
-        (label != null && label!.isNotEmpty)
-            ? Text('$label${isRequired ? " *" : ""}', style: labelStyle)
-            : null;
+    Widget? labelWidget;
+
+    if (label != null && label!.isNotEmpty) {
+      labelWidget = Text('$label${isRequired ? " *" : ""}', style: labelStyle);
+    } else if (labelCustom != null) {
+      labelWidget = labelCustom;
+    } else {
+      labelWidget = null;
+    }
 
     final Widget formMessage = SFFormMessage(
       errorMessage: errorMessage,
