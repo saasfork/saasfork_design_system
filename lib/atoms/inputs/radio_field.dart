@@ -23,7 +23,7 @@ class SFRadioField<T> extends StatelessWidget {
   static const Duration _animationDuration = Duration(milliseconds: 200);
 
   final List<T> options;
-  final T groupValue;
+  final T? groupValue;
   final ValueChanged<T> onChanged;
   final String Function(T) labelBuilder;
   final ComponentSize size;
@@ -86,6 +86,70 @@ class SFRadioField<T> extends StatelessWidget {
                 );
               }).toList(),
         ),
+      ),
+    );
+  }
+}
+
+/// Un widget skeleton pour SFRadioField qui affiche une version pour Skeletonizer.
+///
+/// Ce widget est conçu pour être utilisé avec le package Skeletonizer.
+/// Il reproduit la structure du SFRadioField pour un rendu cohérent lors du chargement.
+///
+/// Exemple d'utilisation :
+/// ```dart
+/// Skeletonizer(
+///   enabled: isLoading,
+///   child: SFRadioFieldSkeleton(
+///     options: 2,
+///     size: ComponentSize.md,
+///   ),
+/// )
+/// ```
+///
+/// [options] Nombre d'options à afficher dans le skeleton.
+/// [size] Taille des boutons skeleton.
+/// [radius] Radius des boutons et du conteneur.
+class SFRadioFieldSkeleton extends StatelessWidget {
+  final int options;
+  final ComponentSize size;
+  final double radius;
+
+  const SFRadioFieldSkeleton({
+    required this.options,
+    this.size = ComponentSize.md,
+    this.radius = 50,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.grey.s200),
+        borderRadius: BorderRadius.circular(radius),
+      ),
+      padding: const EdgeInsets.all(AppSpacing.xs),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: AppSpacing.xs,
+        children: List.generate(options, (index) {
+          final String label = 'Option ${index + 1}';
+          return index == 0
+              ? SFMainButton(
+                label: label,
+                size: size,
+                onPressed: null,
+                radius: radius,
+              )
+              : SFSecondaryButton(
+                label: label,
+                size: size,
+                onPressed: () {},
+                hideBorder: true,
+                radius: radius,
+              );
+        }),
       ),
     );
   }
