@@ -67,7 +67,7 @@ class SFNavLinkItem extends StatelessWidget {
               ],
               Text(
                 link.label,
-                style: AppTypography.labelMedium.copyWith(color: textColor),
+                style: AppTypography.labelLarge.copyWith(color: textColor),
               ),
               // Ajouter un Spacer conditionnel pour "pousser" le texte vers la gauche en mode pleine largeur
               if (fullWidth) Spacer(),
