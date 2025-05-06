@@ -56,14 +56,6 @@ class _SFPriceCardState extends ConsumerState<SFPriceCard> with SignalsMixin {
 
   late final _isLoading = createSignal(false);
 
-  String? _savingsPercentage;
-
-  @override
-  void initState() {
-    super.initState();
-    _savingsPercentage = _calculateSavingsPercentage();
-  }
-
   String? _calculateSavingsPercentage() {
     if (widget.comparePrice == null) return null;
 
@@ -117,7 +109,7 @@ class _SFPriceCardState extends ConsumerState<SFPriceCard> with SignalsMixin {
 
   @override
   Widget build(BuildContext context) {
-    final savingsPercentage = _savingsPercentage;
+    final savingsPercentage = _calculateSavingsPercentage();
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
