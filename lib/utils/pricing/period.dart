@@ -22,3 +22,13 @@ enum SFPricePeriod {
     }
   }
 }
+
+SFPricePeriod convertFromLabel(String value) {
+  final String normalizedValue =
+      value.contains('.') ? value.split('.').last : value;
+
+  return SFPricePeriod.values.firstWhere(
+    (e) => e.label == normalizedValue,
+    orElse: () => SFPricePeriod.month,
+  );
+}
